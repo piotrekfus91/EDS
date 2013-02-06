@@ -13,3 +13,5 @@ site/
 .project
 .settings
 .classpath
+
+# docs - w innym repozytorium (bitbucket)
