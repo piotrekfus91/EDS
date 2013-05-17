@@ -9,10 +9,11 @@
 target/
 site/
 
-# eclipse
-.project
-.settings
-.classpath
+# idea
+*.ids
+*.iws
+*.ipr
+*.iml
 
 # bitbucket
 docs/
