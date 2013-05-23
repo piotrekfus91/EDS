@@ -19,9 +19,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="eds"/>
 </database>
 
-<table name="users" oids="true">
+<table name="people" oids="true">
 	<schema name="eds"/>
-	<position x="128" y="259"/>
+	<position x="160.5" y="454.25"/>
 	<column name="id" not-null="true" default-value="nextval('users_seq')">
 		<type name="bigint"/>
 	</column>
@@ -40,7 +40,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="email" not-null="true">
 		<type name="varchar" length="50"/>
 	</column>
-	<column name="locked" not-null="true" default-value="'F'">
+	<column name="locked" not-null="true" default-value="'N'">
 		<type name="char"/>
 	</column>
 	<column name="creation_time" not-null="true">
@@ -49,17 +49,17 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="last_login_time">
 		<type name="timestamptz"/>
 	</column>
-	<constraint name="users_pk" type="pk-constr" factor="10" table="eds.users">
+	<constraint name="users_pk" type="pk-constr" factor="10" table="eds.people">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-	<constraint name="users_locked_check" type="ck-constr" table="eds.users">
-			<expression><![CDATA[locked IN ('T', 'F')]]></expression>
+	<constraint name="users_locked_check" type="ck-constr" table="eds.people">
+			<expression><![CDATA[locked IN ('Y', 'N')]]></expression>
 	</constraint>
 </table>
 
 <table name="mime_types" oids="true">
 	<schema name="eds"/>
-	<position x="1221" y="39"/>
+	<position x="1888" y="878.5"/>
 	<column name="id" not-null="true" default-value="nextval('mime_types_seq')">
 		<type name="integer"/>
 	</column>
@@ -79,13 +79,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 	<constraint name="mime_type_enabled_check" type="ck-constr" table="eds.mime_types">
-			<expression><![CDATA[enabled IN ('T', 'F')]]></expression>
+			<expression><![CDATA[enabled IN ('Y', 'N')]]></expression>
 	</constraint>
 </table>
 
 <table name="directories" oids="true">
 	<schema name="eds"/>
-	<position x="667" y="67"/>
+	<position x="773.25" y="486.75"/>
 	<column name="id" not-null="true" default-value="nextval('directories_id')">
 		<type name="bigint"/>
 	</column>
@@ -102,7 +102,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 	<constraint name="directories_owner_id" type="fk-constr"	 comparison-type="MATCH FULL"
-	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.users" table="eds.directories">
+	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.people" table="eds.directories">
 		<columns names="owner_id" ref-type="src-columns"/>
 		<columns names="id" ref-type="dst-columns"/>
 	</constraint>
@@ -116,7 +116,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <relationship name="belongs_to"
 	 type="relfk"
 	 src-table="eds.directories"
-	 dst-table="eds.users"
+	 dst-table="eds.people"
 	 src-required="false" dst-required="false"
 >
 	<label ref-type="name-label">
@@ -124,16 +124,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<relationship name="is_subdirectory_of"
+<relationship name="is_parent_directory_of"
 	 type="relfk"
 	 src-table="eds.directories"
 	 dst-table="eds.directories"
 	 src-required="false" dst-required="false"
 >
 	<line>
-		<position x="977.594" y="100.76"/>
-	<position x="977.594" y="57"/>
-	<position x="867.396" y="57"/>
+		<position x="1083.84" y="520.51"/>
+	<position x="1083.84" y="476.75"/>
+	<position x="973.646" y="476.75"/>
 	</line>
 	<label ref-type="src-label">
 		<position x="16.4062" y="15.14"/>
@@ -141,12 +141,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<label ref-type="dst-label">
 		<position x="0" y="0"/>
 	</label>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
 </relationship>
 
 <table name="documents" oids="true">
 	<schema name="eds"/>
-	<position x="1228" y="293"/>
-	<column name="id" not-null="true" default-value="nextval('files_seq')">
+	<position x="1322.5" y="866.25"/>
+	<column name="id" not-null="true" default-value="nextval('documents_seq')">
 		<type name="bigint"/>
 	</column>
 	<column name="mime_type_id">
@@ -164,7 +167,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="content_md5" not-null="true">
 		<type name="varchar" length="32"/>
 	</column>
-	<constraint name="files_pk" type="pk-constr" factor="10" table="eds.documents">
+	<constraint name="documents_pk" type="pk-constr" factor="10" table="eds.documents">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 	<constraint name="documents_mime_type_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
@@ -178,7 +181,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<columns names="id" ref-type="dst-columns"/>
 	</constraint>
 	<constraint name="documents_owner_id" type="fk-constr"	 comparison-type="MATCH FULL"
-	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.users" table="eds.documents">
+	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.people" table="eds.documents">
 		<columns names="owner_id" ref-type="src-columns"/>
 		<columns names="id" ref-type="dst-columns"/>
 	</constraint>
@@ -191,7 +194,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="false" dst-required="false"
 >
 	<label ref-type="name-label">
-		<position x="67.8546" y="13.2014"/>
+		<position x="-5.14529" y="5.32647"/>
 	</label>
 </relationship>
 
@@ -209,7 +212,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <relationship name="is_onwer_of"
 	 type="relfk"
 	 src-table="eds.documents"
-	 dst-table="eds.users"
+	 dst-table="eds.people"
 	 src-required="false" dst-required="false"
 >
 	<label ref-type="name-label">
@@ -219,8 +222,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="comments" oids="true">
 	<schema name="eds"/>
-	<position x="702" y="520"/>
-	<column name="id" not-null="true" default-value="nextval('commens_seq')">
+	<position x="170.5" y="859.25"/>
+	<column name="id" not-null="true" default-value="nextval('comments_seq')">
 		<type name="bigint"/>
 	</column>
 	<column name="user_id" not-null="true">
@@ -229,7 +232,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="document_id" not-null="true">
 		<type name="bigint"/>
 	</column>
-	<column name="modifable" not-null="true">
+	<column name="modifable" not-null="true" default-value="'Y'">
 		<type name="char"/>
 	</column>
 	<column name="content" not-null="true">
@@ -245,7 +248,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 	<constraint name="comments_user_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="eds.users" table="eds.comments">
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="eds.people" table="eds.comments">
 		<columns names="user_id" ref-type="src-columns"/>
 		<columns names="id" ref-type="dst-columns"/>
 	</constraint>
@@ -255,13 +258,27 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<columns names="id" ref-type="dst-columns"/>
 	</constraint>
 	<constraint name="comments_modifable_check" type="ck-constr" table="eds.comments">
-			<expression><![CDATA[modifable IN ('T' 'F')]]></expression>
+			<expression><![CDATA[modifable IN ('Y', 'N')]]></expression>
 	</constraint>
 </table>
 
+<relationship name="commented_by"
+	 type="relfk"
+	 src-table="eds.comments"
+	 dst-table="eds.people"
+	 src-required="false" dst-required="false"
+/>
+
+<relationship name="commented_to"
+	 type="relfk"
+	 src-table="eds.comments"
+	 dst-table="eds.documents"
+	 src-required="false" dst-required="false"
+/>
+
 <table name="tags" oids="true">
 	<schema name="eds"/>
-	<position x="1240" y="761"/>
+	<position x="1878.5" y="112.25"/>
 	<column name="id" not-null="true" default-value="nextval('tags_seq')">
 		<type name="bigint"/>
 	</column>
@@ -276,25 +293,25 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="document_tags" oids="true">
+<table name="documents_tags" oids="true">
 	<schema name="eds"/>
-	<position x="1249" y="590"/>
+	<position x="1899.5" y="497.25"/>
 	<column name="document_id" not-null="true">
 		<type name="bigint"/>
 	</column>
 	<column name="tag_id" not-null="true">
 		<type name="bigint"/>
 	</column>
-	<constraint name="document_tags_pk" type="pk-constr" factor="10" table="eds.document_tags">
+	<constraint name="document_tags_pk" type="pk-constr" factor="10" table="eds.documents_tags">
 		<columns names="document_id,tag_id" ref-type="src-columns"/>
 	</constraint>
 	<constraint name="document_tags_document_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
-	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.documents" table="eds.document_tags">
+	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.documents" table="eds.documents_tags">
 		<columns names="document_id" ref-type="src-columns"/>
 		<columns names="id" ref-type="dst-columns"/>
 	</constraint>
 	<constraint name="document_tags_tag_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
-	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.tags" table="eds.document_tags">
+	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.tags" table="eds.documents_tags">
 		<columns names="tag_id" ref-type="src-columns"/>
 		<columns names="id" ref-type="dst-columns"/>
 	</constraint>
@@ -302,18 +319,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <relationship name="is_tagged_by"
 	 type="relfk"
-	 src-table="eds.document_tags"
+	 src-table="eds.documents_tags"
 	 dst-table="eds.documents"
 	 src-required="false" dst-required="false"
 >
 	<label ref-type="name-label">
-		<position x="64.6749" y="-19.0486"/>
+		<position x="18.1752" y="13.2016"/>
 	</label>
 </relationship>
 
 <relationship name="tags"
 	 type="relfk"
-	 src-table="eds.document_tags"
+	 src-table="eds.documents_tags"
 	 dst-table="eds.tags"
 	 src-required="false" dst-required="false"
 >
@@ -364,18 +381,166 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="eds"/>
 </sequence>
 
-<relationship name="commented_by"
-	 type="relfk"
-	 src-table="eds.comments"
-	 dst-table="eds.users"
-	 src-required="false" dst-required="false"
-/>
+<table name="resource_groups" oids="true">
+	<schema name="eds"/>
+	<position x="119" y="86"/>
+	<column name="id" not-null="true" default-value="nextval('resource_groups_seq')">
+		<type name="bigint"/>
+	</column>
+	<column name="parent_resource_group_id">
+		<type name="bigint"/>
+	</column>
+	<column name="owner_id">
+		<type name="bigint"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<constraint name="resource_groups_pk" type="pk-constr" factor="10" table="eds.resource_groups">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="resource_groups_parent_resource_group_id" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="eds.resource_groups" table="eds.resource_groups">
+		<columns names="parent_resource_group_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+	<constraint name="resource_groups_owner_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="eds.people" table="eds.resource_groups">
+		<columns names="owner_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+</table>
 
-<relationship name="commented_to"
+<relationship name="consists_of"
 	 type="relfk"
-	 src-table="eds.comments"
+	 src-table="eds.resource_groups"
+	 dst-table="eds.resource_groups"
+	 src-required="false" dst-required="false"
+>
+	<line>
+		<position x="469.141" y="119.76"/>
+	<position x="469.141" y="76"/>
+	<position x="345.76" y="76"/>
+	</line>
+	<label ref-type="src-label">
+		<position x="12.6095" y="-14.86"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="-14.8603" y="-6.70002"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="is_owner_of"
+	 type="relfk"
+	 src-table="eds.resource_groups"
+	 dst-table="eds.people"
+	 src-required="false" dst-required="false"
+>
+	<label ref-type="name-label">
+		<position x="0" y="1.25"/>
+	</label>
+</relationship>
+
+<table name="resource_groups_directories" oids="true">
+	<schema name="eds"/>
+	<position x="785.5" y="247"/>
+	<column name="resource_group_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="directory_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<constraint name="resource_groups_directories_pk" type="pk-constr" factor="10" table="eds.resource_groups_directories">
+		<columns names="resource_group_id,directory_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="resource_groups_directories_resource_group_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="eds.resource_groups" table="eds.resource_groups_directories">
+		<columns names="resource_group_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+	<constraint name="resource_groups_directories_directory_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="eds.directories" table="eds.resource_groups_directories">
+		<columns names="directory_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+</table>
+
+<relationship name="consists"
+	 type="relfk"
+	 src-table="eds.resource_groups_directories"
+	 dst-table="eds.resource_groups"
+	 src-required="false" dst-required="false"
+>
+	<label ref-type="name-label">
+		<position x="132.601" y="11.7015"/>
+	</label>
+</relationship>
+
+<relationship name="is_consisted"
+	 type="relfk"
+	 src-table="eds.resource_groups_directories"
+	 dst-table="eds.directories"
+	 src-required="false" dst-required="false"
+>
+	<label ref-type="name-label">
+		<position x="23.6125" y="-26.1735"/>
+	</label>
+</relationship>
+
+<table name="resource_groups_documents" oids="true">
+	<schema name="eds"/>
+	<position x="1314.5" y="101"/>
+	<column name="resource_group_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="document_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<constraint name="resource_groups_documents_pk" type="pk-constr" factor="10" table="eds.resource_groups_documents">
+		<columns names="resource_group_id,document_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="resource_groups_documents_resource_group_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="eds.resource_groups" table="eds.resource_groups_documents">
+		<columns names="resource_group_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+	<constraint name="resource_groups_documents_document_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="eds.documents" table="eds.resource_groups_documents">
+		<columns names="document_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+</table>
+
+<relationship name="contains"
+	 type="relfk"
+	 src-table="eds.resource_groups_documents"
+	 dst-table="eds.resource_groups"
+	 src-required="false" dst-required="false"
+>
+	<label ref-type="name-label">
+		<position x="137.101" y="-55.2985"/>
+	</label>
+</relationship>
+
+<relationship name="is_contained_in"
+	 type="relfk"
+	 src-table="eds.resource_groups_documents"
 	 dst-table="eds.documents"
 	 src-required="false" dst-required="false"
-/>
+>
+	<label ref-type="name-label">
+		<position x="21.0344" y="-22.9235"/>
+	</label>
+</relationship>
+
+<sequence name="resource_groups_seq"
+	 start="1" increment="1"
+	 min-value="0" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="eds"/>
+</sequence>
 
 </dbmodel>

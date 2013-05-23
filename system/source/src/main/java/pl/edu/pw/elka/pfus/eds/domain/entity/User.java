@@ -1,8 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 public class User extends AbstractEntity {
     private Integer id;
@@ -11,7 +9,6 @@ public class User extends AbstractEntity {
     private String lastName;
     private Date registrationDate;
     private Date lastLogin;
-    private Set<Group> groups = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -59,14 +56,6 @@ public class User extends AbstractEntity {
 
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
-    }
-
-    public Set<Group> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(Set<Group> groups) {
-        this.groups = groups;
     }
 
     @Override

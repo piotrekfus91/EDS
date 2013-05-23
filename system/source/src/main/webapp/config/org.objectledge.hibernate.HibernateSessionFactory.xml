@@ -22,10 +22,6 @@
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>
 
-        <!-- Create the database schema on startup (if needed) -->
-        <!--<property name="hbm2ddl.auto">update</property>-->
-        <!--<property name="hbm2ddl.auto">create</property>-->
-
         <!-- Hibernate Security Service -->
         <mapping class="org.objectledge.security.object.hibernate.HibernatePermission"
                  resource="org/objectledge/security/object/hibernate/HibernatePermission.hbm.xml"/>
@@ -40,6 +36,5 @@
 
         <!-- Example mapping  -->
         <mapping class="pl.edu.pw.elka.pfus.eds.domain.entity.User" />
-        <mapping class="pl.edu.pw.elka.pfus.eds.domain.entity.Group" />
     </session-factory>
 </hibernate-configuration>
