@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel>
+<role name="eds"
+      login="true"
+      password="asdf">
+</role>
+
+<schema name="public" protected="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="eds" fill-color="#e1e1e1">
+</schema>
+
+<database name="eds">
+	<role name="eds"/>
+</database>
+
+<table name="users" oids="true">
+	<schema name="eds"/>
+	<position x="128" y="259"/>
+	<column name="id" not-null="true" default-value="nextval('users_seq')">
+		<type name="bigint"/>
+	</column>
+	<column name="login" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="password" not-null="true">
+		<type name="varchar" length="32"/>
+	</column>
+	<column name="first_name" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="last_name" not-null="true">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="email" not-null="true">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="locked" not-null="true" default-value="'F'">
+		<type name="char"/>
+	</column>
+	<column name="creation_time" not-null="true">
+		<type name="timestamptz"/>
+	</column>
+	<column name="last_login_time">
+		<type name="timestamptz"/>
+	</column>
+	<constraint name="users_pk" type="pk-constr" factor="10" table="eds.users">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="users_locked_check" type="ck-constr" table="eds.users">
+			<expression><![CDATA[locked IN ('T', 'F')]]></expression>
+	</constraint>
+</table>
+
+<table name="mime_types" oids="true">
+	<schema name="eds"/>
+	<position x="1221" y="39"/>
+	<column name="id" not-null="true" default-value="nextval('mime_types_seq')">
+		<type name="integer"/>
+	</column>
+	<column name="type" not-null="true">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="enabled" not-null="true">
+		<type name="char"/>
+	</column>
+	<column name="default_extension">
+		<type name="varchar" length="6"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
+	</column>
+	<constraint name="mime_type_pk" type="pk-constr" factor="10" table="eds.mime_types">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="mime_type_enabled_check" type="ck-constr" table="eds.mime_types">
+			<expression><![CDATA[enabled IN ('T', 'F')]]></expression>
+	</constraint>
+</table>
+
+<table name="directories" oids="true">
+	<schema name="eds"/>
+	<position x="667" y="67"/>
+	<column name="id" not-null="true" default-value="nextval('directories_id')">
+		<type name="bigint"/>
+	</column>
+	<column name="parent_directory_id">
+		<type name="bigint"/>
+	</column>
+	<column name="owner_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<constraint name="directories_pk" type="pk-constr" factor="10" table="eds.directories">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="directories_owner_id" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.users" table="eds.directories">
+		<columns names="owner_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+	<constraint name="directories_parent_directory_id" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="eds.directories" table="eds.directories">
+		<columns names="parent_directory_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+</table>
+
+<relationship name="belongs_to"
+	 type="relfk"
+	 src-table="eds.directories"
+	 dst-table="eds.users"
+	 src-required="false" dst-required="false"
+>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="is_subdirectory_of"
+	 type="relfk"
+	 src-table="eds.directories"
+	 dst-table="eds.directories"
+	 src-required="false" dst-required="false"
+>
+	<line>
+		<position x="977.594" y="100.76"/>
+	<position x="977.594" y="57"/>
+	<position x="867.396" y="57"/>
+	</line>
+	<label ref-type="src-label">
+		<position x="16.4062" y="15.14"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="documents" oids="true">
+	<schema name="eds"/>
+	<position x="1228" y="293"/>
+	<column name="id" not-null="true" default-value="nextval('files_seq')">
+		<type name="bigint"/>
+	</column>
+	<column name="mime_type_id">
+		<type name="integer"/>
+	</column>
+	<column name="directory_id">
+		<type name="bigint"/>
+	</column>
+	<column name="owner_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="255"/>
+	</column>
+	<column name="content_md5" not-null="true">
+		<type name="varchar" length="32"/>
+	</column>
+	<constraint name="files_pk" type="pk-constr" factor="10" table="eds.documents">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="documents_mime_type_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.mime_types" table="eds.documents">
+		<columns names="mime_type_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+	<constraint name="documents_directory_id" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.directories" table="eds.documents">
+		<columns names="directory_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+	<constraint name="documents_owner_id" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.users" table="eds.documents">
+		<columns names="owner_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+</table>
+
+<relationship name="is_type_of"
+	 type="relfk"
+	 src-table="eds.documents"
+	 dst-table="eds.mime_types"
+	 src-required="false" dst-required="false"
+>
+	<label ref-type="name-label">
+		<position x="67.8546" y="13.2014"/>
+	</label>
+</relationship>
+
+<relationship name="is_placed_in"
+	 type="relfk"
+	 src-table="eds.documents"
+	 dst-table="eds.directories"
+	 src-required="false" dst-required="false"
+>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="is_onwer_of"
+	 type="relfk"
+	 src-table="eds.documents"
+	 dst-table="eds.users"
+	 src-required="false" dst-required="false"
+>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="comments" oids="true">
+	<schema name="eds"/>
+	<position x="702" y="520"/>
+	<column name="id" not-null="true" default-value="nextval('commens_seq')">
+		<type name="bigint"/>
+	</column>
+	<column name="user_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="document_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="modifable" not-null="true">
+		<type name="char"/>
+	</column>
+	<column name="content" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="creation_time" not-null="true">
+		<type name="timestamptz"/>
+	</column>
+	<column name="updating_time">
+		<type name="timestamptz"/>
+	</column>
+	<constraint name="comments_id" type="pk-constr" factor="10" table="eds.comments">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="comments_user_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="eds.users" table="eds.comments">
+		<columns names="user_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+	<constraint name="comments_document_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="eds.documents" table="eds.comments">
+		<columns names="document_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+	<constraint name="comments_modifable_check" type="ck-constr" table="eds.comments">
+			<expression><![CDATA[modifable IN ('T' 'F')]]></expression>
+	</constraint>
+</table>
+
+<table name="tags" oids="true">
+	<schema name="eds"/>
+	<position x="1240" y="761"/>
+	<column name="id" not-null="true" default-value="nextval('tags_seq')">
+		<type name="bigint"/>
+	</column>
+	<column name="value" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="normalized_value" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<constraint name="tags_pk" type="pk-constr" factor="10" table="eds.tags">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="document_tags" oids="true">
+	<schema name="eds"/>
+	<position x="1249" y="590"/>
+	<column name="document_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="tag_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<constraint name="document_tags_pk" type="pk-constr" factor="10" table="eds.document_tags">
+		<columns names="document_id,tag_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="document_tags_document_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.documents" table="eds.document_tags">
+		<columns names="document_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+	<constraint name="document_tags_tag_id_fk" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="SET NULL" del-action="SET NULL" ref-table="eds.tags" table="eds.document_tags">
+		<columns names="tag_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="dst-columns"/>
+	</constraint>
+</table>
+
+<relationship name="is_tagged_by"
+	 type="relfk"
+	 src-table="eds.document_tags"
+	 dst-table="eds.documents"
+	 src-required="false" dst-required="false"
+>
+	<label ref-type="name-label">
+		<position x="64.6749" y="-19.0486"/>
+	</label>
+</relationship>
+
+<relationship name="tags"
+	 type="relfk"
+	 src-table="eds.document_tags"
+	 dst-table="eds.tags"
+	 src-required="false" dst-required="false"
+>
+	<label ref-type="name-label">
+		<position x="48.3234" y="-27.2985"/>
+	</label>
+</relationship>
+
+<sequence name="users_seq"
+	 start="1" increment="1"
+	 min-value="0" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="eds"/>
+</sequence>
+
+<sequence name="directories_seq"
+	 start="1" increment="1"
+	 min-value="0" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="eds"/>
+</sequence>
+
+<sequence name="comments_seq"
+	 start="1" increment="1"
+	 min-value="0" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="eds"/>
+</sequence>
+
+<sequence name="tags_seq"
+	 start="1" increment="1"
+	 min-value="0" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="eds"/>
+</sequence>
+
+<sequence name="documents_seq"
+	 start="1" increment="1"
+	 min-value="0" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="eds"/>
+</sequence>
+
+<sequence name="mime_types_seq"
+	 start="1" increment="1"
+	 min-value="0" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="eds"/>
+</sequence>
+
+<relationship name="commented_by"
+	 type="relfk"
+	 src-table="eds.comments"
+	 dst-table="eds.users"
+	 src-required="false" dst-required="false"
+/>
+
+<relationship name="commented_to"
+	 type="relfk"
+	 src-table="eds.comments"
+	 dst-table="eds.documents"
+	 src-required="false" dst-required="false"
+/>
+
+</dbmodel>

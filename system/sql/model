@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel>
+<role name="eds"
+      login="true"
+      password="asdf">
+</role>
+
+<schema name="public" protected="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="eds" fill-color="#e1e1e1">
+</schema>
+
+<database name="eds">
+	<role name="eds"/>
+</database>
+
+<table name="users" oids="true">
+	<schema name="eds"/>
+	<position x="222" y="392"/>
+	<column name="id" not-null="true" default-value="nextval('users_seq')">
+		<type name="bigint"/>
+	</column>
+	<constraint name="users_pk" type="pk-constr" factor="10" table="eds.users">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="documents" oids="true">
+	<schema name="eds"/>
+	<position x="972" y="447"/>
+	<column name="id" not-null="true" default-value="nextval('files_seq')">
+		<type name="bigint"/>
+	</column>
+	<constraint name="files_pk" type="pk-constr" factor="10" table="eds.documents">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="mime_types" oids="true">
+	<schema name="eds"/>
+	<position x="1393" y="435"/>
+	<column name="id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="type" not-null="true">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="default_extension">
+		<type name="varchar" length="6"/>
+	</column>
+	<column name="enabled">
+		<type name="char"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
+	</column>
+	<constraint name="mime_type_pk" type="pk-constr" factor="10" table="eds.mime_types">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="mime_type_enabled_check" type="ck-constr" table="eds.mime_types">
+			<expression><![CDATA[enabled IN ('T', 'F')]]></expression>
+	</constraint>
+</table>
+
+<table name="directories" oids="true">
+	<schema name="eds"/>
+	<position x="560" y="580"/>
+	<column name="id" not-null="true" default-value="nextval('directories_id')">
+		<type name="bigint"/>
+	</column>
+	<constraint name="directories_pk" type="pk-constr" factor="10" table="eds.directories">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="comments" oids="true">
+	<schema name="eds"/>
+	<position x="540" y="140"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="content" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="creation_time" not-null="true">
+		<type name="timestamptz"/>
+	</column>
+	<column name="updating_time">
+		<type name="timestamptz"/>
+	</column>
+	<column name="modifable" not-null="true">
+		<type name="char"/>
+	</column>
+	<constraint name="comments_id" type="pk-constr" factor="10" table="eds.comments">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="comments_modifable_check" type="ck-constr" table="eds.comments">
+			<expression><![CDATA[modifable IN ('T' 'F')]]></expression>
+	</constraint>
+</table>
+
+<table name="tags" oids="true">
+	<schema name="eds"/>
+	<position x="1140" y="140"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="value" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="normalized_value" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<constraint name="tags_pk" type="pk-constr" factor="10" table="eds.tags">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+</dbmodel>

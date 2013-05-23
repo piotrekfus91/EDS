@@ -1,0 +1,10 @@
+$viewEnclosureTool.top()##
+hello<br />
+<ul>
+#foreach($user in $users)
+    <li>name: $user.login</li>
+    <li>first name: $user.firstName</li>
+    <li>last name: $user.lastName</li>
+    <li>registration date: $user.registrationDate</li>
+#end
+</ul>

@@ -1,6 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 

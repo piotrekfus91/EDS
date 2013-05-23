@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/eds</property>
+        <property name="connection.username">eds</property>
+        <property name="connection.password">asdf</property>
+        <property name="connection.default_schema">eds</property>
+
+        <property name="jena.db">PostgreSQL</property>
+
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+
+        <!-- Hibernate autocommit -->
+        <property name="connection.autocommit">false</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Create the database schema on startup (if needed) -->
+        <!--<property name="hbm2ddl.auto">update</property>-->
+        <!--<property name="hbm2ddl.auto">create</property>-->
+
+        <!-- Hibernate Security Service -->
+        <mapping class="org.objectledge.security.object.hibernate.HibernatePermission"
+                 resource="org/objectledge/security/object/hibernate/HibernatePermission.hbm.xml"/>
+        <mapping class="org.objectledge.security.object.hibernate.HibernateResourceGroup"
+                 resource="org/objectledge/security/object/hibernate/HibernateResourceGroup.hbm.xml"/>
+        <mapping class="org.objectledge.security.object.hibernate.HibernateRole"
+                 resource="org/objectledge/security/object/hibernate/HibernateRole.hbm.xml"/>
+        <mapping class="org.objectledge.security.object.hibernate.HibernateUser"
+                 resource="org/objectledge/security/object/hibernate/HibernateUser.hbm.xml"/>
+        <mapping class="org.objectledge.security.object.hibernate.HibernateUserResourceGroupRole"
+                 resource="org/objectledge/security/object/hibernate/HibernateUserResourceGroupRole.hbm.xml"/>
+
+        <!-- Example mapping  -->
+        <mapping class="pl.edu.pw.elka.pfus.eds.domain.entity.User" />
+        <mapping class="pl.edu.pw.elka.pfus.eds.domain.entity.Group" />
+    </session-factory>
+</hibernate-configuration>

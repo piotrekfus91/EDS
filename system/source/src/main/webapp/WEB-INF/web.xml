@@ -5,4 +5,16 @@
 		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
            version="3.0">
 
+    <servlet>
+        <servlet-name>ledge</servlet-name>
+        <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ledge</servlet-name>
+        <url-pattern>/l/*</url-pattern>
+    </servlet-mapping>
+    
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>
