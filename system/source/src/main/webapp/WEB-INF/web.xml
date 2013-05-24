@@ -11,10 +11,11 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ledge</servlet-name>
-        <url-pattern>/l/*</url-pattern>
+        <url-pattern>/eds/*</url-pattern>
     </servlet-mapping>
     
     <welcome-file-list>
+        <welcome-file>eds/v/Index</welcome-file>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

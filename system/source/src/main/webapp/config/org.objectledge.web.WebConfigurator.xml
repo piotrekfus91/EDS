@@ -28,4 +28,5 @@
 --> 
 
 <config>
+    <view_token>v</view_token>
 </config>

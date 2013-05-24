@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pfus.eds.modules.views.index;
+package pl.edu.pw.elka.pfus.eds.modules.views;
 
 import org.apache.log4j.Logger;
 import org.objectledge.context.Context;
