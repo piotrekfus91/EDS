@@ -5,6 +5,8 @@
 --> 
 
 <config>
+    <exception class="org.objectledge.web.mvc.builders.MissingViewException"
+               view="error.Http404" level="DEBUG" />
   <exception class="org.objectledge.web.mvc.security.LoginRequiredException"
   			 view="Login" level="DEBUG"/>
   <exception class="org.objectledge.security.exception.AccessControlException"
