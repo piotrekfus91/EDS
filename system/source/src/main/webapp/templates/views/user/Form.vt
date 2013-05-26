@@ -1,0 +1,42 @@
+$viewEnclosureTool.override('layout.Page')
+
+#set($userGroup = $intake.User.Default)
+
+#if($id)
+    #set($formUrl = $link.action('user.Edit'))
+    $pageTool.appendTitleSuffix('Edycja użytkownika - ')
+    $pageTool.appendTitleSuffix($userGroup.Login.Value)
+#else
+    #set($formUrl = $link.action('user.Add'))
+    $pageTool.appendTitleSuffix('Nowy użytkownik')
+#end
+
+
+<form method="post" action="$formUrl">
+    <input type="hidden" name="$userGroup.Id.Key" value="$userGroup.Id" />
+    <table>
+        <tr>
+            <td>Login</td>
+            <td><input type="text" name="$userGroup.Login.Key" value="$userGroup.Login" /></td>
+            <td>
+                #if(!$userGroup.Login.isValid())
+                    <span style="color: red">$userGroup.Login.Message</span>
+                #end
+            </td>
+        </tr>
+        <tr>
+            <td>Imię</td>
+            <td><input type="text" name="$userGroup.FirstName.Key" value="$!userGroup.FirstName" /></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Nazwisko</td>
+            <td><input type="text" name="$userGroup.LastName.Key" value="$userGroup.LastName" /></td>
+            <td></td>
+        </tr>
+    </table>
+    <input type="submit" name="submit" value="Zapisz" />
+    #if($success)
+        <span style="color: green">Operacja zakończona sukcesem</span>
+    #end
+</form>

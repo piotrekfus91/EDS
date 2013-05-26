@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<input-data basePackage="org.objectledge.example.">
+<input-data basePackage="pl.edu.pw.elka.pfus.eds">
 
 <!-- 
 Known types: BigDecimal,ComboKey,DateString,TimestampString,FileItem,NumberKey,String,StringKey,boolean,char,double,float,int,long,short,byte,Enum
@@ -43,6 +43,19 @@ Known types: BigDecimal,ComboKey,DateString,TimestampString,FileItem,NumberKey,S
 	<!--</field>	-->
 <!--</group>-->
 
+    <group name="User" key="user" mapToObject="domain.entity.User">
+        <field name="Id" key="id" type="long" />
+        <field name="Login" key="login" type="String">
+            <rule name="minLength" value="3">Login musi mieć co najmniej 3 znaki</rule>
+            <rule name="maxLength" value="30">Login nie może mieć więcej niż 30 znaków</rule>
+        </field>
+        <field name="FirstName" key="firstName" type="String">
+
+        </field>
+        <field name="LastName" key="lastName" type="String">
+
+        </field>
+    </group>
 <!--<group name="Person" key="person" mapToObject="or.Person">-->
 	<!--<field name="PersonId" key="personid" type="long"/>-->
 	<!--<field name="Name" key="name" type="String" displayName="First name">-->

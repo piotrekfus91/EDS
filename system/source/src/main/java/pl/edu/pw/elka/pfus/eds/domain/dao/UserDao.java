@@ -14,10 +14,20 @@ public class UserDao extends GenericDao<User> {
         super(context);
     }
 
+    public User getById(Long id) {
+        return (User) getSession().get(User.class, id);
+    }
+
     public List<User> getAllUsers() {
         String queryString = "SELECT u FROM User u";
         Query query = getSession().createQuery(queryString);
-        logger.warn(query.list());
         return query.list();
     }
+
+    public void deleteById(Long id) {
+        String queryString = "DELETE FROM User u WHERE u.id = " + id;
+        Query query = getSession().createQuery(queryString);
+        query.executeUpdate();
+    }
+
 }

@@ -1,5 +1,5 @@
 $viewEnclosureTool.top()
-$pageTool.insertTitlePrefix('EDS')
+$pageTool.insertTitlePrefix('EDS - ')
 <!DOCTYPE html
         PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -9,17 +9,21 @@ $pageTool.insertTitlePrefix('EDS')
     <title>$pageTool.title</title>
 </head>
 <body style="margin-top: 20px">
-<div style="width: 20%; margin-left: 10%; float: left">
-    <span style="bold">Menu</span>
-    <ul>
-        <li><a href="$link.view('Index')">Strona główna</a></li>
-        <li><a href="$link.view('user.Index')">Przeglądaj użytkowników</a></li>
-        <li><a href="$link.view('user.Add')">Dodaj użytkownika</a></li>
-        <li><a href="ajksldf">Nie istniejąca</a></li>
-    </ul>
-</div>
-<div style="width: 60%; margin-right: 10%">
-    $embeddedPlaceholder
-</div>
+<table>
+    <tr>
+        <td style="width: 30%">
+            <span style="bold">Menu</span>
+            <ul>
+                <li><a href="$link.view('Index')">Strona główna</a></li>
+                <li><a href="$link.view('user.Index')">Przeglądaj użytkowników</a></li>
+                <li><a href="$link.view('user.Form')">Dodaj użytkownika</a></li>
+                <li><a href="ajksldf">Nie istniejąca</a></li>
+            </ul>
+        </td>
+        <td>
+            $embeddedPlaceholder
+        </td>
+    </tr>
+</table>
 </body>
 </html>

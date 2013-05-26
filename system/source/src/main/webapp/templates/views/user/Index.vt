@@ -1,5 +1,5 @@
 $viewEnclosureTool.override('layout.Page')
-$pageTool.appendTitleSuffix(' - Lista użytkowników')
+$pageTool.appendTitleSuffix('Lista użytkowników')
 
 <table>
     <th>ID</th>
@@ -16,6 +16,8 @@ $pageTool.appendTitleSuffix(' - Lista użytkowników')
             <td>$user.firstName</td>
             <td>$user.lastName</td>
             <td>$user.registrationDate</td>
+            <td><a href="$link.view('user.Form').set('edit', $user.id)">Edytuj</a></td>
+            <td><a href="$link.action('user.Delete').set('delete', $user.id)">Usuń</a></td>
         </tr>
     #end
 </table>

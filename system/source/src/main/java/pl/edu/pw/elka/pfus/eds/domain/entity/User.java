@@ -3,18 +3,28 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 import java.util.Date;
 
 public class User extends AbstractEntity {
-    private Integer id;
-    private String login;
-    private String firstName;
-    private String lastName;
+    private Long id;
+    private String login = "";
+    private String firstName = "";
+    private String lastName = "";
     private Date registrationDate;
     private Date lastLogin;
 
-    public Integer getId() {
+    public User() {
+
+    }
+
+    public User(String login, String firstName, String lastName) {
+        this.login = login;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -56,6 +66,13 @@ public class User extends AbstractEntity {
 
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "login='" + login + '\'' +
+                '}';
     }
 
     @Override
