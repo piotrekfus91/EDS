@@ -8,6 +8,7 @@ import org.objectledge.intake.IntakeTool;
 import org.objectledge.intake.model.Group;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.web.mvc.MVCContext;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.ol.extension.AbstractAction;
@@ -42,6 +43,8 @@ public class Add extends AbstractAction {
                 userDao.persist(user);
                 tx.commit();
                 getTemplatingContext(context).put("success", true);
+                MVCContext.getMVCContext(context).setView("user.Index");
+                MVCContext.getMVCContext(context).setAction("");
             } catch(Exception e) {
                 tx.rollback();
                 logger.error(e.getMessage(), e);

@@ -1,0 +1,8 @@
+0. Zainstaluj ledge.
+1. Stwórz bazę eds, schemat ledge_hello_world, użytkownika eds/asdf.
+2. Odpal skrypty security.sql, security_inserts.sql.
+3. Zbuduj aplikację (mvn package w tym katalogu).
+4. Skopiuj plik target/eds.war do $TOMCAT_HOME/webapps.
+5. Uruchom tomcat ($TOMCAT_HOME/bin/startup.sh).
+6. Uruchom aplikację (np. localhost:8080/eds).
+7. Odpal skrypt create_sequences.sql.

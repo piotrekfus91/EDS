@@ -17,7 +17,7 @@ $pageTool.insertTitlePrefix('EDS - ')
                 <li><a href="$link.view('Index')">Strona główna</a></li>
                 <li><a href="$link.view('user.Index')">Przeglądaj użytkowników</a></li>
                 <li><a href="$link.view('user.Form')">Dodaj użytkownika</a></li>
-                <li><a href="ajksldf">Nie istniejąca</a></li>
+                <li><a href="$link.view('jaskldfj')">Nie istniejąca</a></li>
             </ul>
         </td>
         <td>

@@ -21,7 +21,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="people" oids="true">
 	<schema name="eds"/>
-	<position x="160.5" y="454.25"/>
+	<position x="160" y="460"/>
 	<column name="id" not-null="true" default-value="nextval('users_seq')">
 		<type name="bigint"/>
 	</column>
@@ -59,7 +59,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="mime_types" oids="true">
 	<schema name="eds"/>
-	<position x="1888" y="878.5"/>
+	<position x="1880" y="880"/>
 	<column name="id" not-null="true" default-value="nextval('mime_types_seq')">
 		<type name="integer"/>
 	</column>
@@ -85,7 +85,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="directories" oids="true">
 	<schema name="eds"/>
-	<position x="773.25" y="486.75"/>
+	<position x="780" y="480"/>
 	<column name="id" not-null="true" default-value="nextval('directories_id')">
 		<type name="bigint"/>
 	</column>
@@ -131,9 +131,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="false" dst-required="false"
 >
 	<line>
-		<position x="1083.84" y="520.51"/>
-	<position x="1083.84" y="476.75"/>
-	<position x="973.646" y="476.75"/>
+		<position x="1090.59" y="513.76"/>
+	<position x="1090.59" y="470"/>
+	<position x="980.396" y="470"/>
 	</line>
 	<label ref-type="src-label">
 		<position x="16.4062" y="15.14"/>
@@ -148,7 +148,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="documents" oids="true">
 	<schema name="eds"/>
-	<position x="1322.5" y="866.25"/>
+	<position x="1320" y="860"/>
 	<column name="id" not-null="true" default-value="nextval('documents_seq')">
 		<type name="bigint"/>
 	</column>
@@ -222,7 +222,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="comments" oids="true">
 	<schema name="eds"/>
-	<position x="170.5" y="859.25"/>
+	<position x="180" y="860"/>
 	<column name="id" not-null="true" default-value="nextval('comments_seq')">
 		<type name="bigint"/>
 	</column>
@@ -278,7 +278,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="tags" oids="true">
 	<schema name="eds"/>
-	<position x="1878.5" y="112.25"/>
+	<position x="1880" y="120"/>
 	<column name="id" not-null="true" default-value="nextval('tags_seq')">
 		<type name="bigint"/>
 	</column>
@@ -295,7 +295,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="documents_tags" oids="true">
 	<schema name="eds"/>
-	<position x="1899.5" y="497.25"/>
+	<position x="1900" y="500"/>
 	<column name="document_id" not-null="true">
 		<type name="bigint"/>
 	</column>
@@ -383,7 +383,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="resource_groups" oids="true">
 	<schema name="eds"/>
-	<position x="119" y="86"/>
+	<position x="120" y="80"/>
 	<column name="id" not-null="true" default-value="nextval('resource_groups_seq')">
 		<type name="bigint"/>
 	</column>
@@ -418,9 +418,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="false" dst-required="false"
 >
 	<line>
-		<position x="469.141" y="119.76"/>
-	<position x="469.141" y="76"/>
-	<position x="345.76" y="76"/>
+		<position x="470.141" y="113.76"/>
+	<position x="470.141" y="70"/>
+	<position x="346.76" y="70"/>
 	</line>
 	<label ref-type="src-label">
 		<position x="12.6095" y="-14.86"/>
@@ -446,7 +446,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="resource_groups_directories" oids="true">
 	<schema name="eds"/>
-	<position x="785.5" y="247"/>
+	<position x="780" y="240"/>
 	<column name="resource_group_id" not-null="true">
 		<type name="bigint"/>
 	</column>
@@ -492,7 +492,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="resource_groups_documents" oids="true">
 	<schema name="eds"/>
-	<position x="1314.5" y="101"/>
+	<position x="1320" y="100"/>
 	<column name="resource_group_id" not-null="true">
 		<type name="bigint"/>
 	</column>
@@ -521,7 +521,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="false" dst-required="false"
 >
 	<label ref-type="name-label">
-		<position x="137.101" y="-55.2985"/>
+		<position x="24.3508" y="-50.5485"/>
 	</label>
 </relationship>
 

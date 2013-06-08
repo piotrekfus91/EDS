@@ -1,8 +1,0 @@
-
-<Context>
-    <!--<Resource name="jdbc/EDSDB" auth="Container"-->
-              <!--type="javax.sql.DataSource" username="eds" password="asdf"-->
-              <!--driverClassName="org.postgresql.Driver"-->
-              <!--url="jdbc:postgresql://localhost:5432"-->
-              <!--maxActive="8" />-->
-</Context>

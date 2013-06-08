@@ -4,7 +4,7 @@
 --# Create the global group
 --# this group is used to assign system-wide roles to users
 
-set search_path to eds; 
+set search_path to ledge_hello_world;
 INSERT INTO SECURITY_RESOURCE_GROUP (RESOURCE_GROUP_ID, RESOURCE_GROUP_NAME) VALUES (1,'global');
 INSERT INTO SECURITY_RESOURCE_GROUP (RESOURCE_GROUP_ID, RESOURCE_GROUP_NAME) VALUES (2, 'resource_group_security');
 

@@ -24,6 +24,7 @@ public class Delete extends AbstractAction {
         Transaction tx = getSession(context).beginTransaction();
         try {
             userDao.deleteById(id);
+            tx.commit();
         } catch(Exception e) {
             tx.rollback();
             logger.error(e.getMessage(), e);
