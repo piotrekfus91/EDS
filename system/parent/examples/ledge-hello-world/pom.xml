@@ -3,10 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>pl.edu.pw.elka.pfus.eds</groupId>
-    <artifactId>eds</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <parent>
+        <groupId>pl.edu.pw.elka.pfus.eds</groupId>
+        <artifactId>examples</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>ledge-hello-world</artifactId>
     <packaging>war</packaging>
 
     <properties>
