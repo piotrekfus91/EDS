@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.Comment" table="comment" schema="eds" lazy="false">
+
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="sequence">
+				<param name="sequence">comment_seq</param>
+			</generator>
+		</id>
+
+        <version name="version" column="version" type="integer" />
+
+        <many-to-one name="user" cascade="lock" column="user_id" index="comment_user_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.User" not-null="true" lazy="no-proxy" access="field">
+		</many-to-one>
+
+        <many-to-one name="document" cascade="lock" column="document_id" index="comment_document_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Document" not-null="true" lazy="no-proxy" access="field">
+		</many-to-one>
+
+        <property name="content" column="content" type="text" not-null="true" lazy="false"/>
+        <property name="created" column="created" type="timestamp" length="6" not-null="true" lazy="false"/>
+        <property name="modified" column="modified" type="timestamp" length="6" not-null="false" lazy="false"/>
+
+	</class>
+</hibernate-mapping>

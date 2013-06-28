@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup" table="resource_group" schema="eds" lazy="false">
+
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="sequence">
+				<param name="sequence">resource_group_seq</param>
+			</generator>
+		</id>
+
+        <version name="version" column="version" type="integer"/>
+
+        <many-to-one name="founder" cascade="lock" column="founder_id" index="resource_group_founder_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.User" not-null="true" lazy="no-proxy" access="field">
+		</many-to-one>
+
+        <property name="name" column="name" type="string" length="30" not-null="true" lazy="false"/>
+        <property name="description" column="description" type="text" not-null="false" lazy="false"/>
+
+		<set name="directories" table="resource_group_directory" schema="eds" lazy="true" cascade="save-update,lock">
+			<key column="resource_group_id" not-null="true"/>
+			<many-to-many column="directory_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory">
+			</many-to-many>
+		</set>
+
+		<set name="documents" table="resource_group_document" schema="eds" lazy="true" cascade="save-update,lock">
+			<key column="resource_group_id" not-null="true"/>
+			<many-to-many column="document_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Document">
+			</many-to-many>
+		</set>
+
+	</class>
+</hibernate-mapping>

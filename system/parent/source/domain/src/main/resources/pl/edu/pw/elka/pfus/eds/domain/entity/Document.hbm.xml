@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.Document" table="document" schema="eds" lazy="false">
+
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="sequence">
+				<param name="sequence">document_seq</param>
+			</generator>
+		</id>
+
+        <version name="version" column="version" type="integer" />
+
+        <many-to-one name="mimeType" cascade="lock" column="mime_type_id" index="document_mime_type_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.MimeType" not-null="true" lazy="no-proxy" access="field">
+		</many-to-one>
+
+        <many-to-one name="owner" cascade="lock" column="owner_id" index="document_owner_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.User" not-null="true" lazy="no-proxy" access="field">
+		</many-to-one>
+
+        <many-to-one name="directory" cascade="lock" column="directory_id" index="document_directory_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory" not-null="false" lazy="no-proxy" access="field">
+		</many-to-one>
+
+        <property name="name" column="name" type="string" length="255" not-null="true" lazy="false"/>
+        <property name="contentMd5" column="content_md5" type="string" length="32" not-null="true" lazy="false"/>
+
+		<set name="resourceGroups" table="resource_group_document" schema="eds" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="document_id" not-null="true"/>
+			<many-to-many column="resource_group_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup">
+			</many-to-many>
+		</set>
+
+		<set name="tags" table="document_tag" schema="eds" lazy="true" cascade="save-update,lock">
+			<key column="document_id" not-null="true"/>
+			<many-to-many column="tag_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Tag">
+			</many-to-many>
+		</set>
+
+		<set name="comments" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="document_id" not-null="true"/>
+			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Comment"/>
+		</set>
+
+	</class>
+</hibernate-mapping>

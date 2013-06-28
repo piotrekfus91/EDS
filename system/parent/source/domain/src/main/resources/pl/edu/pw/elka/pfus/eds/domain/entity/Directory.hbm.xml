@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.Directory" table="directory" schema="eds" lazy="false">
+
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="sequence">
+				<param name="sequence">directory_seq</param>
+			</generator>
+		</id>
+
+        <version name="version" column="version" type="integer" />
+
+        <many-to-one name="parentDirectory" cascade="lock" column="parent_directory_id" index="directory_parent_directory_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory" not-null="false" lazy="no-proxy" access="field">
+		</many-to-one>
+
+        <property name="name" column="name" type="string" length="30" not-null="true" lazy="false"/>
+
+		<set name="resourceGroups" table="resource_group_directory" schema="eds" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="directory_id" not-null="true"/>
+			<many-to-many column="resource_group_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup">
+			</many-to-many>
+		</set>
+
+		<set name="subdirectories" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="parent_directory_id" not-null="false"/>
+			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory"/>
+		</set>
+
+		<set name="documents" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="directory_id" not-null="false"/>
+			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Document"/>
+		</set>
+
+	</class>
+</hibernate-mapping>

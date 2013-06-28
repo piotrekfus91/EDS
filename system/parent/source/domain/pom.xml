@@ -5,19 +5,21 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>pl.edu.pw.elka.pfus.eds</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>source</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <groupId>pl.edu.pw.elka.pfus.eds</groupId>
-    <artifactId>examples</artifactId>
+    <artifactId>domain</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>examples</name>
+    <name>domain</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <modules>
-        <module>ledge-hello-world</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+    </dependencies>
 </project>
