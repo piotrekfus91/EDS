@@ -66,6 +66,10 @@ public class MimeType extends IdentifableEntity {
         return ImmutableSet.copyOf(documents);
     }
 
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
+    }
+
     public void addDocument(Document document) {
         documents.add(document);
     }

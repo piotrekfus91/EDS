@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.User" table="`user`" schema="eds" lazy="false">
+	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.User" table="`user`" lazy="false">
 
 		<id name="id" column="id" type="integer" unsaved-value="0">
 			<generator class="sequence">

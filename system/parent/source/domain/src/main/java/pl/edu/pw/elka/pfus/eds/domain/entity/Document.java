@@ -40,6 +40,10 @@ public class Document extends IdentifableEntity implements Versionable {
         return version;
     }
 
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -62,6 +66,10 @@ public class Document extends IdentifableEntity implements Versionable {
 
     public Set<ResourceGroup> getResourceGroups() {
         return ImmutableSet.copyOf(resourceGroups);
+    }
+
+    public void setResourceGroups(Set<ResourceGroup> resourceGroups) {
+        this.resourceGroups = resourceGroups;
     }
 
     public void addResourceGroup(ResourceGroup resourceGroup) {
@@ -100,6 +108,10 @@ public class Document extends IdentifableEntity implements Versionable {
         return ImmutableSet.copyOf(tags);
     }
 
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
     public void addTag(Tag tag) {
         tags.add(tag);
     }
@@ -110,6 +122,10 @@ public class Document extends IdentifableEntity implements Versionable {
 
     public Set<Comment> getComments() {
         return ImmutableSet.copyOf(comments);
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     public void addComment(Comment comment) {

@@ -48,8 +48,16 @@ public class Tag extends IdentifableEntity {
         return normalizedValue;
     }
 
+    public void setNormalizedValue(String normalizedValue) {
+        this.normalizedValue = normalizedValue;
+    }
+
     public Set<Document> getDocuments() {
         return ImmutableSet.copyOf(documents);
+    }
+
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
     }
 
     public void addDocument(Document document) {
@@ -59,6 +67,5 @@ public class Tag extends IdentifableEntity {
     public void removeDocument(Document document) {
         documents.remove(document);
     }
-
 
 }

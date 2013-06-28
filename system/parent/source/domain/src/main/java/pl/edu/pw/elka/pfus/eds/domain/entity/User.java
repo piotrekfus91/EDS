@@ -54,6 +54,10 @@ public class User extends IdentifableEntity implements Named, Versionable {
         return version;
     }
 
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -122,6 +126,10 @@ public class User extends IdentifableEntity implements Named, Versionable {
         return ImmutableSet.copyOf(comments);
     }
 
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
     public void addComment(Comment comment) {
         comments.add(comment);
     }
@@ -134,6 +142,10 @@ public class User extends IdentifableEntity implements Named, Versionable {
         return ImmutableSet.copyOf(documents);
     }
 
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
+    }
+
     public void addDocument(Document document) {
         documents.add(document);
     }
@@ -144,6 +156,10 @@ public class User extends IdentifableEntity implements Named, Versionable {
 
     public Set<ResourceGroup> getResourceGroups() {
         return ImmutableSet.copyOf(resourceGroups);
+    }
+
+    public void setResourceGroups(Set<ResourceGroup> resourceGroups) {
+        this.resourceGroups = resourceGroups;
     }
 
     public void addResourceGroup(ResourceGroup resourceGroup) {

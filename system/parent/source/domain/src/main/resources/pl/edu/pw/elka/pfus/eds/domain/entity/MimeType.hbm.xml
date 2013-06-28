@@ -5,11 +5,11 @@ License Type: Evaluation
 -->
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.MimeType" table="mimeType" lazy="false">
+	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.MimeType" table="mime_type" lazy="false">
 
 		<id name="id" column="id" type="integer" unsaved-value="0">
 			<generator class="sequence">
-				<param name="sequence">eds.mime_type_seq</param>
+				<param name="sequence">mime_type_seq</param>
 			</generator>
 		</id>
 

@@ -5,7 +5,7 @@ License Type: Evaluation
 -->
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.Directory" table="directory" schema="eds" lazy="false">
+	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.Directory" table="directory" lazy="false">
 
 		<id name="id" column="id" type="integer" unsaved-value="0">
 			<generator class="sequence">

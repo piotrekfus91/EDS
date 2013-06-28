@@ -34,6 +34,10 @@ public class Comment extends IdentifableEntity implements Versionable {
         return version;
     }
 
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }

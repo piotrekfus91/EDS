@@ -47,6 +47,10 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
         return version;
     }
 
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -75,6 +79,10 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
         return ImmutableSet.copyOf(directories);
     }
 
+    public void setDirectories(Set<Directory> directories) {
+        this.directories = directories;
+    }
+
     public void addDirectory(Directory directory) {
         directories.add(directory);
     }
@@ -85,6 +93,10 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
 
     public Set<Document> getDocuments() {
         return ImmutableSet.copyOf(documents);
+    }
+
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
     }
 
     public void addDocument(Document document) {

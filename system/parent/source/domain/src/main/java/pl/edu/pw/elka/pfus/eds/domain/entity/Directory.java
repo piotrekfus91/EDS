@@ -37,6 +37,10 @@ public class Directory extends IdentifableEntity implements Versionable {
         return version;
     }
 
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -53,6 +57,10 @@ public class Directory extends IdentifableEntity implements Versionable {
         return ImmutableSet.copyOf(resourceGroups);
     }
 
+    public void setResourceGroups(Set<ResourceGroup> resourceGroups) {
+        this.resourceGroups = resourceGroups;
+    }
+
     public void addResourceGroup(ResourceGroup resourceGroup) {
         resourceGroups.add(resourceGroup);
     }
@@ -65,6 +73,10 @@ public class Directory extends IdentifableEntity implements Versionable {
         return ImmutableSet.copyOf(subdirectories);
     }
 
+    public void setSubdirectories(Set<Directory> subdirectories) {
+        this.subdirectories = subdirectories;
+    }
+
     public void addSubdirectory(Directory directory) {
         subdirectories.add(directory);
     }
@@ -75,6 +87,10 @@ public class Directory extends IdentifableEntity implements Versionable {
 
     public Directory getParentDirectory() {
         return parentDirectory;
+    }
+
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
     }
 
     public void setParentDirectory(Directory parentDirectory) {
