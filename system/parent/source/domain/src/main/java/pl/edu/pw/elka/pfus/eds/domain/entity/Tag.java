@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.collect.ImmutableSet;
+import pl.edu.pw.elka.pfus.eds.domain.util.ValueNormalizer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +16,7 @@ public class Tag extends IdentifableEntity {
     /**
      * Nazwa znormalizowana.
      * Jest to nazwa, która nie posiada polskich znaków,
-     * zapisana małymi literami i bez spacji.
+     * zapisana małymi literami i bez spacji, znaków inne niż litery.
      */
     private String normalizedValue;
     public Set<Document> documents = new HashSet<Document>();
@@ -40,13 +41,12 @@ public class Tag extends IdentifableEntity {
 
     public void setValue(String value) {
         this.value = value;
+        normalizedValue = ValueNormalizer.normalizeValue(value);
     }
 
     public String getNormalizedValue() {
         return normalizedValue;
     }
-
-    // TODO metoda wyliczajaca znormalizowana wartosc
 
     public Set<Document> getDocuments() {
         return ImmutableSet.copyOf(documents);
@@ -59,4 +59,6 @@ public class Tag extends IdentifableEntity {
     public void removeDocument(Document document) {
         documents.remove(document);
     }
+
+
 }
