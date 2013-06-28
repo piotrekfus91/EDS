@@ -1,7 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.collect.ImmutableSet;
-import pl.edu.pw.elka.pfus.eds.domain.util.ValueNormalizer;
+import pl.edu.pw.elka.pfus.eds.util.ValueNormalizer;
 
 import java.util.HashSet;
 import java.util.Set;

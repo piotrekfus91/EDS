@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pfus.eds.domain.util;
+package pl.edu.pw.elka.pfus.eds.util;
 
 import java.util.HashMap;
 import java.util.Map;
