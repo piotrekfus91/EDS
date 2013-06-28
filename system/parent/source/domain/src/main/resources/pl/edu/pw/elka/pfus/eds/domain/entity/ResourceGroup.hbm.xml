@@ -18,7 +18,7 @@ License Type: Evaluation
         <many-to-one name="founder" cascade="lock" column="founder_id" index="resource_group_founder_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.User" not-null="true" lazy="no-proxy" access="field">
 		</many-to-one>
 
-        <property name="name" column="name" type="string" length="30" not-null="true" lazy="false"/>
+        <property name="name" column="name" unique="true" type="string" length="30" not-null="true" lazy="false"/>
         <property name="description" column="description" type="text" not-null="false" lazy="false"/>
 
 		<set name="directories" table="resource_group_directory" schema="eds" lazy="true" cascade="save-update,lock">

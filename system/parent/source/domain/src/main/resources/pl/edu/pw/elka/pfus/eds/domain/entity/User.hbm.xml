@@ -11,7 +11,7 @@
 
         <version name="version" column="version" type="integer" />
 
-        <property name="name" column="login_name" type="string" length="32" not-null="true" lazy="false"/>
+        <property name="name" column="login_name" unique="true" type="string" length="32" not-null="true" lazy="false"/>
         <property name="passwordValue" column="password_value" type="string" length="32" not-null="true" lazy="false"/>
         <property name="firstName" column="first_name" type="string" length="99" not-null="true" lazy="false"/>
         <property name="lastName" column="last_name" type="string" length="99" not-null="true" lazy="false"/>
