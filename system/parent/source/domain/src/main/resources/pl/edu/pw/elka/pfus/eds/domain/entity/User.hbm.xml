@@ -19,7 +19,7 @@
         <property name="locked" type="boolean" not-null="true" lazy="false">
 			<column name="locked" default="false"/>
 		</property>
-        <property name="created" column="created" type="boolean" not-null="true" lazy="false"/>
+        <property name="created" column="created" type="timestamp" not-null="true" lazy="false" />
         <property name="lastLogin" column="last_login" type="timestamp" length="6" not-null="false" lazy="false"/>
 
 		<set name="comments" lazy="true" cascade="save-update,lock" inverse="true">
