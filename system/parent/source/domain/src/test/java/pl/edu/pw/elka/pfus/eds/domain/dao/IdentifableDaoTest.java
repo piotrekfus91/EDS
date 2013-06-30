@@ -18,10 +18,9 @@ public abstract class IdentifableDaoTest<E extends IdentifableEntity, T extends 
     protected abstract void prepareDao(SessionFactory sessionFactory, Context context);
     protected abstract E getSampleEntity();
     protected abstract void updateEntity(E entity);
-    protected abstract void assertEntities(E actual, E expected);
 
     @BeforeMethod
-    private void beforeMethod() {
+    protected void beforeMethod() {
         SessionFactory sessionFactory = new MockSessionFactory();
         Context context = mock(Context.class);
         prepareDao(sessionFactory, context);
@@ -30,7 +29,7 @@ public abstract class IdentifableDaoTest<E extends IdentifableEntity, T extends 
     }
 
     @AfterMethod
-    private void afterMethod() {
+    protected void afterMethod() {
         Session session = getDao().getSession();
         session.getTransaction().rollback();
     }
@@ -89,5 +88,9 @@ public abstract class IdentifableDaoTest<E extends IdentifableEntity, T extends 
         getDao().persist(entity2);
 
         assertThat(getDao().getAll()).containsExactly(entity, entity2);
+    }
+
+    protected void assertEntities(E actual, E expected) {
+        assertThat(actual).isEqualTo(expected);
     }
 }

@@ -75,9 +75,4 @@ public class UserDaoTest extends IdentifableDaoTest<User, UserDao> {
     protected void updateEntity(User entity) {
         entity.setName(entity.getName() + entity.getName());
     }
-
-    @Override
-    protected void assertEntities(User actual, User expected) {
-        assertThat(expected.getName()).isEqualTo(actual.getName());
-    }
 }

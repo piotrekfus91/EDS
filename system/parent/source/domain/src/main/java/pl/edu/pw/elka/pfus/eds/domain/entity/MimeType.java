@@ -11,7 +11,7 @@ import java.util.Set;
 public class MimeType extends IdentifableEntity {
     private Integer id;
     private String type;
-    private boolean enabled;
+    private boolean enabled = true;
     private String defaultExtension;
     private String description;
     private Set<Document> documents = new HashSet<Document>();
