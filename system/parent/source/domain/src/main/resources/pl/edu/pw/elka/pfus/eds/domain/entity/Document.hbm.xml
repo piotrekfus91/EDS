@@ -15,13 +15,13 @@ License Type: Evaluation
 
         <version name="version" column="version" type="integer" />
 
-        <many-to-one name="mimeType" cascade="lock" column="mime_type_id" index="document_mime_type_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.MimeType" not-null="true" lazy="no-proxy" access="field">
+        <many-to-one name="mimeType" cascade="save-update,lock" column="mime_type_id" index="document_mime_type_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.MimeType" not-null="true" lazy="no-proxy" access="field">
 		</many-to-one>
 
-        <many-to-one name="owner" cascade="lock" column="owner_id" index="document_owner_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.User" not-null="true" lazy="no-proxy" access="field">
+        <many-to-one name="owner" cascade="save-update,lock" column="owner_id" index="document_owner_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.User" not-null="true" lazy="no-proxy" access="field">
 		</many-to-one>
 
-        <many-to-one name="directory" cascade="lock" column="directory_id" index="document_directory_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory" not-null="false" lazy="no-proxy" access="field">
+        <many-to-one name="directory" cascade="save-update,lock" column="directory_id" index="document_directory_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory" not-null="false" lazy="no-proxy" access="field">
 		</many-to-one>
 
         <property name="name" column="name" type="string" length="255" not-null="true" lazy="false"/>

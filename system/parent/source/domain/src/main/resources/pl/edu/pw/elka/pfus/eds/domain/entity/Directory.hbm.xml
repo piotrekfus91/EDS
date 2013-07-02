@@ -15,7 +15,7 @@ License Type: Evaluation
 
         <version name="version" column="version" type="integer" />
 
-        <many-to-one name="parentDirectory" cascade="lock" column="parent_directory_id" index="directory_parent_directory_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory" not-null="false" lazy="no-proxy" access="field">
+        <many-to-one name="parentDirectory" cascade="save-update,lock" column="parent_directory_id" index="directory_parent_directory_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory" not-null="false" lazy="no-proxy" access="field">
 		</many-to-one>
 
         <property name="name" column="name" type="string" length="30" not-null="true" lazy="false"/>

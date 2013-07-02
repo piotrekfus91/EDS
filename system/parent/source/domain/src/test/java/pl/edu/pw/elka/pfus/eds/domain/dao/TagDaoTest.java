@@ -1,12 +1,15 @@
 package pl.edu.pw.elka.pfus.eds.domain.dao;
 
 import org.objectledge.context.Context;
+import pl.edu.pw.elka.pfus.eds.domain.dao.factory.EntityFactory;
+import pl.edu.pw.elka.pfus.eds.domain.dao.factory.TagFactory;
 import pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateTagDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 
 public class TagDaoTest extends IdentifableDaoTest<Tag, TagDao> {
     private TagDao tagDao;
+    private TagFactory factory = new TagFactory();
 
     @Override
     public TagDao getDao() {
@@ -24,10 +27,8 @@ public class TagDaoTest extends IdentifableDaoTest<Tag, TagDao> {
     }
 
     @Override
-    protected Tag getSampleEntity() {
-        Tag tag = new Tag();
-        tag.setValue("sample value");
-        return tag;
+    protected EntityFactory<Tag> getFactory() {
+        return factory;
     }
 
     @Override

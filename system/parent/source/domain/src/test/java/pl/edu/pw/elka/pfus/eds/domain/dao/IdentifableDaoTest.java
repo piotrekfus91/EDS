@@ -5,6 +5,7 @@ import org.objectledge.context.Context;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pl.edu.pw.elka.pfus.eds.domain.dao.factory.EntityFactory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.IdentifableEntity;
 import pl.edu.pw.elka.pfus.eds.domain.session.MockSessionFactory;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
@@ -16,7 +17,7 @@ public abstract class IdentifableDaoTest<E extends IdentifableEntity, T extends 
     public abstract T getDao();
     public abstract void setDao(T dao);
     protected abstract void prepareDao(SessionFactory sessionFactory, Context context);
-    protected abstract E getSampleEntity();
+    protected abstract EntityFactory<E> getFactory();
     protected abstract void updateEntity(E entity);
 
     @BeforeMethod
@@ -92,5 +93,9 @@ public abstract class IdentifableDaoTest<E extends IdentifableEntity, T extends 
 
     protected void assertEntities(E actual, E expected) {
         assertThat(actual).isEqualTo(expected);
+    }
+
+    protected E getSampleEntity() {
+        return getFactory().getSampleEntity();
     }
 }

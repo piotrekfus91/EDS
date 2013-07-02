@@ -2,6 +2,8 @@ package pl.edu.pw.elka.pfus.eds.domain.dao;
 
 import org.objectledge.context.Context;
 import org.testng.annotations.Test;
+import pl.edu.pw.elka.pfus.eds.domain.dao.factory.EntityFactory;
+import pl.edu.pw.elka.pfus.eds.domain.dao.factory.MimeTypeFactory;
 import pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateMimeTypeDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
@@ -10,6 +12,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 public class MimeTypeDaoTest extends IdentifableDaoTest<MimeType, MimeTypeDao> {
     private MimeTypeDao mimeTypeDao;
+    private MimeTypeFactory factory = new MimeTypeFactory();
 
     @Test
     public void testDefaultEnabled() throws Exception {
@@ -43,12 +46,8 @@ public class MimeTypeDaoTest extends IdentifableDaoTest<MimeType, MimeTypeDao> {
     }
 
     @Override
-    protected MimeType getSampleEntity() {
-        MimeType mimeType = new MimeType();
-        mimeType.setType("type");
-        mimeType.setDefaultExtension("ext");
-        mimeType.setDescription("");
-        return mimeType;
+    protected EntityFactory<MimeType> getFactory() {
+        return factory;
     }
 
     @Override
