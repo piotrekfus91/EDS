@@ -1,0 +1,2 @@
+$viewEnclosureTool.override('layout.Page')
+<h1>hello world</h1>
