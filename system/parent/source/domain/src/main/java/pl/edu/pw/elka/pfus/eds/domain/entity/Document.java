@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.HashSet;
@@ -134,5 +135,25 @@ public class Document extends IdentifableEntity implements Versionable {
 
     public void removeComment(Comment comment) {
         comments.remove(comment);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Document document = (Document) o;
+
+        if (contentMd5 != null ? !contentMd5.equals(document.contentMd5) : document.contentMd5 != null) return false;
+        if (mimeType != null ? !mimeType.equals(document.mimeType) : document.mimeType != null) return false;
+        if (name != null ? !name.equals(document.name) : document.name != null) return false;
+        if (owner != null ? !owner.equals(document.owner) : document.owner != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name, contentMd5, mimeType, owner);
     }
 }

@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.HashSet;
@@ -76,5 +77,22 @@ public class MimeType extends IdentifableEntity {
 
     public void removeDocument(Document document) {
         documents.remove(document);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MimeType mimeType = (MimeType) o;
+
+        if (type != null ? !type.equals(mimeType.type) : mimeType.type != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(type);
     }
 }

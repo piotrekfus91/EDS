@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.HashSet;
@@ -105,5 +106,23 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
 
     public void removeDocument(Document document) {
         documents.remove(document);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ResourceGroup that = (ResourceGroup) o;
+
+        if (founder != null ? !founder.equals(that.founder) : that.founder != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name, founder);
     }
 }

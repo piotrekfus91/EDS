@@ -1,5 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
+import com.google.common.base.Objects;
+
 import java.util.Date;
 
 /**
@@ -80,5 +82,24 @@ public class Comment extends IdentifableEntity implements Versionable {
 
     public void setDocument(Document document) {
         this.document = document;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Comment comment = (Comment) o;
+
+        if (content != null ? !content.equals(comment.content) : comment.content != null) return false;
+        if (document != null ? !document.equals(comment.document) : comment.document != null) return false;
+        if (user != null ? !user.equals(comment.user) : comment.user != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(content, document, user);
     }
 }
