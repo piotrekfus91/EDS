@@ -9,21 +9,19 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>util</artifactId>
-    <name>Moduł biblioteczny</name>
+    <artifactId>security</artifactId>
+    <name>System bezpieczeństwa</name>
 
     <dependencies>
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
+            <groupId>pl.edu.pw.elka.pfus.eds</groupId>
+            <artifactId>domain</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-assert</artifactId>
+            <groupId>org.objectledge</groupId>
+            <artifactId>ledge-security</artifactId>
+            <classifier>classes</classifier>
         </dependency>
     </dependencies>
 </project>

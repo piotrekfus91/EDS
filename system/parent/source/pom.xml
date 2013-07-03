@@ -6,14 +6,16 @@
         <artifactId>parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
     <artifactId>source</artifactId>
     <packaging>pom</packaging>
-    <name>source</name>
-    <url>http://maven.apache.org</url>
+    <name>Moduł nadrzędny kodu</name>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <ledge.version>SNAPSHOT</ledge.version>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -115,5 +117,6 @@
     <modules>
         <module>domain</module>
     <module>util</module>
+    <module>security</module>
   </modules>
 </project>
