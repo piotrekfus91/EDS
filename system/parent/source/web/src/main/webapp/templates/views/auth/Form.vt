@@ -1,0 +1,36 @@
+$viewEnclosureTool.top()
+$pageTool.setTitle('EDS - logowanie')
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>$pageTool.title</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="/content/css/auth/form.css" />
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://malsup.github.io/jquery.corner.js"></script>
+    <script src="/content/js/auth/form.js"></script>
+</head>
+<body>
+    <div class="login_div">
+        <form>
+            <table class="log_table">
+                <tr>
+                    <td style="vertical-align: middle">Login:</td>
+                    <td><input type="text" class="log_input log_input_text" /></td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: middle">Hasło:</td>
+                    <td><input type="password" class="log_input log_input_text" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="Zaloguj" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only log_input" style="padding: 0" />
+                    </td>
+                </tr>
+            </table>
+         </form>
+    </div>
+</body>
+</html>
