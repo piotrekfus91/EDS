@@ -90,6 +90,12 @@
                 <type>war</type>
             </dependency>
             <dependency>
+                <groupId>org.objectledge</groupId>
+                <artifactId>ledge-web</artifactId>
+                <version>${ledge.version}</version>
+                <classifier>classes</classifier>
+            </dependency>
+            <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
                 <version>6.8</version>

@@ -45,6 +45,27 @@ public class UserDaoTest extends IdentifableDaoTest<User, UserDao> {
         assertThat(sameUser).isEqualTo(user);
     }
 
+    @Test
+    public void testUserByNameAndPassNotFound() throws Exception {
+        User expectedNoUser = getDao().findByNameAndPassword("", "");
+        assertThat(expectedNoUser).isNull();
+    }
+
+    @Test
+    public void testUserByNameAndPassFound() throws Exception {
+        String name = "user_by_name_login";
+        String password = "some_password";
+        User user = getSampleEntity();
+        user.setName(name);
+        user.setPasswordValue(password);
+        getDao().persist(user);
+
+        User expectedUser = getDao().findByNameAndPassword(name, password);
+
+        assertThat(expectedUser).isNotNull();
+        assertThat(expectedUser).isEqualTo(user);
+    }
+
     @Override
     public UserDao getDao() {
         return dao;

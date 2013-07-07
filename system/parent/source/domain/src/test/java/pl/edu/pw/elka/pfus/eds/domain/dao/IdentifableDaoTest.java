@@ -91,6 +91,20 @@ public abstract class IdentifableDaoTest<E extends IdentifableEntity, T extends 
         assertThat(getDao().getAll()).containsExactly(entity, entity2);
     }
 
+    @Test
+    public void testById() throws Exception {
+        E entity = getSampleEntity();
+
+        getDao().persist(entity);
+
+        assertThat(getDao().findById(entity.getId())).isEqualTo(entity);
+    }
+
+    @Test
+    public void testByIdNotFound() throws Exception {
+        assertThat(getDao().findById(Integer.MAX_VALUE)).isNull();
+    }
+
     protected void assertEntities(E actual, E expected) {
         assertThat(actual).isEqualTo(expected);
     }

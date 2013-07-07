@@ -4,6 +4,7 @@ import org.objectledge.context.Context;
 import org.objectledge.hibernate.HibernateSessionFactory;
 import org.objectledge.security.DataBackend;
 import org.objectledge.security.object.hibernate.HibernateDataBackend;
+import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.security.exception.SecurityInitializationException;
 
 public class SecurityFacadeImpl implements SecurityFacade {
@@ -24,5 +25,10 @@ public class SecurityFacadeImpl implements SecurityFacade {
         } catch (Exception e) {
             throw new SecurityException(e);
         }
+    }
+
+    @Override
+    public User logIn(String login, String password) {
+        return null;
     }
 }

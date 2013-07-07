@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.domain.dao.impl;
 
+import org.hibernate.Query;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.IdentifableGenericDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.NamedDao;
@@ -18,6 +19,15 @@ public class HibernateUserDao extends IdentifableGenericDao<User> implements Use
     @Override
     public User findByName(String name) {
         return namedDao.findByName(name);
+    }
+
+    @Override
+    public User findByNameAndPassword(String name, String password) {
+        String BY_NAME_AND_PASSWORD_QUERY = "SELECT u FROM User u WHERE u.name = :name AND u.passwordValue = :password";
+        Query query = session.createQuery(BY_NAME_AND_PASSWORD_QUERY);
+        query.setString("name", name);
+        query.setString("password", password);
+        return (User) query.uniqueResult();
     }
 
     @Override
