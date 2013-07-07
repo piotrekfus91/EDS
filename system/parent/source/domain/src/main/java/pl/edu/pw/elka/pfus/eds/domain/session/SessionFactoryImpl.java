@@ -7,6 +7,18 @@ import org.objectledge.hibernate.HibernateSessionContext;
 public class SessionFactoryImpl implements SessionFactory {
     @Override
     public Session getSession(Context context) {
-        return HibernateSessionContext.getHibernateSessionContext(context).getSession();
+        HibernateSessionContext hibernateSessionContext = getHibernateSessionContext(context);
+        if(hibernateSessionContext != null)
+            return hibernateSessionContext.getSession();
+        else
+            return getBasicSession();
+    }
+
+    private HibernateSessionContext getHibernateSessionContext(Context context) {
+        return HibernateSessionContext.getHibernateSessionContext(context);
+    }
+
+    private Session getBasicSession() {
+        return HibernateUtil.getInstance().getSession();
     }
 }

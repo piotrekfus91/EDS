@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <container>
 
+    <component class="pl.edu.pw.elka.pfus.eds.web.init.DatabaseInitializer" />
+
+    <component class-key="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory"
+               class="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactoryImpl" />
+
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.dao.CommentDao"
                class="pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateCommentDao" />
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao"
@@ -15,8 +20,6 @@
                class="pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateTagDao" />
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.dao.UserDao"
                class="pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateUserDao" />
-
-    <!-- // hibernate ///////////////////////////////////////////////////////////////// -->
 
     <container key="hibernateContainer"/>
     <component class="org.objectledge.hibernate.NonCachingPicoObjectInstantiator">

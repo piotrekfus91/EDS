@@ -29,11 +29,6 @@
                 <version>1.0.2</version>
             </dependency>
             <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-core</artifactId>
-                <version>4.2.1.Final</version>
-            </dependency>
-            <dependency>
                 <groupId>postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>9.1-901.jdbc4</version>
@@ -114,6 +109,34 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <name>Objectledge Nexus repository</name>
+            <url>http://objectledge.org/nexus/content/groups/m2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>verbis</id>
+            <name>Objectledge Nexus repository</name>
+            <url>http://nexus.verbis.pl/m2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <modules>
         <module>domain</module>
     <module>util</module>

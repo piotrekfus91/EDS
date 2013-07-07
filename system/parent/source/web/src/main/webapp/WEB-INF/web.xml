@@ -13,6 +13,10 @@
         <servlet-name>ledge</servlet-name>
         <url-pattern>/eds/*</url-pattern>
     </servlet-mapping>
+
+    <listener>
+        <listener-class>pl.edu.pw.elka.pfus.eds.web.servlet.ServletContextListener</listener-class>
+    </listener>
     
     <welcome-file-list>
         <welcome-file>eds/v/Index</welcome-file>
