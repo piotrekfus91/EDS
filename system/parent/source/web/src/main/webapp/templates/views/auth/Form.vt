@@ -14,7 +14,8 @@ $pageTool.setTitle('EDS - logowanie')
     <title>$pageTool.title</title>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <link rel="stylesheet" type="text/css" href="/content/css/auth/form.css" />
-    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="http://malsup.github.io/jquery.corner.js"></script>
     <script src="/content/js/auth/form.js"></script>
 </head>
@@ -32,7 +33,7 @@ $pageTool.setTitle('EDS - logowanie')
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input type="submit" value="Zaloguj" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only log_input" style="padding: 0" />
+                        <input type="submit" value="Zaloguj" class="log_input" style="padding: 0" />
                     </td>
                 </tr>
             </table>

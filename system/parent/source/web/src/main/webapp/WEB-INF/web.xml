@@ -21,10 +21,6 @@
     <filter>
         <filter-name>Authentication filter</filter-name>
         <filter-class>pl.edu.pw.elka.pfus.eds.web.servlet.AuthFilter</filter-class>
-        <init-param>
-            <param-name>formUrl</param-name>
-            <param-value>eds/v/auth.Form</param-value>
-        </init-param>
     </filter>
 
     <filter-mapping>

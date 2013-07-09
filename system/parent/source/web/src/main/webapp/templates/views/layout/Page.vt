@@ -1,29 +1,38 @@
 $viewEnclosureTool.top()
 $pageTool.insertTitlePrefix('EDS - ')
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="/content/css/main.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tabs').tabs();
+        });
+    </script>
     <title>$pageTool.title</title>
 </head>
 <body style="margin-top: 20px">
-<table>
-    <tr>
-        <td style="width: 30%">
-            <span style="bold">Menu</span>
-            <ul>
-                <li><a href="$link.view('Index')">Strona główna</a></li>
-                <li><a href="$link.view('user.Index')">Przeglądaj użytkowników</a></li>
-                <li><a href="$link.view('user.Form')">Dodaj użytkownika</a></li>
-                <li><a href="$link.view('jaskldfj')">Nie istniejąca</a></li>
-            </ul>
-        </td>
-        <td>
-            $embeddedPlaceholder
-        </td>
-    </tr>
-</table>
+<div id="top_div">
+    <div id="tabs">
+        <ul>
+            <li><a href="#files">Pliki</a></li>
+            <li><a href="#data">Moje dane</a></li>
+            <li><a href="#password">Zmiana hasła</a></li>
+            <li>
+                <a href="$link.view('auth.Logout')">
+                    <img src="$link.content('images/logout.png')" style="height: 16px" />
+                    Wyloguj się
+                </a>
+            </li>
+        </ul>
+        <div id="files">pliki</div>
+        <div id="data">dane</div>
+        <div id="password">haslo</div>
+    </div>
+</div>
 </body>
 </html>

@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    $('input[type=submit]').button();
+
     roundLoginFormCorners();
 
     $('.log_input_text').focus(function() {

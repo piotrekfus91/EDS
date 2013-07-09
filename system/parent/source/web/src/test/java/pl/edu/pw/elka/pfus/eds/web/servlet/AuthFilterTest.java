@@ -27,7 +27,7 @@ public class AuthFilterTest {
     public void testBuildLoginFormRootUrl() throws Exception {
         when(request.getRequestURI()).thenReturn("/");
 
-        String expectedUri = Constants.URL_PREFIX + Constants.AUTH_VIEW_NAME + "?redirect="
+        String expectedUri = Constants.ROOT_URL + Constants.URL_PREFIX + Constants.AUTH_VIEW_NAME + "?redirect="
                 + URLEncoder.encode("/", Constants.ENCODING);
         assertThat(filter.buildLoginFormUrl(request, response)).isEqualTo(expectedUri);
     }
@@ -38,7 +38,7 @@ public class AuthFilterTest {
         when(request.getRequestURI()).thenReturn(Constants.URL_PREFIX + viewName);
 
         String encodedRequestedUri = URLEncoder.encode(Constants.URL_PREFIX + viewName, Constants.ENCODING);
-        String expectedUri = Constants.URL_PREFIX + Constants.AUTH_VIEW_NAME + "?" +
+        String expectedUri = Constants.ROOT_URL + Constants.URL_PREFIX + Constants.AUTH_VIEW_NAME + "?" +
                 Constants.REDIRECT_PARAM + "=" + encodedRequestedUri;
 
         assertThat(filter.buildLoginFormUrl(request, response)).isEqualTo(expectedUri);
@@ -52,7 +52,7 @@ public class AuthFilterTest {
         when(request.getRequestURI()).thenReturn(requestUri);
 
         String encodedRequestedUri = URLEncoder.encode(requestUri, "UTF-8");
-        String expectedUri = Constants.URL_PREFIX + Constants.AUTH_VIEW_NAME + "?" + Constants.REDIRECT_PARAM
+        String expectedUri = Constants.ROOT_URL + Constants.URL_PREFIX + Constants.AUTH_VIEW_NAME + "?" + Constants.REDIRECT_PARAM
                 + "=" + encodedRequestedUri;
         assertThat(filter.buildLoginFormUrl(request, response)).isEqualTo(expectedUri);
     }
