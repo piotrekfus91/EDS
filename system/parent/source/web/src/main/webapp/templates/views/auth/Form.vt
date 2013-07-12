@@ -1,11 +1,8 @@
 $viewEnclosureTool.top()
 $pageTool.setTitle('EDS - logowanie')
 
-#if($parametersTool.isDefined('redirect'))
-    #set($loginUrl = $link.action('auth.Login').set('redirect', $parametersTool.get('redirect')))
-#else
-    #set($loginUrl = $link.action('auth.Login'))
-#end
+
+#set($loginUrl = $link.action('auth.Login').set('redirect', $redirect))
 
 <!DOCTYPE html>
 <html>
@@ -25,11 +22,11 @@ $pageTool.setTitle('EDS - logowanie')
             <table class="log_table">
                 <tr>
                     <td style="vertical-align: middle">Login:</td>
-                    <td><input type="text" name="" class="log_input log_input_text" /></td>
+                    <td><input type="text" name="$loginName" class="log_input log_input_text" /></td>
                 </tr>
                 <tr>
                     <td style="vertical-align: middle">Hasło:</td>
-                    <td><input type="password" name="" class="log_input log_input_text" /></td>
+                    <td><input type="password" name="$passwordValue" class="log_input log_input_text" /></td>
                 </tr>
                 <tr>
                     <td colspan="2">

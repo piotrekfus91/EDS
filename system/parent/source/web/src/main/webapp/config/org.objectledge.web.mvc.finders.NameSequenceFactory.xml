@@ -29,8 +29,8 @@
 <config>
   <views separator="."/>
   <classes separator="." default-suffix="Default">
+    <prefix>pl.edu.pw.elka.pfus.eds.web.modules</prefix>
     <prefix>pl.edu.pw.elka.pfus.eds.security.modules</prefix>
-    <prefix>pl.edu.pw.elka.pfus.eds.modules</prefix>
   </classes>
   <templates separator="/" default-suffix="Default"/>
 </config>  

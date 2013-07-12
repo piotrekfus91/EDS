@@ -48,4 +48,19 @@ public interface Dao<T extends GenericEntity> {
      * @return sesja hibernate.
      */
     Session getSession();
+
+    /**
+     * Rozpoczyna transakcję na bieżącej sesji.
+     */
+    void beginTransaction();
+
+    /**
+     * Zatwierdza transakcję na bieżącej sesji.
+     */
+    void commitTransaction();
+
+    /**
+     * Wycofuje transakcję na bieżącej sesji.
+     */
+    void rollbackTransaction();
 }

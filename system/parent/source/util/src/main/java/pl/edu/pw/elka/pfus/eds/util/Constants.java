@@ -8,6 +8,7 @@ public interface Constants {
     String REDIRECT_PARAM = "redirect";
 
     String APP_VIEW_NAME_FRONT = "app.";
+    String APP_INDEX_VIEW = "app.Index";
     String AUTH_VIEW_NAME = "auth.Form";
 
     String LOGIN_NAME = "loginName";

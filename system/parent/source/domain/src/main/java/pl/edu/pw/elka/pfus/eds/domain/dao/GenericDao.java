@@ -50,5 +50,20 @@ public abstract class GenericDao<T extends GenericEntity> implements Dao<T> {
         return session;
     }
 
+    @Override
+    public void beginTransaction() {
+        session.getTransaction().begin();
+    }
+
+    @Override
+    public void commitTransaction() {
+        session.getTransaction().commit();
+    }
+
+    @Override
+    public void rollbackTransaction() {
+        session.getTransaction().rollback();
+    }
+
     protected abstract Class<T> getEntityClass();
 }

@@ -1,7 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.web.servlet;
 
 import pl.edu.pw.elka.pfus.eds.util.Constants;
-import pl.edu.pw.elka.pfus.eds.web.servlet.util.UrlHelper;
+import pl.edu.pw.elka.pfus.eds.util.ledge.UrlHelper;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

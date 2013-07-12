@@ -1,11 +1,12 @@
 package pl.edu.pw.elka.pfus.eds.util.ledge;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Strings;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.Valve;
+import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.mvc.MVCContext;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,36 +14,54 @@ import javax.servlet.http.HttpSession;
  * Helper dla akcji.
  */
 public abstract class AbstractAction implements Valve {
-    protected HttpContext getHttpContext(Context context) {
-        return HttpContext.getHttpContext(context);
+    private LedgeHelper ledgeHelper = new LedgeHelper();
+
+    public void putInTemplatingContext(Context context, String name, Object object) {
+        ledgeHelper.putInTemplatingContext(context, name, object);
     }
 
-    protected HttpSession getHttpSession(Context context) {
-        return getHttpContext(context).getRequest().getSession();
+    public Optional<String> getStringFromRequestParameters(Context context, String name) {
+        return ledgeHelper.getStringFromRequestParameters(context, name);
     }
 
-    protected void putInSession(Context context, String name, Object object) {
-        HttpSession session = getHttpSession(context);
-        session.setAttribute(name, object);
+    public String getParamOrEmptyString(Context context, String name) {
+        return ledgeHelper.getParamOrEmptyString(context, name);
     }
 
-    protected RequestParameters getRequestParameters(Context context) {
-        return RequestParameters.getRequestParameters(context);
+    public void putInSession(Context context, String name, Object object) {
+        ledgeHelper.putInSession(context, name, object);
     }
 
-    protected Optional<String> getStringFromRequestParameters(Context context, String name) {
-        RequestParameters requestParameters = getRequestParameters(context);
-        if(requestParameters.isDefined(name))
-            return Optional.fromNullable(requestParameters.get(name));
-        else
-            return Optional.absent();
+    public void setView(Context context, String view) {
+        ledgeHelper.setView(context, view);
     }
 
-    protected String getParamOrEmptyString(Context context, String name) {
-        Optional<String> optional = getStringFromRequestParameters(context, name);
-        if(optional.isPresent())
-            return Strings.nullToEmpty(optional.get());
-        else
-            return "";
+    public void setViewByUri(Context context, String uri) {
+        ledgeHelper.setViewByUri(context, uri);
+    }
+
+    @Deprecated
+    public TemplatingContext getTemplatingContext(Context context) {
+        return ledgeHelper.getTemplatingContext(context);
+    }
+
+    @Deprecated
+    public HttpSession getHttpSession(Context context) {
+        return ledgeHelper.getHttpSession(context);
+    }
+
+    @Deprecated
+    public HttpContext getHttpContext(Context context) {
+        return ledgeHelper.getHttpContext(context);
+    }
+
+    @Deprecated
+    public RequestParameters getRequestParameters(Context context) {
+        return ledgeHelper.getRequestParameters(context);
+    }
+
+    @Deprecated
+    public MVCContext getMVCContext(Context context) {
+        return ledgeHelper.getMVCContext(context);
     }
 }

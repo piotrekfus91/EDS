@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pfus.eds.web.servlet.util;
+package pl.edu.pw.elka.pfus.eds.util.ledge;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -9,14 +9,13 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AbstractActionTest {
-    private AbstractAction abstractAction;
+public class LedgeHelperTest {
+    private LedgeHelper ledgeHelper = new LedgeHelper();
     private Context context;
     private RequestParameters requestParameters;
 
     @BeforeMethod
     public void beforeMethod() {
-        abstractAction = new MockAbstractAction();
         requestParameters = new MockRequestParameters();
         context = mock(Context.class);
         when(context.getAttribute(RequestParameters.class)).thenReturn(requestParameters);
@@ -24,40 +23,40 @@ public class AbstractActionTest {
 
     @Test
     public void getNotExistingParam() throws Exception {
-        assertThat(abstractAction.getStringFromRequestParameters(context, "some attr").isPresent()).isFalse();
+        assertThat(ledgeHelper.getStringFromRequestParameters(context, "some attr").isPresent()).isFalse();
     }
 
     @Test
     public void getNullString() throws Exception {
         requestParameters.add("attr", (String)null);
 
-        assertThat(abstractAction.getStringFromRequestParameters(context, "attr").isPresent()).isFalse();
+        assertThat(ledgeHelper.getStringFromRequestParameters(context, "attr").isPresent()).isFalse();
     }
 
     @Test
     public void getEmptyString() throws Exception {
         requestParameters.add("attr", "");
 
-        assertThat(abstractAction.getStringFromRequestParameters(context, "attr").isPresent()).isTrue();
-        assertThat(abstractAction.getStringFromRequestParameters(context, "attr").get()).isEmpty();
+        assertThat(ledgeHelper.getStringFromRequestParameters(context, "attr").isPresent()).isTrue();
+        assertThat(ledgeHelper.getStringFromRequestParameters(context, "attr").get()).isEmpty();
     }
 
     @Test
     public void getSampleString() throws Exception {
         requestParameters.add("attr", "sample");
 
-        assertThat(abstractAction.getStringFromRequestParameters(context, "attr").get()).isEqualTo("sample");
+        assertThat(ledgeHelper.getStringFromRequestParameters(context, "attr").get()).isEqualTo("sample");
     }
 
     @Test
     public void getEmptyStringFromNotExistingParam() throws Exception {
-        assertThat(abstractAction.getParamOrEmptyString(context, "attr")).isEmpty();
+        assertThat(ledgeHelper.getParamOrEmptyString(context, "attr")).isEmpty();
     }
 
     @Test
     public void getExistingString() throws Exception {
         requestParameters.add("attr", "sample");
 
-        assertThat(abstractAction.getParamOrEmptyString(context, "attr")).isEqualTo("sample");
+        assertThat(ledgeHelper.getParamOrEmptyString(context, "attr")).isEqualTo("sample");
     }
 }
