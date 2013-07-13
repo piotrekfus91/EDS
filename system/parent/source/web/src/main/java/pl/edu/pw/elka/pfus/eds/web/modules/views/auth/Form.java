@@ -21,7 +21,8 @@ public class Form extends AbstractView {
 
     @Override
     public String build(Template template, String embeddedBuildResults) throws BuildException, ProcessingException {
-        // TODO redirect if logged
+        if(isAuthenticated())
+            redirect(Constants.ROOT_URL);
 
         putLoginFormFieldNames();
 
@@ -36,6 +37,10 @@ public class Form extends AbstractView {
         logger.info("displaying login form with redirect: " + redirect);
 
         return super.build(template, embeddedBuildResults);
+    }
+
+    private boolean isAuthenticated() {
+        return getFromSession(Constants.LOGGED_USER) != null;
     }
 
     private void putLoginFormFieldNames( ) {

@@ -42,8 +42,20 @@ public abstract class AbstractView extends AbstractBuilder {
         ledgeHelper.putInSession(context, name, object);
     }
     
+    public Object getFromSession(String name) {
+        return ledgeHelper.getFromSession(context, name);
+    }
+    
     public void setView(String view) {
         ledgeHelper.setView(context, view);
+    }
+    
+    public void setViewByUri(String uri) {
+        ledgeHelper.setViewByUri(context, uri);
+    }
+    
+    public void redirect(String url) {
+        ledgeHelper.redirect(context, url);
     }
 
     @Deprecated

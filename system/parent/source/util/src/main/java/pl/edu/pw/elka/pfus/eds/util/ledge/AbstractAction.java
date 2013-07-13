@@ -37,6 +37,10 @@ public abstract class AbstractAction implements Valve {
         ledgeHelper.putInSession(context, name, object);
     }
 
+    public Object getFromSession(Context context, String name) {
+        return ledgeHelper.getFromSession(context, name);
+    }
+
     public void redirect(Context context, String url) {
         ledgeHelper.redirect(context, url);
     }

@@ -22,10 +22,17 @@ public class Login extends AbstractAction {
 
     @Override
     public void process(Context context) throws ProcessingException {
+        if(isAuthenticated(context))
+            return;
+
         String login = getParamOrEmptyString(context, Constants.LOGIN_NAME);
         String password = getParamOrEmptyString(context, Constants.PASSWORD_VALUE);
 
         registerUserInSession(context, login, password);
+    }
+
+    private boolean isAuthenticated(Context context) {
+        return getFromSession(context, Constants.LOGGED_USER) != null;
     }
 
     private void registerUserInSession(Context context, String login, String password) {
