@@ -21,6 +21,8 @@ public class Form extends AbstractView {
 
     @Override
     public String build(Template template, String embeddedBuildResults) throws BuildException, ProcessingException {
+        // TODO redirect if logged
+
         putLoginFormFieldNames();
 
         Optional<String> redirectCandidate = getStringFromRequestParameters(Constants.REDIRECT_PARAM);

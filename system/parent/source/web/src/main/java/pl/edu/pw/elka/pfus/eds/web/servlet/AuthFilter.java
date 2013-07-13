@@ -57,7 +57,7 @@ public class AuthFilter implements Filter {
     }
 
     private boolean isAuthenticated(HttpServletRequest request) {
-        return request.getAttribute(Constants.LOGGED_USER) != null;
+        return request.getSession().getAttribute(Constants.LOGGED_USER) != null;
     }
 
     private void redirectToLoginForm(HttpServletRequest request, HttpServletResponse response) throws IOException {

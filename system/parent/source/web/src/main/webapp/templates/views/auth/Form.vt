@@ -9,12 +9,23 @@ $pageTool.setTitle('EDS - logowanie')
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>$pageTool.title</title>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="$link.content('css/jquery-ui/jquery-ui.css')" />
     <link rel="stylesheet" type="text/css" href="/content/css/auth/form.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <script src="http://malsup.github.io/jquery.corner.js"></script>
-    <script src="/content/js/auth/form.js"></script>
+    <script src="$link.content('js/jquery/jquery-1.9.1.js')"></script>
+    <script src="$link.content('js/jquery-ui/jquery-ui.js')"></script>
+    <script src="$link.content('js/corners/jquery.corner.js')"></script>
+    <script src="$link.content('js/auth/form.js')"></script>
+    <script src="$link.content('js/common/noty/jquery.noty.js')"></script>
+    <script src="$link.content('js/common/noty/topRight.js')"></script>
+    <script src="$link.content('js/common/noty/default.js')"></script>
+    <script src="$link.content('js/common/noty.js')"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            #foreach($message in $messages)
+                post_message('$message.type', '$message.text', '$message.date');
+            #end
+        });
+    </script>
 </head>
 <body>
     <div class="login_div">

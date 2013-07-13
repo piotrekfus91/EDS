@@ -7,6 +7,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
+import pl.edu.pw.elka.pfus.eds.util.message.MessageType;
 
 import javax.servlet.http.HttpSession;
 
@@ -19,6 +20,10 @@ public abstract class AbstractView extends AbstractBuilder {
 
     protected AbstractView(Context context) {
         super(context);
+    }
+    
+    public void postMessage(MessageType type, String text) {
+        ledgeHelper.postMessage(context, type, text);
     }
 
     public void putInTemplatingContext(String name, Object object) {

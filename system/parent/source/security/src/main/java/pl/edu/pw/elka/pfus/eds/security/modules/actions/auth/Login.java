@@ -8,6 +8,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.util.Constants;
 import pl.edu.pw.elka.pfus.eds.util.ledge.AbstractAction;
+import pl.edu.pw.elka.pfus.eds.util.message.MessageType;
 
 import java.util.List;
 
@@ -35,12 +36,12 @@ public class Login extends AbstractAction {
 
         if(user != null) {
             putUserInSession(context, user);
-            logger.info("User " + user + " successfully logged in");
-            putInTemplatingContext(context, "loginSuccess", true);
-            redirectToRequestedViewOrAppIndex(context);
+            postMessage(context, MessageType.SUCCESS, "Zalogowano: " + user.getFriendlyName() + ".");
+            redirectToRequestedViewOrDefault(context);
+            logger.info("User " + user.getName() + " successfully logged in");
         } else {
+            postMessage(context, MessageType.ERROR, "Logowanie nie powiodło się.");
             logger.info("Failed to log user with login <" + login + "> and password <" + password + ">");
-            putInTemplatingContext(context, "loginFailure", true);
         }
     }
 
@@ -48,12 +49,12 @@ public class Login extends AbstractAction {
         return userDao.findByNameAndPassword(login, password);
     }
 
-    private void redirectToRequestedViewOrAppIndex(Context context) {
+    private void redirectToRequestedViewOrDefault(Context context) {
         String redirect = getParamOrEmptyString(context, Constants.REDIRECT_PARAM);
-        if(Strings.isNullOrEmpty(redirect) || redirect.equals(Constants.ROOT_URL)) {
-            setView(context, Constants.APP_INDEX_VIEW);
+        if(Strings.isNullOrEmpty(redirect)) {
+            setView(context, Constants.ROOT_URL);
         } else {
-            setViewByUri(context, redirect);
+            redirect(context, redirect);
         }
     }
 

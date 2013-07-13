@@ -4,13 +4,22 @@ $pageTool.insertTitlePrefix('EDS - ')
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <link rel="stylesheet" href="/content/css/main.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <link rel="stylesheet" href="$link.content('css/jquery-ui/jquery-ui.css')" />
+    <script src="$link.content('js/jquery/jquery-1.9.1.js')"></script>
+    <script src="$link.content('js/jquery-ui/jquery-ui.js')"></script>
+    <script src="$link.content('js/corners/jquery.corners.js')"></script>
+    <script src="$link.content('js/common/noty/jquery.noty.js')"></script>
+    <script src="$link.content('js/common/noty/topRight.js')"></script>
+    <script src="$link.content('js/common/noty/default.js')"></script>
+    <script src="$link.content('js/common/noty.js')"></script>
+    <script src="$link.content('js/eds.js')"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#tabs').tabs();
+            make_tabs();
+            animate_page();
+            #foreach($message in $messages)
+                post_message('$message.type', '$message.text', '$message.date');
+            #end
         });
     </script>
     <title>$pageTool.title</title>

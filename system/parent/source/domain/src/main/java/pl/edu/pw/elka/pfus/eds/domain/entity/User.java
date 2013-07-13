@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.Date;
@@ -53,6 +54,20 @@ public class User extends IdentifableEntity implements Named, Versionable {
     @Override
     public Integer getVersion() {
         return version;
+    }
+
+    /**
+     * Zwraca sformatowaną nazwę użytkownika.
+     * Jeśli są podane imię, to zwraca imię i ewentualnie nazwisko,
+     * w przeciwnym wypadku login.
+     *
+     * @return sformatowana nazwa użytkownika.
+     */
+    public String getFriendlyName() {
+        if(!Strings.isNullOrEmpty(firstName))
+            return firstName + Strings.nullToEmpty(lastName);
+        else
+            return name;
     }
 
     public void setVersion(Integer version) {

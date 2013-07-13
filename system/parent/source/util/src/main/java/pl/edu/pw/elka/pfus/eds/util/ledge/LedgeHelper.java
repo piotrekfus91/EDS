@@ -7,14 +7,31 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+import pl.edu.pw.elka.pfus.eds.util.message.ListMessages;
+import pl.edu.pw.elka.pfus.eds.util.message.MessageType;
+import pl.edu.pw.elka.pfus.eds.util.message.Messages;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 /**
  * Klasa helpera dla ledge'owych obiektów.
  * Udostępnia API hermetyzucjące framework.
  */
 public class LedgeHelper {
+    /**
+     * Dostawia wiadomość do kolekcji.
+     *
+     * @param context bieżący context.
+     * @param type typ wiadomości.
+     * @param text tekst wiadomości.
+     */
+    protected void postMessage(Context context, MessageType type, String text) {
+        Messages messages = getMessages(context);
+        messages.postMessage(type, text);
+    }
+    
     /**
      * Umieszcza parametr w {@link TemplatingContext}.
      *
@@ -37,6 +54,22 @@ public class LedgeHelper {
     protected void putInSession(Context context, String name, Object object) {
         HttpSession session = getHttpSession(context);
         session.setAttribute(name, object);
+    }
+
+    /**
+     * Wywołuje standardowe przekierowanie HTTP.
+     *
+     * @param context bieżący context.
+     * @param url url docelowy.
+     */
+    protected void redirect(Context context, String url) {
+        HttpContext httpContext = getHttpContext(context);
+        HttpServletResponse response = httpContext.getResponse();
+        try {
+            response.sendRedirect(url);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -149,5 +182,15 @@ public class LedgeHelper {
     @Deprecated
     protected MVCContext getMVCContext(Context context) {
         return MVCContext.getMVCContext(context);
+    }
+
+    private Messages getMessages(Context context) {
+        TemplatingContext templatingContext = getTemplatingContext(context);
+        Messages messages = (Messages) templatingContext.get("messages");
+        if(messages == null) {
+            messages = new ListMessages();
+            templatingContext.put("messages", messages.getCollection());
+        }
+        return messages;
     }
 }

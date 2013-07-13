@@ -7,6 +7,7 @@ import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+import pl.edu.pw.elka.pfus.eds.util.message.MessageType;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,6 +16,10 @@ import javax.servlet.http.HttpSession;
  */
 public abstract class AbstractAction implements Valve {
     private LedgeHelper ledgeHelper = new LedgeHelper();
+
+    public void postMessage(Context context, MessageType type, String text) {
+        ledgeHelper.postMessage(context, type, text);
+    }
 
     public void putInTemplatingContext(Context context, String name, Object object) {
         ledgeHelper.putInTemplatingContext(context, name, object);
@@ -30,6 +35,10 @@ public abstract class AbstractAction implements Valve {
 
     public void putInSession(Context context, String name, Object object) {
         ledgeHelper.putInSession(context, name, object);
+    }
+
+    public void redirect(Context context, String url) {
+        ledgeHelper.redirect(context, url);
     }
 
     public void setView(Context context, String view) {
