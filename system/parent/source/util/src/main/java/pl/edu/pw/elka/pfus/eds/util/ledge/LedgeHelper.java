@@ -56,6 +56,13 @@ public class LedgeHelper {
         session.setAttribute(name, object);
     }
 
+    /**
+     * Zwraca obiekt z sesji.
+     *
+     * @param context bieżący context.
+     * @param name nazwa pod jaką jest dostępny obiekt.
+     * @return obiekt z sesji.
+     */
     protected Object getFromSession(Context context, String name) {
         HttpSession session = getHttpSession(context);
         return session.getAttribute(name);

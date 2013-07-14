@@ -33,7 +33,7 @@ $pageTool.setTitle('EDS - logowanie')
             <table class="log_table">
                 <tr>
                     <td style="vertical-align: middle">Login:</td>
-                    <td><input type="text" name="$loginName" class="log_input log_input_text" /></td>
+                    <td><input type="text" name="$loginName" id="login_name" class="log_input log_input_text" /></td>
                 </tr>
                 <tr>
                     <td style="vertical-align: middle">Hasło:</td>

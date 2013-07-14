@@ -6,13 +6,13 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.security.ledge.SecurityAction;
 import pl.edu.pw.elka.pfus.eds.util.Constants;
-import pl.edu.pw.elka.pfus.eds.util.ledge.AbstractAction;
 import pl.edu.pw.elka.pfus.eds.util.message.MessageType;
 
 import java.util.List;
 
-public class Login extends AbstractAction {
+public class Login extends SecurityAction {
     private static final Logger logger = Logger.getLogger(Login.class);
     private UserDao userDao;
 
@@ -29,10 +29,6 @@ public class Login extends AbstractAction {
         String password = getParamOrEmptyString(context, Constants.PASSWORD_VALUE);
 
         registerUserInSession(context, login, password);
-    }
-
-    private boolean isAuthenticated(Context context) {
-        return getFromSession(context, Constants.LOGGED_USER) != null;
     }
 
     private void registerUserInSession(Context context, String login, String password) {

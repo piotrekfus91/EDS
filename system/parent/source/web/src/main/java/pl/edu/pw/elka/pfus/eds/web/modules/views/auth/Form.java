@@ -21,7 +21,7 @@ public class Form extends AbstractView {
 
     @Override
     public String build(Template template, String embeddedBuildResults) throws BuildException, ProcessingException {
-        if(isAuthenticated())
+        if(isAuthenticated() && getMVCContext().getAction() != "auth.Login")
             redirect(Constants.ROOT_URL);
 
         putLoginFormFieldNames();

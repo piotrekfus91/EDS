@@ -32,7 +32,7 @@ $pageTool.insertTitlePrefix('EDS - ')
             <li><a href="#data">Moje dane</a></li>
             <li><a href="#password">Zmiana hasła</a></li>
             <li>
-                <a href="$link.view('auth.Logout')">
+                <a id="logout_link" href="$link.view('auth.Form').action('auth.Logout')">
                     <img src="$link.content('images/logout.png')" style="height: 16px" />
                     Wyloguj się
                 </a>
