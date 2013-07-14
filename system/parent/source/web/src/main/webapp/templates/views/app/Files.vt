@@ -1,0 +1,42 @@
+$viewEnclosureTool.top()
+<script>
+    $(document).ready(function() {
+        document.title = 'EDS - pliki';
+
+        $('#tree').dynatree({
+            fx: {
+                height: "toggle",
+                duration: 200
+            }
+        });
+    });
+</script>
+<table class="files_main_table">
+    <tr>
+        <td>
+            <fieldset class="files_fieldset">
+                <legend>Struktura katalogwa</legend>
+                <div class="tree" id="tree">
+                    <ul>
+                        <li class="folder">
+                            /
+                            <ul>
+                                <li>
+                                    <a href="#">katalog 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">katalog 2</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </fieldset>
+        </td>
+        <td>
+            <fieldset class="files_fieldset">
+                <legend>Lista plików</legend>
+            </fieldset>
+        </td>
+    </tr>
+</table>

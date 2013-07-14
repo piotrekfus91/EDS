@@ -9,7 +9,8 @@ function animate_page() {
 }
 
 function make_tabs() {
-    $('#tabs').tabs();
+    var tabs = $('#tabs');
+    tabs.tabs();
     // wylaczamy link z tabów, żeby otworzył się jako czysty GET
-    $('#logout_link').unbind('click');
+    tabs.find('#logout_link').unbind('click');
 }
