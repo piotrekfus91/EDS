@@ -147,5 +147,6 @@
     <module>util</module>
     <module>security</module>
     <module>web</module>
+    <module>logic</module>
   </modules>
 </project>
