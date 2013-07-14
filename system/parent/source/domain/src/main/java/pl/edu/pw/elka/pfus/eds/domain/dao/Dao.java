@@ -50,6 +50,13 @@ public interface Dao<T extends GenericEntity> {
     Session getSession();
 
     /**
+     * Ustawia sesję hibernate.
+     *
+     * @param session sesja hibernate.
+     */
+    void setSession(Session session);
+
+    /**
      * Rozpoczyna transakcję na bieżącej sesji.
      */
     void beginTransaction();

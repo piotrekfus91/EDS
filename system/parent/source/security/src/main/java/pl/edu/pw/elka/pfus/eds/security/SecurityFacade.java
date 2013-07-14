@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.security;
 
+import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 
 /**
@@ -25,4 +26,12 @@ public interface SecurityFacade {
      * @return obiekt typu {@link User} pasujący do podanych loginu i hasła.
      */
     User logIn(String login, String password);
+
+    /**
+     * Zwraca zalogowanego użytkownika.
+     *
+     * @param context bieżący context.
+     * @return bieżący użytkownik, jeśli istnieje, w przeciwnym wypadku null.
+     */
+    User getCurrentUser(Context context);
 }

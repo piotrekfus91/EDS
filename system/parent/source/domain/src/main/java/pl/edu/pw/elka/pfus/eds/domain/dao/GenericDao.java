@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class GenericDao<T extends GenericEntity> implements Dao<T> {
     protected Session session;
 
-    protected GenericDao(Session session) {
+    public GenericDao(Session session) {
         this.session = session;
     }
 
@@ -48,6 +48,11 @@ public abstract class GenericDao<T extends GenericEntity> implements Dao<T> {
     @Override
     public Session getSession() {
         return session;
+    }
+
+    @Override
+    public void setSession(Session session) {
+        this.session = session;
     }
 
     @Override

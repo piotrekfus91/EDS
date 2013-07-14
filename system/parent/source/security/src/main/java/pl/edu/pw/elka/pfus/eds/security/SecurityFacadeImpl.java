@@ -6,8 +6,11 @@ import org.objectledge.security.DataBackend;
 import org.objectledge.security.object.hibernate.HibernateDataBackend;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.security.exception.SecurityInitializationException;
+import pl.edu.pw.elka.pfus.eds.util.Constants;
+import pl.edu.pw.elka.pfus.eds.util.ledge.LedgeHelper;
 
 public class SecurityFacadeImpl implements SecurityFacade {
+    private LedgeHelper ledgeHelper = new LedgeHelper();
     private DataBackend dataBackend;
 
     public SecurityFacadeImpl(Context context, HibernateSessionFactory hibernateSessionFactory) {
@@ -30,5 +33,10 @@ public class SecurityFacadeImpl implements SecurityFacade {
     @Override
     public User logIn(String login, String password) {
         return null;
+    }
+
+    @Override
+    public User getCurrentUser(Context context) {
+        return (User) ledgeHelper.getFromSession(context, Constants.LOGGED_USER);
     }
 }

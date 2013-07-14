@@ -27,7 +27,7 @@ public class LedgeHelper {
      * @param type typ wiadomości.
      * @param text tekst wiadomości.
      */
-    protected void postMessage(Context context, MessageType type, String text) {
+    public void postMessage(Context context, MessageType type, String text) {
         Messages messages = getMessages(context);
         messages.postMessage(type, text);
     }
@@ -39,7 +39,7 @@ public class LedgeHelper {
      * @param name nazwa pod jaką ma być dostępny obiekt.
      * @param object obiekt do umieszczenia.
      */
-    protected void putInTemplatingContext(Context context, String name, Object object) {
+    public void putInTemplatingContext(Context context, String name, Object object) {
         TemplatingContext templatingContext = getTemplatingContext(context);
         templatingContext.put(name, object);
     }
@@ -51,7 +51,7 @@ public class LedgeHelper {
      * @param name nazwa pod jaką ma być dostępny obiekt.
      * @param object obiekt do umieszczenia w sesji.
      */
-    protected void putInSession(Context context, String name, Object object) {
+    public void putInSession(Context context, String name, Object object) {
         HttpSession session = getHttpSession(context);
         session.setAttribute(name, object);
     }
@@ -63,7 +63,7 @@ public class LedgeHelper {
      * @param name nazwa pod jaką jest dostępny obiekt.
      * @return obiekt z sesji.
      */
-    protected Object getFromSession(Context context, String name) {
+    public Object getFromSession(Context context, String name) {
         HttpSession session = getHttpSession(context);
         return session.getAttribute(name);
     }
@@ -74,7 +74,7 @@ public class LedgeHelper {
      * @param context bieżący context.
      * @param url url docelowy.
      */
-    protected void redirect(Context context, String url) {
+    public void redirect(Context context, String url) {
         HttpContext httpContext = getHttpContext(context);
         HttpServletResponse response = httpContext.getResponse();
         try {
@@ -90,7 +90,7 @@ public class LedgeHelper {
      * @param context bieżący context.
      * @param view widok do ustawienia.
      */
-    protected void setView(Context context, String view) {
+    public void setView(Context context, String view) {
         MVCContext mvcContext = getMVCContext(context);
         mvcContext.setView(view);
     }
@@ -101,7 +101,7 @@ public class LedgeHelper {
      * @param context bieżący widok.
      * @param uri adres zawierający widok.
      */
-    protected void setViewByUri(Context context, String uri) {
+    public void setViewByUri(Context context, String uri) {
         String view = UrlHelper.getViewName(uri);
         setView(context, view);
     }
@@ -113,7 +113,7 @@ public class LedgeHelper {
      * @param name nazwa parametru.
      * @return opakowany string.
      */
-    protected Optional<String> getStringFromRequestParameters(Context context, String name) {
+    public Optional<String> getStringFromRequestParameters(Context context, String name) {
         RequestParameters requestParameters = getRequestParameters(context);
         if(requestParameters.isDefined(name))
             return Optional.fromNullable(requestParameters.get(name));
@@ -128,7 +128,7 @@ public class LedgeHelper {
      * @param name nazwa parametru.
      * @return parametr lub pusty string.
      */
-    protected String getParamOrEmptyString(Context context, String name) {
+    public String getParamOrEmptyString(Context context, String name) {
         Optional<String> optional = getStringFromRequestParameters(context, name);
         if(optional.isPresent())
             return Strings.nullToEmpty(optional.get());
@@ -144,7 +144,7 @@ public class LedgeHelper {
      * @deprecated użyj lepiej metod operujących na templating context zamiast samego templating contextu.
      */
     @Deprecated
-    protected TemplatingContext getTemplatingContext(Context context) {
+    public TemplatingContext getTemplatingContext(Context context) {
         return TemplatingContext.getTemplatingContext(context);
     }
 
@@ -156,7 +156,7 @@ public class LedgeHelper {
      * @deprecated użyj lepiej metod operujących na request parameters zamiast samych parametrów żądania.
      */
     @Deprecated
-    protected RequestParameters getRequestParameters(Context context) {
+    public RequestParameters getRequestParameters(Context context) {
         return RequestParameters.getRequestParameters(context);
     }
 
@@ -168,7 +168,7 @@ public class LedgeHelper {
      * @deprecated użyj lepiej metod operujących na conteksćie http zamiast samego http contextu.
      */
     @Deprecated
-    protected HttpContext getHttpContext(Context context) {
+    public HttpContext getHttpContext(Context context) {
         return HttpContext.getHttpContext(context);
     }
 
@@ -180,7 +180,7 @@ public class LedgeHelper {
      * @deprecated użyj lepiej metod operujących na sesji zamiast samej sesji.
      */
     @Deprecated
-    protected HttpSession getHttpSession(Context context) {
+    public HttpSession getHttpSession(Context context) {
         return getHttpContext(context).getRequest().getSession();
     }
 
@@ -192,7 +192,7 @@ public class LedgeHelper {
      * @deprecated użyj lepiej metod operujących na context zamiast samego mvc contextu.
      */
     @Deprecated
-    protected MVCContext getMVCContext(Context context) {
+    public MVCContext getMVCContext(Context context) {
         return MVCContext.getMVCContext(context);
     }
 

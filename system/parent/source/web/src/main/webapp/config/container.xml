@@ -6,6 +6,11 @@
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory"
                class="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactoryImpl" />
 
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder"
+               class="pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryFinderImpl" />
+
+    <component class="pl.edu.pw.elka.pfus.eds.web.rest.DirectoryRest" />
+
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.dao.CommentDao"
                class="pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateCommentDao" />
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao"

@@ -152,8 +152,10 @@ public class Directory extends IdentifableEntity implements Versionable {
             this.parentDirectory.removeSubdirectory(this);
 
         // dostajemy nowy, nie nullowy parent, trzeba dodac do niego biezacy
-        else if(parentDirectory != null && !parentDirectory.containsDirectory(this))
+        else if(parentDirectory != null && !parentDirectory.containsDirectory(this)) {
+            this.setOwner(parentDirectory.getOwner());
             parentDirectory.addSubdirectory(this);
+        }
 
         this.parentDirectory = parentDirectory;
     }

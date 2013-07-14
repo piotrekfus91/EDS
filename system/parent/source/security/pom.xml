@@ -14,12 +14,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>pl.edu.pw.elka.pfus.eds</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>util</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>pl.edu.pw.elka.pfus.eds</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>domain</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -5,6 +5,15 @@
 		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
            version="3.0">
 
+    <context-param>
+        <param-name>resteasy.scan</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>resteasy.servlet.mapping.prefix</param-name>
+        <param-value>/rest</param-value>
+    </context-param>
+
     <servlet>
         <servlet-name>ledge</servlet-name>
         <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
@@ -14,6 +23,23 @@
         <url-pattern>/eds/*</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>resteasy-servlet</servlet-name>
+        <servlet-class>
+            org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+        </servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>resteasy-servlet</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+
+    <listener>
+        <listener-class>
+            org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
+        </listener-class>
+    </listener>
     <listener>
         <listener-class>pl.edu.pw.elka.pfus.eds.web.servlet.ServletContextListener</listener-class>
     </listener>

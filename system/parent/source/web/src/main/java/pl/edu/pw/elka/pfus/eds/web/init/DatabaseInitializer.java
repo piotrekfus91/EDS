@@ -2,9 +2,10 @@ package pl.edu.pw.elka.pfus.eds.web.init;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.objectledge.context.Context;
 import org.picocontainer.Startable;
+import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
+import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 import pl.edu.pw.elka.pfus.eds.web.init.impl.SqlScriptLoader;
@@ -15,12 +16,13 @@ public class DatabaseInitializer implements Startable {
     private static final Logger logger = Logger.getLogger(DatabaseInitializer.class);
 
     private SessionFactory sessionFactory;
-    private Context context;
     private UserDao userDao;
+    private DirectoryDao directoryDao;
 
-    public DatabaseInitializer(SessionFactory sessionFactory, Context context, UserDao userDao) {
+    public DatabaseInitializer(SessionFactory sessionFactory, UserDao userDao, DirectoryDao directoryDao) {
         this.sessionFactory = sessionFactory;
         this.userDao = userDao;
+        this.directoryDao = directoryDao;
     }
 
     @Override
@@ -29,14 +31,28 @@ public class DatabaseInitializer implements Startable {
         initFromScripts();
 
         userDao.beginTransaction();
-        User user = new User();
-        user.setName("root");
-        user.setPasswordValue("asdf");
-        user.setEmail("root@localhost");
-        user.setFirstName("root");
-        user.setLastName("root");
-        user.setCreated(new Date());
-        userDao.persist(user);
+        User rootUser = new User();
+        rootUser.setName("root");
+        rootUser.setPasswordValue("asdf");
+        rootUser.setEmail("root@localhost");
+        rootUser.setFirstName("root");
+        rootUser.setLastName("root");
+        rootUser.setCreated(new Date());
+        userDao.persist(rootUser);
+
+        directoryDao.setSession(userDao.getSession());
+        Directory picturesDirectory = new Directory();
+        picturesDirectory.setName("obrazki");
+        picturesDirectory.setOwner(rootUser);
+        Directory documentsDirectory = new Directory();
+        documentsDirectory.setName("dokumenty");
+        documentsDirectory.setOwner(rootUser);
+        Directory lfcPicturesDirectory = new Directory();
+        lfcPicturesDirectory.setName("LFC");
+        lfcPicturesDirectory.setParentDirectory(picturesDirectory);
+        directoryDao.persist(picturesDirectory);
+        directoryDao.persist(documentsDirectory);
+
         userDao.commitTransaction();
     }
 
@@ -46,7 +62,7 @@ public class DatabaseInitializer implements Startable {
     }
 
     private void initFromScripts() {
-        Session session = sessionFactory.getSession(context);
+        Session session = sessionFactory.getSession(null);
         logger.info("initializing security from ETL");
         session.getTransaction().begin();
         session.doWork(new SqlScriptLoader("/etl/security_inserts.sql"));
