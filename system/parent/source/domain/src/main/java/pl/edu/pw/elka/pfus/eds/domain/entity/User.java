@@ -22,6 +22,7 @@ public class User extends IdentifableEntity implements Named, Versionable {
     private Date created;
     private Integer version;
     private Date lastLogin;
+    private Set<Directory> directories = new HashSet<Directory>();
     private Set<Comment> comments = new HashSet<Comment>();
     private Set<Document> documents = new HashSet<Document>();
     private Set<ResourceGroup> resourceGroups = new HashSet<ResourceGroup>();
@@ -136,6 +137,22 @@ public class User extends IdentifableEntity implements Named, Versionable {
 
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public Set<Directory> getDirectories() {
+        return ImmutableSet.copyOf(directories);
+    }
+
+    public void setDirectories(Set<Directory> directories) {
+        this.directories = directories;
+    }
+
+    public void addDirectory(Directory directory) {
+        directories.add(directory);
+    }
+
+    public void removeDirectory(Directory directory) {
+        directories.remove(directory);
     }
 
     public Set<Comment> getComments() {

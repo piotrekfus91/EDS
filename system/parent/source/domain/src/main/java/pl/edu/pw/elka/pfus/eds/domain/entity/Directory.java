@@ -14,6 +14,7 @@ public class Directory extends IdentifableEntity implements Versionable {
     private Integer id;
     private String name;
     private Integer version;
+    private User owner;
     private Set<ResourceGroup> resourceGroups = new HashSet<ResourceGroup>();
     private Set<Directory> subdirectories = new HashSet<Directory>();
     private Directory parentDirectory;
@@ -95,6 +96,14 @@ public class Directory extends IdentifableEntity implements Versionable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public Set<ResourceGroup> getResourceGroups() {
