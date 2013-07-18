@@ -1,15 +1,8 @@
 <?xml version="1.0"?>
 <container>
-
-    <component class="pl.edu.pw.elka.pfus.eds.web.init.DatabaseInitializer" />
-
+    <!-- domain -->
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory"
                class="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactoryImpl" />
-
-    <component class-key="pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder"
-               class="pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryFinderImpl" />
-
-    <component class="pl.edu.pw.elka.pfus.eds.web.rest.DirectoryRest" />
 
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.dao.CommentDao"
                class="pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateCommentDao" />
@@ -26,10 +19,27 @@
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.dao.UserDao"
                class="pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateUserDao" />
 
+    <!-- security -->
+    <component class-key="pl.edu.pw.elka.pfus.eds.security.SecurityFacade"
+               class="pl.edu.pw.elka.pfus.eds.security.SecurityFacadeImpl" />
+
+    <!-- logic -->
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder"
+               class="pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryFinderImpl" />
+
+    <component class="pl.edu.pw.elka.pfus.eds.web.init.DatabaseInitializer" />
+
+    <!-- ledge -->
     <container key="hibernateContainer"/>
     <component class="org.objectledge.hibernate.NonCachingPicoObjectInstantiator">
         <parameter key="hibernateContainer"/>
     </component>
+
+    <component class-key="org.objectledge.authentication.UserManager"
+               class="org.objectledge.authentication.DirectoryUserManager" />
+
+    <component class-key="org.objectledge.authentication.UserManagementParticipant"
+               class="pl.edu.pw.elka.pfus.eds.security.DummyUserManagementParticipant" />
 
     <component class-key="org.objectledge.hibernate.InterceptorFactory"
                class="org.objectledge.hibernate.EmptyInterceptorFactory"/>
@@ -76,7 +86,8 @@
     <component class-key="org.objectledge.security.SecurityTokenModificationPolicy"
                class="org.objectledge.security.SecurityTokenModificationPolicyImpl"/>
     <component class="org.objectledge.security.object.hibernate.HibernateDataBackend"/>
-    <component class="pl.edu.pw.elka.pfus.eds.security.DummyGroupNamingPolicy" />
+    <component class-key="org.objectledge.security.GroupNamingPolicy"
+               class="pl.edu.pw.elka.pfus.eds.security.DummyGroupNamingPolicy" />
     <!--<component class="org.objectledge.example.security.DummyGroupNamingPolicy"/>-->
     <component class="org.objectledge.web.mvc.security.AclSecurityHelper"/>
     <component class="org.objectledge.web.mvc.security.SecurityPolicyCheckingHelper"/>
@@ -107,11 +118,19 @@
         <parameter value="MD5"/>
     </component>
 
+    <component class-key="org.picocontainer.PicoContainer"
+               class="org.picocontainer.defaults.DefaultPicoContainer" />
+
+    <component class-key="org.objectledge.database.persistence.Persistence"
+               class="org.objectledge.database.persistence.DefaultPersistence" />
 
     <!-- // valves ////////////////////////////////////////////////////////////////////// -->
+    <!--<component class-key="org.jcontainer.dna.Configuration"-->
+               <!--class="org.jcontainer.dna.impl.DefaultConfiguration" />-->
 
     <component class="org.objectledge.web.ContentTypeInitializerValve"/>
     <component class="org.objectledge.context.Context"/>
+    <component class="org.objectledge.naming.ContextFactory" />
     <component class="org.objectledge.web.WebConfigurator"/>
     <component class="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
     <component class="org.objectledge.web.mvc.MVCResultsValve"/>

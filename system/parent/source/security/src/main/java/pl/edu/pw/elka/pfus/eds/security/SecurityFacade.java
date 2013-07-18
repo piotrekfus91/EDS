@@ -21,11 +21,12 @@ public interface SecurityFacade {
     /**
      * Sprawdza czy podane login i hasło pasują do istniejącego użytkownika z bazy.
      *
+     * @param context bieżący context.
      * @param login login użytkownika.
      * @param password podane hasło.
      * @return obiekt typu {@link User} pasujący do podanych loginu i hasła.
      */
-    User logIn(String login, String password);
+    User logIn(Context context, String login, String password);
 
     /**
      * Zwraca zalogowanego użytkownika.

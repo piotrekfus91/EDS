@@ -69,6 +69,21 @@ public class LedgeHelper {
     }
 
     /**
+     * Resetuje sesję HTTP - inwaliduje starą i uruchamia nową.
+     *
+     * @param context bieżący context.
+     */
+    public void invalidateSession(Context context) {
+        // inwalidacja
+        HttpSession session = getHttpSession(context);
+        session.invalidate();
+
+        // start
+        HttpContext httpContext = getHttpContext(context);
+        httpContext.getRequest().getSession(true);
+    }
+
+    /**
      * Wywołuje standardowe przekierowanie HTTP.
      *
      * @param context bieżący context.
