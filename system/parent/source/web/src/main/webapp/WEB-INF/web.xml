@@ -8,14 +8,31 @@
     <servlet>
         <servlet-name>ledge</servlet-name>
         <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <init-param>
+            <param-name>dispatcher</param-name>
+            <param-value>main</param-value>
+        </init-param>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>ledge</servlet-name>
         <url-pattern>/eds/*</url-pattern>
     </servlet-mapping>
 
-+
+    <servlet>
+        <servlet-name>rest</servlet-name>
+        <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
+        <init-param>
+            <param-name>dispatcher</param-name>
+            <param-value>restDispatcher</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>rest</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+
     <listener>
         <listener-class>pl.edu.pw.elka.pfus.eds.web.servlet.ServletContextListener</listener-class>
     </listener>
