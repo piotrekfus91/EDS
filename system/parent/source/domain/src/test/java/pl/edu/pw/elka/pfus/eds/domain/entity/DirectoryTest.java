@@ -85,4 +85,25 @@ public class DirectoryTest {
         directory.addSubdirectory(subdir);
         assertThat(subdir.getStringPath()).isEqualTo("/parent/child");
     }
+
+    @Test
+    public void testFindRootThisDirectory() throws Exception {
+        assertThat(directory.findRoot()).isEqualTo(directory);
+    }
+
+    @Test
+    public void testFindRootOfSubdirectory() throws Exception {
+        directory.addSubdirectory(subdir);
+        assertThat(subdir.findRoot()).isEqualTo(directory);
+    }
+
+    @Test
+    public void testRecursiveOwner() throws Exception {
+        directory.addSubdirectory(subdir);
+        User user = new User();
+        directory.setOwner(user);
+
+        assertThat(directory.getOwner()).isSameAs(user);
+        assertThat(subdir.getOwner()).isSameAs(user);
+    }
 }

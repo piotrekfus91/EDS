@@ -103,7 +103,8 @@ public class Directory extends IdentifableEntity implements Versionable {
     }
 
     public void setOwner(User owner) {
-        this.owner = owner;
+        Directory rootDir = findRoot();
+        recursiveSetOwner(rootDir, owner);
     }
 
     public Set<ResourceGroup> getResourceGroups() {
@@ -174,6 +175,20 @@ public class Directory extends IdentifableEntity implements Versionable {
 
     public void removeDocument(Document document) {
         documents.remove(document);
+    }
+
+    Directory findRoot() {
+        Directory rootDir = this;
+        while(rootDir.getParentDirectory() != null)
+            rootDir = rootDir.getParentDirectory();
+        return rootDir;
+    }
+
+    void recursiveSetOwner(Directory directory, User owner) {
+        directory.owner = owner;
+        for(Directory subdir : directory.getSubdirectories()) {
+            recursiveSetOwner(subdir, owner);
+        }
     }
 
     @Override
