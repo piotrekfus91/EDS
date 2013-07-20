@@ -37,34 +37,46 @@ public class SqlScriptLoader implements ScriptLoader {
     }
 
     private void executeQuery(Connection connection, String query) throws SQLException {
-        Statement statement = connection.createStatement();
-        logger.info("executing startup query: " + query);
-        if(!Strings.isNullOrEmpty(query.trim()))
-            statement.execute(query);
-        statement.close();
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            logger.info("executing startup query: " + query);
+            if (!Strings.isNullOrEmpty(query.trim()))
+                statement.execute(query);
+        } finally {
+            if(statement != null)
+                statement.close();
+        }
     }
 
     private String getWholeQuery() {
         InputStream sqlStream = SqlScriptLoader.class.getResourceAsStream(scriptUri);
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(sqlStream));
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(sqlStream, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            logger.warn("encoding UTF-8 not found, processing system encoding");
+            bufferedReader = new BufferedReader(new InputStreamReader(sqlStream));
+        }
 
         String wholeQuery = getWholeQueryFromReader(bufferedReader);
         return wholeQuery;
     }
 
     private String getWholeQueryFromReader(BufferedReader bufferedReader) {
-        String wholeQuery = "";
+        StringBuilder wholeQuery = new StringBuilder();
         try {
             String line;
             while((line = bufferedReader.readLine()) != null) {
                 line = line.trim().replace(UTF_8_BOM, "");
-                if(isApplicableLine(line))
-                    wholeQuery += line + "\n";
+                if(isApplicableLine(line)) {
+                    wholeQuery.append(line).append('\n');
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return wholeQuery;
+        return wholeQuery.toString();
     }
 
     private boolean isApplicableLine(String line) {

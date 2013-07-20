@@ -3,6 +3,9 @@ package pl.edu.pw.elka.pfus.eds.util;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Normalizator dla stringów.
+ */
 public class ValueNormalizer {
     private static Map<Character, Character> nonAsciiChars;
 
@@ -11,6 +14,16 @@ public class ValueNormalizer {
         initNontAsciiMap();
     }
 
+    private ValueNormalizer() {
+
+    }
+
+    /**
+     * Normalizuje podany parametr, poprzez usunięcie nie alfanumerycznych znaków i zamianę polskich liter na ASCII.
+     *
+     * @param originalValue wartość orginalna.
+     * @return wartość znormalizowana.
+     */
     public static String normalizeValue(String originalValue) {
         StringBuilder builder = new StringBuilder();
         for(Character c : originalValue.toLowerCase().toCharArray()) {
