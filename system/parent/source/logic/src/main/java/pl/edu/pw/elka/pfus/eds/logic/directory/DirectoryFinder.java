@@ -13,5 +13,27 @@ public interface DirectoryFinder {
      *
      * @return katalogi główne użytkownika.
      */
-    public List<Directory> getRootDirectories();
+    List<Directory> getRootDirectories();
+
+    /**
+     * Znajduje wszystkie podkatalogi podanego katalogu.
+     * Jednocześnie sprawdza, czy użytkownik jest
+     * właścicielem katalogu. Jeśli nie jest, to zwraca
+     * pustą listę.
+     *
+     * @param directory katalog nadrzędny.
+     * @return lista katalogów podrzędnych
+     */
+    List<Directory> getSubdirectories(Directory directory);
+
+    /**
+     * Znajduje wszystkie podkatalogi podanego katalogu.
+     * Jednocześnie sprawdza, czy użytkownik jest
+     * właścicielem katalogu. Jeśli nie jest, to zwraca
+     * pustą listę.
+     *
+     * @param directoryId katalog nadrzędny.
+     * @return lista katalogów podrzędnych
+     */
+    List<Directory> getSubdirectories(int directoryId);
 }

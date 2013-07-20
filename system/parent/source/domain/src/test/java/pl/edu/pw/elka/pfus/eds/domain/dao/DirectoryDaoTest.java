@@ -10,6 +10,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -56,6 +57,25 @@ public class DirectoryDaoTest extends IdentifableDaoTest<Directory, DirectoryDao
         assertThat(expectedOnlyRoots).containsOnly(firstRoot, secondRoot);
     }
 
+    @Test
+    public void testSubdirectories() throws Exception {
+        Directory parent = getFreeLevelStructure();
+        List<Directory> expectedSubdirectories = new LinkedList(parent.getSubdirectories());
+        List<Directory> actualSubdirectories = directoryDao.getSubdirectories(parent);
+
+        assertThat(actualSubdirectories).isEqualTo(expectedSubdirectories);
+    }
+
+    @Test
+    public void testWithSubsAndOwner() throws Exception {
+        Directory expected = getFreeLevelStructure();
+
+        Directory actual = directoryDao.getDirectoryWithSubdirectoriesAndOwner(expected.getId());
+        assertThat(actual).isEqualTo(expected);
+        assertThat(actual.getSubdirectories()).isEqualTo(expected.getSubdirectories());
+        assertThat(actual.getOwner()).isEqualTo(expected.getOwner());
+    }
+
     @Override
     public DirectoryDao getDao() {
         return directoryDao;
@@ -79,5 +99,26 @@ public class DirectoryDaoTest extends IdentifableDaoTest<Directory, DirectoryDao
     @Override
     protected void updateEntity(Directory entity) {
         entity.setName(entity.getName() + entity.getName());
+    }
+
+    private Directory getFreeLevelStructure() {
+        User user = userFactory.getSampleEntity();
+        Directory parentDir = new Directory();
+        parentDir.setName("parent");
+        parentDir.setOwner(user);
+        Directory firstSubdir = new Directory();
+        firstSubdir.setName("firstSubdir");
+        firstSubdir.setOwner(user);
+        firstSubdir.setParentDirectory(parentDir);
+        Directory secondSubdir = new Directory();
+        secondSubdir.setName("secondSubdir");
+        secondSubdir.setOwner(user);
+        secondSubdir.setParentDirectory(parentDir);
+        Directory subsubdir = new Directory();
+        subsubdir.setName("subsubdir");
+        subsubdir.setOwner(user);
+        subsubdir.setParentDirectory(firstSubdir);
+        directoryDao.persist(parentDir);
+        return parentDir;
     }
 }

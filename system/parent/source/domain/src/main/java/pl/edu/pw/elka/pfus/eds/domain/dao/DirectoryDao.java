@@ -26,4 +26,28 @@ public interface DirectoryDao extends IdentifableDao<Directory> {
      * @return główne katalogi.
      */
     List<Directory> getRootDirectories(int userId);
+
+    /**
+     * Zwraca wszystkie katalogi danego katalogu.
+     *
+     * @param directory wybrany katalog.
+     * @return podkatalogi.
+     */
+    List<Directory> getSubdirectories(Directory directory);
+
+    /**
+     * Zwraca wszystkie katalogi danego katalogu.
+     *
+     * @param directoryId id katalogu.
+     * @return podkatalogi.
+     */
+    List<Directory> getSubdirectories(int directoryId);
+
+    /**
+     * Znajduje podany katalog wraz z podkatalogami.
+     *
+     * @param directoryId id katalogu.
+     * @return katalog i jego podkatalogi.
+     */
+    Directory getDirectoryWithSubdirectoriesAndOwner(int directoryId);
 }

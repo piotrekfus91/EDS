@@ -34,6 +34,35 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
     }
 
     @Override
+    public List<Directory> getSubdirectories(Directory directory) {
+        return getSubdirectories(directory.getId());
+    }
+
+    @Override
+    public List<Directory> getSubdirectories(int directoryId) {
+        String SUBDIRECTORIES_QUERY =
+                "SELECT dir " +
+                "FROM Directory dir " +
+                "WHERE dir.parentDirectory.id = :directoryId";
+        Query query = session.createQuery(SUBDIRECTORIES_QUERY);
+        query.setInteger("directoryId", directoryId);
+        return query.list();
+    }
+
+    @Override
+    public Directory getDirectoryWithSubdirectoriesAndOwner(int directoryId) {
+        String DIRECTORY_WITH_SUBDIRECTORIES_AND_OWNER =
+                "SELECT dir " +
+                "FROM Directory dir " +
+                        "JOIN dir.owner " +
+                        "JOIN dir.subdirectories " +
+                "WHERE dir.id = :directoryId";
+        Query query = session.createQuery(DIRECTORY_WITH_SUBDIRECTORIES_AND_OWNER);
+        query.setParameter("directoryId", directoryId);
+        return (Directory) query.uniqueResult();
+    }
+
+    @Override
     protected Class<Directory> getEntityClass() {
         return Directory.class;
     }
