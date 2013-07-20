@@ -38,5 +38,14 @@ public interface DirectoryFinder {
      */
     List<Directory> getSubdirectories(int directoryId);
 
+    /**
+     * Zwraca listę wszystkich elementów typu {@link FileSystemEntry}
+     * dla podanego katalogu. Jednocześnie sprawdza właściciela.
+     * Jeśli zalogowany użytkownik nie jest właścicielem
+     * to zwraca listę pustą.
+     *
+     * @param directoryId id katalogu.
+     * @return lista elementów systemu plików.
+     */
     List<FileSystemEntry> getFileSystemEntries(int directoryId);
 }

@@ -40,6 +40,7 @@ public class DirectoryFinderTest {
     public void testGetRootForLoggedUser() throws Exception {
         List<Directory> expectedDirs = getSampleDirectories();
         User user = getMockUser();
+        when(securityFacade.isLogged(context)).thenReturn(true);
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
         when(directoryDao.getRootDirectories(user)).thenReturn(expectedDirs);
 
@@ -57,9 +58,11 @@ public class DirectoryFinderTest {
     @Test
     public void testGetSubdirectoriesForLoggedUser() throws Exception {
         User user = getMockUser();
+        when(securityFacade.isLogged(context)).thenReturn(true);
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
         Directory parent = getFreeLevelStructure();
         parent.setOwner(user);
+        when(user.isOwnerOfDirectory(parent)).thenReturn(true);
         when(directoryDao.getDirectoryWithSubdirectoriesAndOwner(1)).thenReturn(parent);
 
         assertThat(finder.getSubdirectories(1)).isEqualTo(new LinkedList<>(parent.getSubdirectories()));
@@ -83,10 +86,6 @@ public class DirectoryFinderTest {
         User user = mock(User.class);
         when(user.getId()).thenReturn(1);
         return user;
-    }
-
-    private Directory getMockDirectory() {
-        return mock(Directory.class);
     }
 
     private List<Directory> getSampleDirectories() {

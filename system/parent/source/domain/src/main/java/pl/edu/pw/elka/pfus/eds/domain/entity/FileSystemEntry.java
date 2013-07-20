@@ -6,6 +6,13 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
  */
 public interface FileSystemEntry {
     /**
+     * Zwraca id na potrzeby systemu plikół.
+     *
+     * @return id na potrzeby systemu plików.
+     */
+    Integer getId();
+
+    /**
      * Zwraca nazwę na potrzeby systemu plików.
      *
      * @return nazwa na potrzeby systemu plików.
