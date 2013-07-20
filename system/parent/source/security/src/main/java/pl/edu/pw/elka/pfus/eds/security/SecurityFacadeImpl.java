@@ -58,6 +58,11 @@ public class SecurityFacadeImpl implements SecurityFacade {
         return (User) ledgeHelper.getFromSession(context, Constants.LOGGED_USER);
     }
 
+    @Override
+    public boolean isLogged(Context context) {
+        return getCurrentUser(context) != null;
+    }
+
     private Principal getPrincipalByLogin(String login) throws AuthenticationException {
         return null;
 //        return userManager.getUserByLogin(login);

@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.logic.directory;
 
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
+import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
 
 import java.util.List;
 
@@ -36,4 +37,6 @@ public interface DirectoryFinder {
      * @return lista katalogów podrzędnych
      */
     List<Directory> getSubdirectories(int directoryId);
+
+    List<FileSystemEntry> getFileSystemEntries(int directoryId);
 }

@@ -63,6 +63,20 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
     }
 
     @Override
+    public Directory getDirectoryWithSubdirectoriesDocumentsAndOwner(int directoryId) {
+        String DIRECTORIES_WITH_SUBDIRECTORIES_FILES_AND_OWNER =
+                "SELECT dir " +
+                "FROM Directory dir " +
+                        "JOIN dir.owner " +
+                        "JOIN dir.subdirectories " +
+                        "JOIN dir.documents " +
+                "WHERE dir.id = :directoryId";
+        Query query = session.createQuery(DIRECTORIES_WITH_SUBDIRECTORIES_FILES_AND_OWNER);
+        query.setInteger("directoryId", directoryId);
+        return (Directory) query.uniqueResult();
+    }
+
+    @Override
     protected Class<Directory> getEntityClass() {
         return Directory.class;
     }

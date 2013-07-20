@@ -35,4 +35,12 @@ public interface SecurityFacade {
      * @return bieżący użytkownik, jeśli istnieje, w przeciwnym wypadku null.
      */
     User getCurrentUser(Context context);
+
+    /**
+     * Zwraca informację, czy jest zalogowanu użytkownik w bieżącej sesji.
+     *
+     * @param context bieżący context.
+     * @return true jeśli jest użytkownik zalogowany, w przeciwnym razie false.
+     */
+    boolean isLogged(Context context);
 }

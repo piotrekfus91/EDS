@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
+import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
@@ -35,16 +36,40 @@ public class DirectoryFinderImpl implements DirectoryFinder {
 
     @Override
     public List<Directory> getSubdirectories(int directoryId) {
+        if(!isLogged())
+            return ImmutableList.of();
+
         User currentUser = getCurrentUser();
         Directory parentDirectory = directoryDao.getDirectoryWithSubdirectoriesAndOwner(directoryId);
         if(parentDirectory == null)
             return ImmutableList.of();
 
-        if(parentDirectory.getOwner().equals(currentUser)) {
+        if(currentUser.isOwnerOfDirectory(parentDirectory)) {
             return new LinkedList<>(parentDirectory.getSubdirectories());
         } else {
             return ImmutableList.of();
         }
+    }
+
+    @Override
+    public List<FileSystemEntry> getFileSystemEntries(int directoryId) {
+        if(!isLogged())
+            return ImmutableList.of();
+
+        User currentUser = getCurrentUser();
+        Directory parentDirectory = directoryDao.getDirectoryWithSubdirectoriesDocumentsAndOwner(directoryId);
+        if(parentDirectory == null)
+            return ImmutableList.of();
+
+        if(currentUser.isOwnerOfDirectory(parentDirectory)) {
+            return parentDirectory.getSubdirectoriesAndDocuments();
+        } else {
+            return ImmutableList.of();
+        }
+    }
+
+    private boolean isLogged() {
+        return securityFacade.isLogged(context);
     }
 
     private User getCurrentUser() {

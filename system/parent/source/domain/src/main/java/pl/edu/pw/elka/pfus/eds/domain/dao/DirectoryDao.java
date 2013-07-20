@@ -44,10 +44,20 @@ public interface DirectoryDao extends IdentifableDao<Directory> {
     List<Directory> getSubdirectories(int directoryId);
 
     /**
-     * Znajduje podany katalog wraz z podkatalogami.
+     * Znajduje podany katalog wraz z podkatalogami i właścicielem.
+     * Katalogi tylko bieżącego katalogu, nie w głąb.
      *
      * @param directoryId id katalogu.
-     * @return katalog i jego podkatalogi.
+     * @return wypełniony katalog.
      */
     Directory getDirectoryWithSubdirectoriesAndOwner(int directoryId);
+
+    /**
+     * Znajduje podany katalog, jego podkatalogi, właściciela i pliki.
+     * Podkatalogi tylko bieżącego katalogu, nie w głąb.
+     *
+     * @param directoryId id katalogu.
+     * @return wypełniony katalog.
+     */
+    Directory getDirectoryWithSubdirectoriesDocumentsAndOwner(int directoryId);
 }

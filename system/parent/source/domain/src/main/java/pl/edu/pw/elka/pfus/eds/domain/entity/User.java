@@ -71,6 +71,16 @@ public class User extends IdentifableEntity implements Named, Versionable {
             return name;
     }
 
+    /**
+     * Sprawdza czy ten użytkownik jest właścicielem katalogu.
+     *
+     * @param directory dany katalog.
+     * @return true jeśli użytkownik jest właścicielem katalogu, w przeciwnym razie false.
+     */
+    public boolean isOwnerOfDirectory(Directory directory) {
+        return this.equals(directory.getOwner());
+    }
+
     public void setVersion(Integer version) {
         this.version = version;
     }

@@ -2,15 +2,17 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Klasa reprezentująca katalog użytkownika.
  */
-public class Directory extends IdentifableEntity implements Versionable {
+public class Directory extends IdentifableEntity implements Versionable, FileSystemEntry {
     private Integer id;
     private String name;
     private Integer version;
@@ -34,12 +36,22 @@ public class Directory extends IdentifableEntity implements Versionable {
 
     /**
      * Zwraca wersję encji na potrzeby optymistycznego blokowania.
-     * 
+     *
      * @return wersja.
      */
     @Override
     public Integer getVersion() {
         return version;
+    }
+
+    /**
+     * Zwraca nazwę w systemie plików.
+     *
+     * @return nazwa w systemie plików.
+     */
+    @Override
+    public String getName() {
+        return name;
     }
 
     /**
@@ -60,6 +72,16 @@ public class Directory extends IdentifableEntity implements Versionable {
             thisPath = "/" + name;
 
         return parentPath + thisPath;
+    }
+
+    /**
+     * Zwraca listę wszystkich elementów systemu plików leżących w bieżącym katalogu,
+     * to znaczy podkatalogów i plików.
+     *
+     * @return lista elementów systemu plików.
+     */
+    public List<FileSystemEntry> getSubdirectoriesAndDocuments() {
+        return ImmutableList.<FileSystemEntry>builder().addAll(subdirectories).addAll(documents).build();
     }
 
     public boolean isEmpty() {
@@ -88,10 +110,6 @@ public class Directory extends IdentifableEntity implements Versionable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {

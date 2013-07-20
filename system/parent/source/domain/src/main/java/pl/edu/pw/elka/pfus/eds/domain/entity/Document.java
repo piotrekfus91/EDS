@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Klasa reprezentująca dokument.
  */
-public class Document extends IdentifableEntity implements Versionable {
+public class Document extends IdentifableEntity implements Versionable, FileSystemEntry {
     private Integer id;
     private String name;
     private String contentMd5;
@@ -41,16 +41,22 @@ public class Document extends IdentifableEntity implements Versionable {
         return version;
     }
 
+    /**
+     * Zwraca nazwę w systemie plików.
+     *
+     * @return nazwa w systemie plików.
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
+
     public void setVersion(Integer version) {
         this.version = version;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
