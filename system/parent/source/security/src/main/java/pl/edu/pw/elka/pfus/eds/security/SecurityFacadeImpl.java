@@ -11,6 +11,7 @@ import pl.edu.pw.elka.pfus.eds.security.exception.SecurityInitializationExceptio
 import pl.edu.pw.elka.pfus.eds.util.Constants;
 import pl.edu.pw.elka.pfus.eds.util.ledge.LedgeHelper;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 public class SecurityFacadeImpl implements SecurityFacade {
@@ -56,6 +57,11 @@ public class SecurityFacadeImpl implements SecurityFacade {
     @Override
     public User getCurrentUser(Context context) {
         return (User) ledgeHelper.getFromSession(context, Constants.LOGGED_USER);
+    }
+
+    @Override
+    public User getCurrentUser(HttpServletRequest request) {
+        return (User) request.getSession().getAttribute(Constants.LOGGED_USER);
     }
 
     @Override

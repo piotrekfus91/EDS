@@ -3,6 +3,8 @@ package pl.edu.pw.elka.pfus.eds.security;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Fasada dostępu do systemu bezpieczeństwa.
  */
@@ -35,6 +37,14 @@ public interface SecurityFacade {
      * @return bieżący użytkownik, jeśli istnieje, w przeciwnym wypadku null.
      */
     User getCurrentUser(Context context);
+
+    /**
+     * Zwraca zalogowanego użytkownika.
+     *
+     * @param request request HTTP.
+     * @return bieżący użytkownik, jeśli istnieje, w przeciwnym wypadku null.
+     */
+    User getCurrentUser(HttpServletRequest request);
 
     /**
      * Zwraca informację, czy jest zalogowanu użytkownik w bieżącej sesji.

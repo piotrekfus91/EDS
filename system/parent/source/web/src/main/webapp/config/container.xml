@@ -27,7 +27,14 @@
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder"
                class="pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryFinderImpl" />
 
+    <!-- web -->
     <component class="pl.edu.pw.elka.pfus.eds.web.init.DatabaseInitializer" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonFileSystemEntryListExporter"
+               class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonFileSystemEntryListExporterImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryExporter"
+               class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonDirectoryExporterImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryListExporter"
+               class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonDirectoryListExporterImpl" />
 
 
     <!-- jersey -->

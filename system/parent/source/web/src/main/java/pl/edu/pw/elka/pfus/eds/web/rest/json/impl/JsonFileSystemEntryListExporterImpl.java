@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.AbstractJsonExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonFileSystemEntryListExporter;
+import pl.edu.pw.elka.pfus.eds.web.rest.json.dto.FileSystemEntryJsonDto;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pfus.eds.web.rest.json.impl;
+package pl.edu.pw.elka.pfus.eds.web.rest.json.dto;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -12,18 +12,18 @@ public class FileSystemEntryJsonDtoTest {
 
     @BeforeMethod
     private void beforeMethod() {
-        dto.setIsFolder("");
+        dto.setFolder("");
     }
 
     @Test
     public void testIsFolderForDirectory() {
-        dto.setIsFolder(Directory.class);
-        assertThat(dto.getIsFolder()).isTrue();
+        dto.setFolder(Directory.class);
+        assertThat(dto.getFolder()).isTrue();
     }
 
     @Test
     public void testIsFolderForDocument() {
-        dto.setIsFolder(Document.class);
-        assertThat(dto.getIsFolder()).isFalse();
+        dto.setFolder(Document.class);
+        assertThat(dto.getFolder()).isFalse();
     }
 }
