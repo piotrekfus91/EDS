@@ -7,7 +7,7 @@
 -----------------------------------------------------------------------------
 -- SECURITY_PERMISSION
 -----------------------------------------------------------------------------
-SET search_path TO ledge_hello_world;
+SET search_path TO eds;
 drop table if exists SECURITY_PERMISSION;
 
 CREATE TABLE SECURITY_PERMISSION
