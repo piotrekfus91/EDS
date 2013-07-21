@@ -29,6 +29,32 @@
 
     <component class="pl.edu.pw.elka.pfus.eds.web.init.DatabaseInitializer" />
 
+
+    <!-- jersey -->
+    <container key="forwardMeToParent"/>
+    <component class="pl.edu.pw.elka.pfus.eds.web.jersey.JerseyRestValve">
+       <parameter key="forwardMeToParent" />
+       <parameter />
+       <parameter />
+       <!--<parameter />-->
+    </component>
+    <component class="org.objectledge.web.dispatcher.PipelineHttpDispatcher" key="restDispatcher">
+        <!--<parameter key="restErrorHandlingPipeline"/>-->
+        <parameter key="restPipeline" />
+        <parameter/>
+    </component>
+    <component class="org.objectledge.web.dispatcher.PipelineHttpDispatcher" key="main">
+        <parameter key="http-ErrorHandlingPipeline" />
+        <parameter/>
+    </component>
+    <component class="org.objectledge.pipeline.SimplePipeline" key="restPipeline">
+        <sequence>
+            <!--<parameter class-key="net.mklew.hotelms.persistance.valve.OpenSessionAndBindToCurrentThread"/>-->
+            <parameter class-key="pl.edu.pw.elka.pfus.eds.web.jersey.JerseyRestValve"/>
+        </sequence>
+    </component>
+
+
     <!-- ledge -->
     <container key="hibernateContainer"/>
     <component class="org.objectledge.hibernate.NonCachingPicoObjectInstantiator">
@@ -291,42 +317,13 @@
         </sequence>
     </component>
 
-
-    <component key="ajax-ErrorHandlingPipeline" class="org.objectledge.pipeline.ErrorHandlingPipeline">
-        <parameter class-key="org.jcontainer.dna.Logger"/>
-        <sequence>
-            <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
-            <parameter class-key="org.objectledge.security.SecurityAuthenticationValve"/>
-            <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
-            <parameter class-key="org.objectledge.i18n.UTF8EncodingLoaderValve"/>
-            <parameter class-key="org.objectledge.hibernate.HibernateSessionValve"/>
-            <parameter class-key="org.objectledge.ajax.AjaxExecutorValve"/>
-        </sequence>
-        <sequence>
-            <!--Exception section left empty -->
-        </sequence>
-        <sequence>
-            <parameter class-key="org.objectledge.hibernate.HibernateSessionFinallyValve"/>
-        </sequence>
-    </component>
-    <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
-
-    <component key="http-request" class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
-        <parameter key="http-ErrorHandlingPipeline"/>
-        <parameter/>
-    </component>
-
-    <component key="ajax-request" class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
-        <parameter key="ajax-ErrorHandlingPipeline"/>
-        <parameter/>
-    </component>
-
+    <!-- main dispatcher -->
     <component class-key="org.objectledge.web.HttpDispatcher"
                class="org.objectledge.web.dispatcher.SelectorHttpDispatcher">
         <parameter/>
         <sequence>
-            <parameter key="ajax-request"/>
-            <parameter key="http-request"/>
+            <parameter key="main" />
+            <parameter key="restDispatcher" />
         </sequence>
     </component>
 
