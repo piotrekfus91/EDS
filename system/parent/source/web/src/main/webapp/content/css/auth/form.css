@@ -21,14 +21,14 @@ html, body {
 }
 
 .log_input {
-    width: 100%;
+    width: 80%;
     margin-top: 15px;
     margin-bottom: 15px;
     padding: 0;
 }
 
 .log_input_text {
-    width: 200px;
+    width: 80%;
     height: 20px;
     font-size: 14px;
     background-color: #92a0b3;

@@ -5,8 +5,8 @@ $(document).ready(function() {
 
     $('.log_input_text').focus(function() {
         $(this).animate({
-            height: 30,
-            fontSize: 24,
+            height: '+=10',
+            fontSize: '+=8',
             marginBottom: '-=5',
             marginTop: '-=5',
             marginLeft: '-=10',
@@ -16,8 +16,8 @@ $(document).ready(function() {
 
     $('.log_input_text').blur(function() {
         $(this).animate({
-            height: 20,
-            fontSize: 16,
+            height: '-=10',
+            fontSize: '-=8',
             marginBottom: '+=5',
             marginTop: '+=5',
             marginLeft: '+=10',

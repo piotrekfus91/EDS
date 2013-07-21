@@ -4,7 +4,7 @@ function animate_page() {
         {
             direction: "down"
         },
-        2000
+        1000
     );
 }
 
