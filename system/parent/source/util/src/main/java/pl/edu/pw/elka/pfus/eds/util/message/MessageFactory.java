@@ -10,6 +10,10 @@ import java.util.Date;
 public class MessageFactory {
     private static final Logger logger = Logger.getLogger(MessageFactory.class);
 
+    private MessageFactory() {
+
+    }
+
     /**
      * Zwraca nową wiadomość na podstawie jej parametrów.
      * Wiadomość automatycznie jest uzupełniania o bieżącą datę.
