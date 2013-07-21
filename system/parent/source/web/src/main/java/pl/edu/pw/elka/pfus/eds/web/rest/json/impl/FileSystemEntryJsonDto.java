@@ -9,16 +9,16 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
 public class FileSystemEntryJsonDto {
     private int id;
     private String name;
-    private String type;
+    private boolean isFolder;
 
     public FileSystemEntryJsonDto() {
 
     }
 
-    public FileSystemEntryJsonDto(int id, String name, Class<? extends FileSystemEntry> type) {
+    public FileSystemEntryJsonDto(int id, String name, Class<? extends FileSystemEntry> isFolder) {
         this.id = id;
         this.name = name;
-        setType(type);
+        setIsFolder(isFolder);
     }
 
     public static FileSystemEntryJsonDto from(FileSystemEntry entry) {
@@ -41,15 +41,16 @@ public class FileSystemEntryJsonDto {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public boolean getIsFolder() {
+        return isFolder;
     }
 
-    public void setType(String type) {
-        this.type = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, type);
+    public void setIsFolder(String folder) {
+        String lowerUnderscoreName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, folder);
+        this.isFolder = "directory".equals(lowerUnderscoreName);
     }
 
-    public void setType(Class<? extends FileSystemEntry> type) {
-        setType(type.getSimpleName());
+    public void setIsFolder(Class<? extends FileSystemEntry> type) {
+        setIsFolder(type.getSimpleName());
     }
 }
