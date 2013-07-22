@@ -28,6 +28,7 @@ $pageTool.insertTitlePrefix('EDS')
     <title>$pageTool.title</title>
 </head>
 <body>
+<div id="ajax_loading"></div>
 <div class="tabs" id="tabs">
     <ul>
         <li><a href="$link.view('app.Files')">Pliki</a></li>

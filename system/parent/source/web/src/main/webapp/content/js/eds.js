@@ -1,3 +1,12 @@
+$(document).ajaxStart(function() {
+    $('#ajax_loading').css('display', 'block');
+}).ajaxComplete(function() {
+    $('#ajax_loading').css('display', 'none');
+});
+$(document).ready(function() {
+
+});
+
 function animate_page() {
     $('body').hide().effect(
         'slide',

@@ -1,16 +1,4 @@
 $viewEnclosureTool.top()
-##<script>
-##    $(document).ready(function() {
-##        document.title = 'EDS - pliki';
-##
-##        $('#tree').dynatree({
-##            fx: {
-##                height: "toggle",
-##                duration: 200
-##            }
-##        });
-##    });
-##</script>
 <script src="$link.content('/js/app/files.js')"></script>
 <table class="files_main_table">
     <tr>
