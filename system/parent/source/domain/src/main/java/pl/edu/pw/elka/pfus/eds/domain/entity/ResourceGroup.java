@@ -3,7 +3,7 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -15,8 +15,8 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
     private String description;
     private Integer version;
     private User founder;
-    private Set<Directory> directories = new HashSet<Directory>();
-    private Set<Document> documents = new HashSet<Document>();
+    private Set<Directory> directories = new LinkedHashSet<>();
+    private Set<Document> documents = new LinkedHashSet<>();
 
     /**
      * Zwraca id encji.

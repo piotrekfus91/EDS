@@ -3,7 +3,7 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -15,7 +15,7 @@ public class MimeType extends IdentifableEntity {
     private boolean enabled = true;
     private String defaultExtension;
     private String description;
-    private Set<Document> documents = new HashSet<Document>();
+    private Set<Document> documents = new LinkedHashSet<>();
 
     /**
      *Zwraca id encji.

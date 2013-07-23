@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,10 +18,10 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
     private String name;
     private Integer version;
     private User owner;
-    private Set<ResourceGroup> resourceGroups = new HashSet<ResourceGroup>();
-    private Set<Directory> subdirectories = new HashSet<Directory>();
+    private Set<ResourceGroup> resourceGroups = new LinkedHashSet<>();
+    private Set<Directory> subdirectories = new LinkedHashSet<>();
     private Directory parentDirectory;
-    private Set<Document> documents = new HashSet<Document>();
+    private Set<Document> documents = new LinkedHashSet<>();
 
     private static final String PATH_SEPARATOR = "/";
 

@@ -4,7 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import pl.edu.pw.elka.pfus.eds.util.ValueNormalizer;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -20,7 +20,7 @@ public class Tag extends IdentifableEntity {
      * zapisana małymi literami i bez spacji, znaków inne niż litery.
      */
     private String normalizedValue;
-    public Set<Document> documents = new HashSet<Document>();
+    public Set<Document> documents = new LinkedHashSet<>();
 
     /**
      * Zwraca id encji.

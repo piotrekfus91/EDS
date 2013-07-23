@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -18,8 +19,8 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
     private MimeType mimeType;
     private User owner;
     private Directory directory;
-    private Set<Tag> tags = new HashSet<Tag>();
-    private Set<Comment> comments = new HashSet<Comment>();
+    private Set<Tag> tags = new LinkedHashSet<>();
+    private Set<Comment> comments = new LinkedHashSet<>();
 
     /**
      * Zwraca id encji.

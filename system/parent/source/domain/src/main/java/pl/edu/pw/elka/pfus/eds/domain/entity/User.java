@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableSet;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -22,10 +23,10 @@ public class User extends IdentifableEntity implements Named, Versionable {
     private Date created;
     private Integer version;
     private Date lastLogin;
-    private Set<Directory> directories = new HashSet<Directory>();
-    private Set<Comment> comments = new HashSet<Comment>();
-    private Set<Document> documents = new HashSet<Document>();
-    private Set<ResourceGroup> resourceGroups = new HashSet<ResourceGroup>();
+    private Set<Directory> directories = new LinkedHashSet<>();
+    private Set<Comment> comments = new LinkedHashSet<>();
+    private Set<Document> documents = new LinkedHashSet<>();
+    private Set<ResourceGroup> resourceGroups = new LinkedHashSet<>();
 
     /**
      * Zwraca id encji.
