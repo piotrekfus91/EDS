@@ -220,21 +220,16 @@ public class User extends IdentifableEntity implements Named, Versionable {
 
         User user = (User) o;
 
-        if (locked != user.locked) return false;
-        if (created != null ? !created.equals(user.created) : user.created != null) return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
-        if (id != null ? !id.equals(user.id) : user.id != null) return false;
-        if (lastLogin != null ? !lastLogin.equals(user.lastLogin) : user.lastLogin != null) return false;
-        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
-        if (name != null ? !name.equals(user.name) : user.name != null) return false;
-        if (version != null ? !version.equals(user.version) : user.version != null) return false;
+        if (id != null ? !id.equals(user.id) : user.id != null)
+            return false;
+        if (name != null ? !name.equals(user.name) : user.name != null)
+            return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, name, firstName, lastName, email, locked, lastLogin, created);
+        return id;
     }
 }

@@ -25,5 +25,5 @@ public interface Message {
      *
      * @return czas nadania wiadomości.
      */
-    Date getDate();
+    String getDate();
 }

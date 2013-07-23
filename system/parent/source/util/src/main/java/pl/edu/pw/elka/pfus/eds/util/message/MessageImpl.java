@@ -1,5 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.util.message;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MessageImpl implements Message {
@@ -21,7 +23,8 @@ public class MessageImpl implements Message {
         return text;
     }
 
-    public Date getDate() {
-        return date;
+    public String getDate() {
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        return dateFormat.format(date);
     }
 }

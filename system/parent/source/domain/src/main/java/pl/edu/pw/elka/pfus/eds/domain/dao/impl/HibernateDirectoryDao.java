@@ -27,7 +27,8 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
                 "FROM Directory dir " +
                         "JOIN dir.owner own " +
                 "WHERE own.id = :userId " +
-                        "AND dir.parentDirectory IS NULL";
+                        "AND dir.parentDirectory IS NULL " +
+                "ORDER BY dir.name";
         Query query = session.createQuery(ROOT_DIRECTORIES_QUERY);
         query.setInteger("userId", userId);
         return query.list();
@@ -43,7 +44,8 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
         String SUBDIRECTORIES_QUERY =
                 "SELECT dir " +
                 "FROM Directory dir " +
-                "WHERE dir.parentDirectory.id = :directoryId";
+                "WHERE dir.parentDirectory.id = :directoryId " +
+                "ORDER BY dir.name";
         Query query = session.createQuery(SUBDIRECTORIES_QUERY);
         query.setInteger("directoryId", directoryId);
         return query.list();
@@ -55,8 +57,9 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
                 "SELECT dir " +
                 "FROM Directory dir " +
                         "JOIN dir.owner " +
-                        "JOIN dir.subdirectories " +
-                "WHERE dir.id = :directoryId";
+                        "LEFT JOIN dir.subdirectories AS subdirs " +
+                "WHERE dir.id = :directoryId " +
+                "ORDER BY subdirs.name";
         Query query = session.createQuery(DIRECTORY_WITH_SUBDIRECTORIES_AND_OWNER);
         query.setParameter("directoryId", directoryId);
         return (Directory) query.uniqueResult();
@@ -68,9 +71,10 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
                 "SELECT dir " +
                 "FROM Directory dir " +
                         "JOIN dir.owner " +
-                        "JOIN dir.subdirectories " +
-                        "JOIN dir.documents " +
-                "WHERE dir.id = :directoryId";
+                        "LEFT JOIN dir.subdirectories AS subdirs " +
+                        "LEFT JOIN dir.documents AS docs " +
+                "WHERE dir.id = :directoryId " +
+                "ORDER BY subdirs.name, docs.name";
         Query query = session.createQuery(DIRECTORIES_WITH_SUBDIRECTORIES_FILES_AND_OWNER);
         query.setInteger("directoryId", directoryId);
         return (Directory) query.uniqueResult();

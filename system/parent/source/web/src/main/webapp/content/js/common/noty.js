@@ -6,6 +6,10 @@ function post_message(type, text, date) {
     });
 }
 
+function post_message_now(type, text) {
+    post_message(type, text, current_time());
+}
+
 $.noty.defaults = {
     layout: 'topRight',
     theme: 'defaultTheme',
@@ -19,7 +23,7 @@ $.noty.defaults = {
         easing: 'swing',
         speed: 500 // opening & closing animation speed
     },
-    timeout: 5000, // delay for closing event. Set false for sticky notifications
+    timeout: false, // delay for closing event. Set false for sticky notifications
     force: false, // adds notification to the beginning of queue when set to true
     modal: false,
     closeWith: ['click'], // ['click', 'button', 'hover']

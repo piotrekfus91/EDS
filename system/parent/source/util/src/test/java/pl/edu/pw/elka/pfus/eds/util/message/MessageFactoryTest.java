@@ -13,12 +13,4 @@ public class MessageFactoryTest {
         assertThat(message.getText()).isEqualTo("text");
         assertThat(message.getDate()).isNotNull();
     }
-
-    @Test
-    public void testTwoMessagesCompareDates() throws Exception {
-        Message message = MessageFactory.getMessage(MessageType.ALERT, "text1");
-        Message message2 = MessageFactory.getMessage(MessageType.ALERT, "text2");
-
-        assertThat(message.getDate().before(message2.getDate()));
-    }
 }

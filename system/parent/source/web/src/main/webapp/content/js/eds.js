@@ -23,3 +23,8 @@ function make_tabs() {
     // wylaczamy link z tabów, żeby otworzył się jako czysty GET
     tabs.find('#logout_link').unbind('click');
 }
+
+function current_time() {
+    var current_date = new Date();
+    return current_date.getHours() + ":" + current_date.getMinutes() + ":" + current_date.getSeconds();
+}
