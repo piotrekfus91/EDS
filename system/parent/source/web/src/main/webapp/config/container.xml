@@ -22,6 +22,7 @@
     <!-- security -->
     <component class-key="pl.edu.pw.elka.pfus.eds.security.SecurityFacade"
                class="pl.edu.pw.elka.pfus.eds.security.SecurityFacadeImpl" />
+    <component class="pl.edu.pw.elka.pfus.eds.security.valve.CheckLoginValve" />
 
     <!-- logic -->
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder"
@@ -56,7 +57,7 @@
     </component>
     <component class="org.objectledge.pipeline.SimplePipeline" key="restPipeline">
         <sequence>
-            <!--<parameter class-key="net.mklew.hotelms.persistance.valve.OpenSessionAndBindToCurrentThread"/>-->
+            <parameter class-key="pl.edu.pw.elka.pfus.eds.security.valve.CheckLoginValve" />
             <parameter class-key="pl.edu.pw.elka.pfus.eds.web.jersey.JerseyRestValve"/>
         </sequence>
     </component>
