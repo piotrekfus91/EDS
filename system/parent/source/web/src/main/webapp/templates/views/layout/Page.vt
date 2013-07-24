@@ -7,6 +7,7 @@ $pageTool.insertTitlePrefix('EDS')
     <link rel="stylesheet" href="$link.content('css/style.css')" />
     <link rel="stylesheet" href="$link.content('css/jquery-ui/jquery-ui.css')" />
     <link rel="stylesheet" href="$link.content('css/dynatree/skin/ui.dynatree.css')" />
+    <link rel="stylesheet" href="$link.content('css/contextMenu/jquery.contextMenu.css')" />
     <script src="$link.content('js/jquery/jquery-1.9.1.js')"></script>
     <script src="$link.content('js/jquery-ui/jquery-ui.js')"></script>
     <script src="$link.content('js/corners/jquery.corners.js')"></script>
@@ -14,6 +15,8 @@ $pageTool.insertTitlePrefix('EDS')
     <script src="$link.content('js/common/noty/topRight.js')"></script>
     <script src="$link.content('js/common/noty/default.js')"></script>
     <script src="$link.content('js/common/noty.js')"></script>
+    <script src="$link.content('js/contextMenu/jquery.contextMenu.js')"></script>
+    <script src="$link.content('js/contextMenu/jquery.ui.position.js')"></script>
     <script src="$link.content('js/dynatree/jquery.dynatree.js')"></script>
     <script src="$link.content('js/eds.js')"></script>
     <script type="text/javascript">
@@ -31,6 +34,7 @@ $pageTool.insertTitlePrefix('EDS')
 <div id="ajax_loading"></div>
 <div class="tabs" id="tabs">
     <ul>
+        <li><a href="#search">Wyszukiwarka</a></li>
         <li><a href="$link.view('app.Files')">Pliki</a></li>
         <li><a href="#data">Moje dane</a></li>
         <li><a href="#password">Zmiana hasła</a></li>
@@ -41,6 +45,7 @@ $pageTool.insertTitlePrefix('EDS')
             </a>
         </li>
     </ul>
+    <div id="search">wyszukiwarka</div>
     <div id="data">dane</div>
     <div id="password">haslo</div>
 </div>

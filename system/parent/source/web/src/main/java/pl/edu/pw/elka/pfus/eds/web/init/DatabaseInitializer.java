@@ -42,7 +42,7 @@ public class DatabaseInitializer implements Startable {
 
         directoryDao.setSession(userDao.getSession());
 
-        // chytry myk na polaczenie - hsql-dynatree
+        // chytry myk na polaczenie hsql-dynatree
         // dynatree nie radzi sobie z id = 0,
         // od ktorego startuje sekwencja w hsql
         Directory fakeDir = new Directory();
