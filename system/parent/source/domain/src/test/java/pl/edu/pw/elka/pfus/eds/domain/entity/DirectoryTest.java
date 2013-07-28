@@ -106,4 +106,15 @@ public class DirectoryTest {
         assertThat(directory.getOwner()).isSameAs(user);
         assertThat(subdir.getOwner()).isSameAs(user);
     }
+
+    @Test
+    public void testIsRootForRoot() throws Exception {
+        assertThat(directory.isRootDirectory()).isTrue();
+    }
+
+    @Test
+    public void testIsRootForNotRoot() throws Exception {
+        subdir.setParentDirectory(directory);
+        assertThat(subdir.isRootDirectory()).isFalse();
+    }
 }

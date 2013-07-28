@@ -27,6 +27,10 @@
     <!-- logic -->
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder"
                class="pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryFinderImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryModifier"
+               class="pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryModifierImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryService"
+               class="pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryServiceImpl" />
 
     <!-- web -->
     <component class="pl.edu.pw.elka.pfus.eds.web.init.DatabaseInitializer" />

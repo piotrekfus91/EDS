@@ -2,8 +2,10 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
+import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -73,6 +75,10 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
             thisPath = "/" + name;
 
         return parentPath + thisPath;
+    }
+
+    public boolean isRootDirectory() {
+        return parentDirectory == null;
     }
 
     /**
@@ -151,15 +157,16 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
     }
 
     public void addSubdirectory(Directory directory) {
-        // logika jest w ponizszej metodzie
         subdirectories.add(directory);
-        directory.setParentDirectory(this);
+        directory.parentDirectory = this;
+        directory.owner = owner;
     }
 
     public void removeSubdirectory(Directory directory) {
-        // jak wyzej
-        subdirectories.remove(directory);
-        directory.setParentDirectory(null);
+        Set<Directory> newSubdirectories = Sets.newLinkedHashSet(this.subdirectories);
+        newSubdirectories.remove(directory);
+        this.subdirectories = newSubdirectories;
+        directory.parentDirectory = null;
     }
 
     public Directory getParentDirectory() {
@@ -167,16 +174,26 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
     }
 
     public void setParentDirectory(Directory parentDirectory) {
-        // dostajemy parent null - musimy usunac ze starego parenta biezacy
-        if(parentDirectory == null && this.parentDirectory != null)
-            this.parentDirectory.removeSubdirectory(this);
+        if(this.parentDirectory == null && parentDirectory == null)
+            return;
 
-        // dostajemy nowy, nie nullowy parent, trzeba dodac do niego biezacy
-        else if(parentDirectory != null && !parentDirectory.containsDirectory(this)) {
-            this.setOwner(parentDirectory.getOwner());
+        if(this.parentDirectory == null && parentDirectory != null) {
+            this.parentDirectory = parentDirectory;
+            this.owner = parentDirectory.getOwner();
             parentDirectory.addSubdirectory(this);
+            return;
         }
 
+        if(this.parentDirectory != null && parentDirectory == null) {
+            this.parentDirectory.removeSubdirectory(this);
+            this.parentDirectory = null;
+            return;
+        }
+
+        // oba nie nulle
+        this.parentDirectory.removeSubdirectory(this);
+        parentDirectory.addSubdirectory(this);
+        this.owner = parentDirectory.getOwner();
         this.parentDirectory = parentDirectory;
     }
 
@@ -217,15 +234,18 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
 
         Directory directory = (Directory) o;
 
-        if (name != null ? !name.equals(directory.name) : directory.name != null) return false;
-        if (subdirectories != null ? !subdirectories.equals(directory.subdirectories) : directory.subdirectories != null)
-            return false;
+        if(id != null && directory.id != null)
+            return id.equals(directory.id);
 
-        return getStringPath().equals(directory.getStringPath());
+        boolean ownership = true; // domyslnie, aby nie negowalo nam zawsze warunku
+        if(owner != null && directory.owner != null)
+            ownership = owner.equals(directory.owner);
+
+        return ownership && getStringPath().equals(directory.getStringPath());
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(name, subdirectories, getStringPath());
-    }
+//    @Override
+//    public int hashCode() {
+//        return Objects.hashCode(name, subdirectories, getStringPath());
+//    }
 }

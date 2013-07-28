@@ -28,3 +28,7 @@ function current_time() {
     var current_date = new Date();
     return current_date.getHours() + ":" + current_date.getMinutes() + ":" + current_date.getSeconds();
 }
+
+function rest(suffix) {
+    return '/rest' + suffix;
+}

@@ -67,7 +67,7 @@ public class User extends IdentifableEntity implements Named, Versionable {
      */
     public String getFriendlyName() {
         if(!Strings.isNullOrEmpty(firstName))
-            return firstName + Strings.nullToEmpty(lastName);
+            return (firstName + " " + Strings.nullToEmpty(lastName)).trim();
         else
             return name;
     }
@@ -232,5 +232,10 @@ public class User extends IdentifableEntity implements Named, Versionable {
     @Override
     public int hashCode() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return getFriendlyName();
     }
 }

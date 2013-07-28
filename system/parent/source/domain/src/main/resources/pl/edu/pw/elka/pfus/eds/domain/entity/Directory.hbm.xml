@@ -15,7 +15,7 @@ License Type: Evaluation
 
         <version name="version" column="version" type="integer" />
 
-        <many-to-one name="owner" cascade="save-update,lock" column="owner_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.User" not-null="false" lazy="no-proxy" access="field">
+        <many-to-one name="owner" cascade="save-update,lock" column="owner_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.User" not-null="false" lazy="proxy" access="field">
         </many-to-one>
 
         <many-to-one name="parentDirectory" cascade="save-update,lock" column="parent_directory_id" index="directory_parent_directory_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory" not-null="false" lazy="no-proxy" access="field">
@@ -29,12 +29,12 @@ License Type: Evaluation
 			</many-to-many>
 		</set>
 
-		<set name="subdirectories" lazy="true" cascade="save-update,lock" inverse="true">
+		<set name="subdirectories" lazy="true" cascade="save-update,lock,delete" inverse="true" access="field">
 			<key column="parent_directory_id" not-null="false"/>
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory"/>
 		</set>
 
-		<set name="documents" lazy="true" cascade="save-update,lock" inverse="true">
+		<set name="documents" lazy="true" cascade="save-update,lock,delete" inverse="true">
 			<key column="directory_id" not-null="false"/>
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Document"/>
 		</set>

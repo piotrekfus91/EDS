@@ -7,14 +7,14 @@ $(document).ready(function() {
             duration: 200
         },
         initAjax: {
-            url: '/rest/directories/root'
+            url: rest('/directories/root')
         },
         onCreate: function(node, span) {
             bindContextMenu(span);
         },
         onLazyRead: function(node) {
             node.appendAjax({
-                url: '/rest/directories/' + node.data.key
+                url: rest('/directories/' + node.data.key)
             });
         },
         onPostInit: function(isReloading, isError) {
@@ -55,6 +55,17 @@ function bindContextMenu() {
 function delete_file_system_entry(id) {
     $.ajax({
         type: "DELETE",
-        url: "/rest/directories/delete/" + id
+        url: rest("/directories/delete/" + id),
+        success: function(refreshedDir) {
+            if(refreshedDir) {
+                post_message_now('information', 'Katalog usunięty: ' + currentNode.data.title);
+                currentNode.remove();
+            } else {
+                post_message_now('error', 'Błąd przy usuwaniu katalogu: ' + currentNode.data.title);
+            }
+        },
+        error: function() {
+            post_message_now('error', 'Błąd przy usuwaniu katalogu');
+        }
     });
 }

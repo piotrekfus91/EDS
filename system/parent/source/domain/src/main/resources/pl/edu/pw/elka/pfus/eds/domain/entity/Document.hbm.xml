@@ -39,7 +39,7 @@ License Type: Evaluation
 			</many-to-many>
 		</set>
 
-		<set name="comments" lazy="true" cascade="save-update,lock" inverse="true">
+		<set name="comments" lazy="true" cascade="save-update,lock,delete" inverse="true">
 			<key column="document_id" not-null="true"/>
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Comment"/>
 		</set>

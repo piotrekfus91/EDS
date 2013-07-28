@@ -22,22 +22,22 @@
         <property name="created" column="created" type="timestamp" not-null="true" lazy="false" />
         <property name="lastLogin" column="last_login" type="timestamp" length="6" not-null="false" lazy="false"/>
 
-        <set name="directories" lazy="true" cascade="save-update,lock" inverse="true">
+        <set name="directories" lazy="true" cascade="save-update,lock,delete" inverse="true">
             <key column="owner_id" not-null="true" />
             <one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Document" />
         </set>
 
-		<set name="comments" lazy="true" cascade="save-update,lock" inverse="true">
+		<set name="comments" lazy="true" cascade="save-update,lock,delete" inverse="true">
 			<key column="user_id" not-null="true"/>
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Comment"/>
 		</set>
 
-		<set name="documents" lazy="true" cascade="save-update,lock" inverse="true">
+		<set name="documents" lazy="true" cascade="save-update,lock,delete" inverse="true">
 			<key column="owner_id" not-null="true"/>
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Document"/>
 		</set>
 
-		<set name="resourceGroups" lazy="true" cascade="save-update,lock" inverse="true">
+		<set name="resourceGroups" lazy="true" cascade="save-update,lock,delete" inverse="true">
 			<key column="founder_id" not-null="true"/>
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup"/>
 		</set>
