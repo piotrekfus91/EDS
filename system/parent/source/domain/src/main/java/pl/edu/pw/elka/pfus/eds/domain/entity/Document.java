@@ -1,11 +1,10 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Klasa reprezentująca dokument.
@@ -15,12 +14,12 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
     private String name;
     private String contentMd5;
     private Integer version;
-    private Set<ResourceGroup> resourceGroups = new HashSet<ResourceGroup>();
+    private List<ResourceGroup> resourceGroups = new LinkedList<>();
     private MimeType mimeType;
     private User owner;
     private Directory directory;
-    private Set<Tag> tags = new LinkedHashSet<>();
-    private Set<Comment> comments = new LinkedHashSet<>();
+    private List<Tag> tags = new LinkedList<>();
+    private List<Comment> comments = new LinkedList<>();
 
     /**
      * Zwraca id encji.
@@ -72,11 +71,11 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
         this.contentMd5 = contentMd5;
     }
 
-    public Set<ResourceGroup> getResourceGroups() {
-        return ImmutableSet.copyOf(resourceGroups);
+    public List<ResourceGroup> getResourceGroups() {
+        return ImmutableList.copyOf(resourceGroups);
     }
 
-    public void setResourceGroups(Set<ResourceGroup> resourceGroups) {
+    public void setResourceGroups(List<ResourceGroup> resourceGroups) {
         this.resourceGroups = resourceGroups;
     }
 
@@ -112,11 +111,11 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
         this.directory = directory;
     }
 
-    public Set<Tag> getTags() {
-        return ImmutableSet.copyOf(tags);
+    public List<Tag> getTags() {
+        return ImmutableList.copyOf(tags);
     }
 
-    public void setTags(Set<Tag> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 
@@ -128,11 +127,11 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
         tags.remove(tag);
     }
 
-    public Set<Comment> getComments() {
-        return ImmutableSet.copyOf(comments);
+    public List<Comment> getComments() {
+        return ImmutableList.copyOf(comments);
     }
 
-    public void setComments(Set<Comment> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 

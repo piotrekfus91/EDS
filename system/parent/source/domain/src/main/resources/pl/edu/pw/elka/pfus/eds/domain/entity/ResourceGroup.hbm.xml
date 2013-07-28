@@ -21,17 +21,19 @@ License Type: Evaluation
         <property name="name" column="name" unique="true" type="string" length="30" not-null="true" lazy="false"/>
         <property name="description" column="description" type="text" not-null="false" lazy="false"/>
 
-		<set name="directories" table="resource_group_directory" schema="eds" lazy="true" cascade="save-update,lock">
+		<list name="directories" table="resource_group_directory" schema="eds" lazy="true" cascade="save-update,lock">
 			<key column="resource_group_id" not-null="true"/>
+            <list-index column="id" />
 			<many-to-many column="directory_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory">
 			</many-to-many>
-		</set>
+		</list>
 
-		<set name="documents" table="resource_group_document" schema="eds" lazy="true" cascade="save-update,lock">
+		<list name="documents" table="resource_group_document" schema="eds" lazy="true" cascade="save-update,lock">
 			<key column="resource_group_id" not-null="true"/>
+            <list-index column="id" />
 			<many-to-many column="document_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Document">
 			</many-to-many>
-		</set>
+		</list>
 
 	</class>
 </hibernate-mapping>

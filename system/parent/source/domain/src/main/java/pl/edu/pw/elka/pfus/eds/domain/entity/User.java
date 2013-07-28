@@ -1,13 +1,11 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Klasa reprezentująca systemowego użytkownika.
@@ -23,10 +21,10 @@ public class User extends IdentifableEntity implements Named, Versionable {
     private Date created;
     private Integer version;
     private Date lastLogin;
-    private Set<Directory> directories = new LinkedHashSet<>();
-    private Set<Comment> comments = new LinkedHashSet<>();
-    private Set<Document> documents = new LinkedHashSet<>();
-    private Set<ResourceGroup> resourceGroups = new LinkedHashSet<>();
+    private List<Directory> directories = new LinkedList<>();
+    private List<Comment> comments = new LinkedList<>();
+    private List<Document> documents = new LinkedList<>();
+    private List<ResourceGroup> resourceGroups = new LinkedList<>();
 
     /**
      * Zwraca id encji.
@@ -150,11 +148,11 @@ public class User extends IdentifableEntity implements Named, Versionable {
         this.lastLogin = lastLogin;
     }
 
-    public Set<Directory> getDirectories() {
-        return ImmutableSet.copyOf(directories);
+    public List<Directory> getDirectories() {
+        return ImmutableList.copyOf(directories);
     }
 
-    public void setDirectories(Set<Directory> directories) {
+    public void setDirectories(List<Directory> directories) {
         this.directories = directories;
     }
 
@@ -166,11 +164,11 @@ public class User extends IdentifableEntity implements Named, Versionable {
         directories.remove(directory);
     }
 
-    public Set<Comment> getComments() {
-        return ImmutableSet.copyOf(comments);
+    public List<Comment> getComments() {
+        return ImmutableList.copyOf(comments);
     }
 
-    public void setComments(Set<Comment> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 
@@ -182,11 +180,11 @@ public class User extends IdentifableEntity implements Named, Versionable {
         comments.remove(comment);
     }
 
-    public Set<Document> getDocuments() {
-        return ImmutableSet.copyOf(documents);
+    public List<Document> getDocuments() {
+        return ImmutableList.copyOf(documents);
     }
 
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(List<Document> documents) {
         this.documents = documents;
     }
 
@@ -198,11 +196,11 @@ public class User extends IdentifableEntity implements Named, Versionable {
         documents.remove(document);
     }
 
-    public Set<ResourceGroup> getResourceGroups() {
-        return ImmutableSet.copyOf(resourceGroups);
+    public List<ResourceGroup> getResourceGroups() {
+        return ImmutableList.copyOf(resourceGroups);
     }
 
-    public void setResourceGroups(Set<ResourceGroup> resourceGroups) {
+    public void setResourceGroups(List<ResourceGroup> resourceGroups) {
         this.resourceGroups = resourceGroups;
     }
 

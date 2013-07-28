@@ -16,11 +16,12 @@ License Type: Evaluation
 		<property name="value" column="value" unique="true" index="tag_value_key" type="string" length="30" not-null="true" lazy="false"/>
 		<property name="normalizedValue" column="normalized_value" index="tag_normalized_value" type="string" length="30" not-null="true" lazy="false"/>
 
-		<set name="documents" table="document_tag" schema="eds" lazy="true" cascade="save-update,lock" inverse="true">
+		<list name="documents" table="document_tag" schema="eds" lazy="true" cascade="save-update,lock" inverse="true">
 			<key column="tag_id" not-null="true"/>
+            <list-index column="id" />
 			<many-to-many column="document_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Document">
 			</many-to-many>
-		</set>
+		</list>
 
 	</class>
 </hibernate-mapping>

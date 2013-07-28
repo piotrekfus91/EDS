@@ -1,16 +1,10 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Strings;
-import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Klasa reprezentująca katalog użytkownika.
@@ -20,10 +14,10 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
     private String name;
     private Integer version;
     private User owner;
-    private Set<ResourceGroup> resourceGroups = new LinkedHashSet<>();
-    private Set<Directory> subdirectories = new LinkedHashSet<>();
+    private List<ResourceGroup> resourceGroups = new LinkedList<>();
+    private List<Directory> subdirectories = new LinkedList<>();
     private Directory parentDirectory;
-    private Set<Document> documents = new LinkedHashSet<>();
+    private List<Document> documents = new LinkedList<>();
 
     private static final String PATH_SEPARATOR = "/";
 
@@ -132,11 +126,11 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
         recursiveSetOwner(rootDir, owner);
     }
 
-    public Set<ResourceGroup> getResourceGroups() {
-        return ImmutableSet.copyOf(resourceGroups);
+    public List<ResourceGroup> getResourceGroups() {
+        return ImmutableList.copyOf(resourceGroups);
     }
 
-    public void setResourceGroups(Set<ResourceGroup> resourceGroups) {
+    public void setResourceGroups(List<ResourceGroup> resourceGroups) {
         this.resourceGroups = resourceGroups;
     }
 
@@ -148,11 +142,11 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
         resourceGroups.remove(resourceGroup);
     }
 
-    public Set<Directory> getSubdirectories() {
-        return ImmutableSet.copyOf(subdirectories);
+    public List<Directory> getSubdirectories() {
+        return ImmutableList.copyOf(subdirectories);
     }
 
-    public void setSubdirectories(Set<Directory> subdirectories) {
+    public void setSubdirectories(List<Directory> subdirectories) {
         this.subdirectories = subdirectories;
     }
 
@@ -163,9 +157,7 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
     }
 
     public void removeSubdirectory(Directory directory) {
-        Set<Directory> newSubdirectories = Sets.newLinkedHashSet(this.subdirectories);
-        newSubdirectories.remove(directory);
-        this.subdirectories = newSubdirectories;
+        subdirectories.remove(directory);
         directory.parentDirectory = null;
     }
 
@@ -197,11 +189,11 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
         this.parentDirectory = parentDirectory;
     }
 
-    public Set<Document> getDocuments() {
-        return ImmutableSet.copyOf(documents);
+    public List<Document> getDocuments() {
+        return ImmutableList.copyOf(documents);
     }
 
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(List<Document> documents) {
         this.documents = documents;
     }
 

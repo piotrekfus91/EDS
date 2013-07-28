@@ -1,11 +1,11 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 import pl.edu.pw.elka.pfus.eds.util.ValueNormalizer;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Klasa reprezentująca tag dokumentu.
@@ -20,7 +20,7 @@ public class Tag extends IdentifableEntity {
      * zapisana małymi literami i bez spacji, znaków inne niż litery.
      */
     private String normalizedValue;
-    public Set<Document> documents = new LinkedHashSet<>();
+    public List<Document> documents = new LinkedList<>();
 
     /**
      * Zwraca id encji.
@@ -53,11 +53,11 @@ public class Tag extends IdentifableEntity {
         this.normalizedValue = normalizedValue;
     }
 
-    public Set<Document> getDocuments() {
-        return ImmutableSet.copyOf(documents);
+    public List<Document> getDocuments() {
+        return ImmutableList.copyOf(documents);
     }
 
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(List<Document> documents) {
         this.documents = documents;
     }
 

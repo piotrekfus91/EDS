@@ -22,25 +22,29 @@
         <property name="created" column="created" type="timestamp" not-null="true" lazy="false" />
         <property name="lastLogin" column="last_login" type="timestamp" length="6" not-null="false" lazy="false"/>
 
-        <set name="directories" lazy="true" cascade="save-update,lock,delete" inverse="true">
+        <list name="directories" lazy="true" cascade="save-update,lock,delete" inverse="true">
             <key column="owner_id" not-null="true" />
+            <list-index column="id" />
             <one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Document" />
-        </set>
+        </list>
 
-		<set name="comments" lazy="true" cascade="save-update,lock,delete" inverse="true">
+		<list name="comments" lazy="true" cascade="save-update,lock,delete" inverse="true">
 			<key column="user_id" not-null="true"/>
+            <list-index column="id" />
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Comment"/>
-		</set>
+		</list>
 
-		<set name="documents" lazy="true" cascade="save-update,lock,delete" inverse="true">
+		<list name="documents" lazy="true" cascade="save-update,lock,delete" inverse="true">
 			<key column="owner_id" not-null="true"/>
+            <list-index column="id" />
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Document"/>
-		</set>
+		</list>
 
-		<set name="resourceGroups" lazy="true" cascade="save-update,lock,delete" inverse="true">
+		<list name="resourceGroups" lazy="true" cascade="save-update,lock,delete" inverse="true">
 			<key column="founder_id" not-null="true"/>
+            <list-index column="id" />
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup"/>
-		</set>
+		</list>
 
 	</class>
 </hibernate-mapping>

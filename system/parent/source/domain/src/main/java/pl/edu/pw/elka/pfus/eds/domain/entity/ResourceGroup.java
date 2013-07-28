@@ -1,10 +1,10 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Klasa reprezentuje grupę zasobów.
@@ -15,8 +15,8 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
     private String description;
     private Integer version;
     private User founder;
-    private Set<Directory> directories = new LinkedHashSet<>();
-    private Set<Document> documents = new LinkedHashSet<>();
+    private List<Directory> directories = new LinkedList<>();
+    private List<Document> documents = new LinkedList<>();
 
     /**
      * Zwraca id encji.
@@ -76,11 +76,11 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
         this.founder = founder;
     }
 
-    public Set<Directory> getDirectories() {
-        return ImmutableSet.copyOf(directories);
+    public List<Directory> getDirectories() {
+        return ImmutableList.copyOf(directories);
     }
 
-    public void setDirectories(Set<Directory> directories) {
+    public void setDirectories(List<Directory> directories) {
         this.directories = directories;
     }
 
@@ -92,11 +92,11 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
         directories.remove(directory);
     }
 
-    public Set<Document> getDocuments() {
-        return ImmutableSet.copyOf(documents);
+    public List<Document> getDocuments() {
+        return ImmutableList.copyOf(documents);
     }
 
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(List<Document> documents) {
         this.documents = documents;
     }
 

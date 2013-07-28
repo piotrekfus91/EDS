@@ -1,10 +1,10 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Klasa reprezentująca dozwolone typy MIME.
@@ -15,7 +15,7 @@ public class MimeType extends IdentifableEntity {
     private boolean enabled = true;
     private String defaultExtension;
     private String description;
-    private Set<Document> documents = new LinkedHashSet<>();
+    private List<Document> documents = new LinkedList<>();
 
     /**
      *Zwraca id encji.
@@ -63,11 +63,11 @@ public class MimeType extends IdentifableEntity {
         this.description = description;
     }
 
-    public Set<Document> getDocuments() {
-        return ImmutableSet.copyOf(documents);
+    public List<Document> getDocuments() {
+        return ImmutableList.copyOf(documents);
     }
 
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(List<Document> documents) {
         this.documents = documents;
     }
 

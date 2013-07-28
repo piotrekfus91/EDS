@@ -15,10 +15,10 @@ License Type: Evaluation
 
         <version name="version" column="version" type="integer" />
 
-        <many-to-one name="user" cascade="save-update,lock" column="user_id" index="comment_user_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.User" not-null="true" lazy="no-proxy" access="field">
+        <many-to-one name="user" cascade="save-update,lock" column="user_id" index="comment_user_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.User" not-null="true" lazy="proxy" access="field">
 		</many-to-one>
 
-        <many-to-one name="document" cascade="save-update,lock" column="document_id" index="comment_document_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Document" not-null="true" lazy="no-proxy" access="field">
+        <many-to-one name="document" cascade="save-update,lock" column="document_id" index="comment_document_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Document" not-null="true" lazy="proxy" access="field">
 		</many-to-one>
 
         <property name="content" column="content" type="text" not-null="true" lazy="false"/>
