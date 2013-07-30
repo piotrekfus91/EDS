@@ -8,6 +8,8 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryModifier;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
+import java.util.List;
+
 public class DirectoryModifierImpl implements DirectoryModifier {
     private static final Logger logger = Logger.getLogger(DirectoryModifierImpl.class);
     private DirectoryDao directoryDao;
@@ -62,6 +64,8 @@ public class DirectoryModifierImpl implements DirectoryModifier {
         try {
             directoryDao.beginTransaction();
             Directory directory = directoryDao.findById(id);
+            if(hasAnySiblingThisName(directory, newName))
+                return null;
             directory.setName(newName);
             directoryDao.persist(directory);
             directoryDao.commitTransaction();
@@ -71,5 +75,14 @@ public class DirectoryModifierImpl implements DirectoryModifier {
             directoryDao.rollbackTransaction();
             return null;
         }
+    }
+
+    private boolean hasAnySiblingThisName(Directory directory, String name) {
+        List<Directory> siblings = directoryDao.getSubdirectories(directory.getParentDirectory());
+        for(Directory sibling : siblings) {
+            if(name.equals(sibling.getName()))
+                return true;
+        }
+        return false;
     }
 }

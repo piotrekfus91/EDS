@@ -91,11 +91,13 @@ function rename_directory(id, name) {
         url: rest("/directories/rename/" + id + "/" + name),
         success: function() {
             post_message_now('success', 'Nazwa katalogu została zmieniona na ' + name);
-            currentNode.data.title = "name";
-            $('#rename_directory').dialog("close");
+            currentNode.data.title = name;
+            currentNode.render();
+            clear_and_close_rename_div()
         },
         error: function() {
             post_message_now('error', 'Błąd przy zmianie nazwy');
+            clear_and_close_rename_div();
         }
     });
 }
@@ -112,7 +114,15 @@ $('#rename_directory').dialog({
             rename_directory(id, new_name);
         },
         "Anuluj": function() {
-            $(this).dialog("close");
+            clear_and_close_rename_div();
         }
     }
 });
+
+function clear_and_close_rename_div() {
+    var rename_directory_div = $('#rename_directory');
+    rename_directory_div.find("#path").text("");
+    rename_directory_div.find('#old_directory_name').text("");
+    rename_directory_div.find('#new_directory_name').attr('value', "");
+    rename_directory_div.dialog("close");
+}
