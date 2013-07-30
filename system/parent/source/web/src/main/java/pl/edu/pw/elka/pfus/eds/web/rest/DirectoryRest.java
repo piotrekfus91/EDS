@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryService;
+import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryListExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonFileSystemEntryListExporter;
 
@@ -19,13 +20,16 @@ public class DirectoryRest {
     private DirectoryService directoryService;
     private JsonDirectoryListExporter directoryListExporter;
     private JsonFileSystemEntryListExporter fileSystemEntryListExporter;
+    private JsonDirectoryExporter directoryExporter;
 
     @Inject
     public DirectoryRest(DirectoryService directoryService, JsonDirectoryListExporter directoryListExporter,
-                         JsonFileSystemEntryListExporter fileSystemEntryListExporter) {
+                         JsonFileSystemEntryListExporter fileSystemEntryListExporter,
+                         JsonDirectoryExporter directoryExporter) {
         this.directoryService = directoryService;
         this.directoryListExporter = directoryListExporter;
         this.fileSystemEntryListExporter = fileSystemEntryListExporter;
+        this.directoryExporter = directoryExporter;
     }
 
     @GET
@@ -46,6 +50,15 @@ public class DirectoryRest {
         return Response.status(Response.Status.OK).entity(exportedFileSystemEntries).build();
     }
 
+    @GET
+    @Path("/single/{directoryId: \\d+}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSingleDirectoryById(@PathParam("directoryId") int directoryId) {
+        Directory directory = directoryService.getById(directoryId);
+        String exportedDirectory = directoryExporter.export(directory);
+        return Response.status(Response.Status.OK).entity(exportedDirectory).build();
+    }
+
     @DELETE
     @Path("/delete/{directoryId: \\d+}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -57,5 +70,17 @@ public class DirectoryRest {
         List<FileSystemEntry> fileSystemEntries = parentDirectory.getSubdirectoriesAndDocuments();
         String exportedFileSystemEntries = fileSystemEntryListExporter.export(fileSystemEntries);
         return Response.status(Response.Status.OK).entity(exportedFileSystemEntries).build();
+    }
+
+    @PUT
+    @Path("/rename/{directoryId: \\d+}/{newName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response renameDirectory(@PathParam("directoryId") int directoryId, @PathParam("newName") String newName) {
+        Directory renamedDirectory = directoryService.rename(directoryId, newName);
+        if(renamedDirectory == null) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+        String exportedDirectory = directoryExporter.export(renamedDirectory);
+        return Response.status(Response.Status.OK).entity(exportedDirectory).build();
     }
 }

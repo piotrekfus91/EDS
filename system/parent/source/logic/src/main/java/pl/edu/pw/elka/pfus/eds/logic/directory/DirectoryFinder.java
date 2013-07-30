@@ -48,4 +48,12 @@ public interface DirectoryFinder {
      * @return lista elementów systemu plików.
      */
     List<FileSystemEntry> getFileSystemEntries(int directoryId);
+
+    /**
+     * Zwraca katalog na podstawie podanego id.
+     *
+     * @param id id katalogu.
+     * @return katalog.
+     */
+    Directory getById(int id);
 }

@@ -38,6 +38,11 @@ public class DirectoryServiceImpl implements DirectoryService {
     }
 
     @Override
+    public Directory getById(int id) {
+        return directoryFinder.getById(id);
+    }
+
+    @Override
     public Directory delete(Directory directory) {
         return directoryModifier.delete(directory);
     }
@@ -45,5 +50,10 @@ public class DirectoryServiceImpl implements DirectoryService {
     @Override
     public Directory delete(int id) {
         return directoryModifier.delete(id);
+    }
+
+    @Override
+    public Directory rename(int id, String newName) {
+        return directoryModifier.rename(id, newName);
     }
 }

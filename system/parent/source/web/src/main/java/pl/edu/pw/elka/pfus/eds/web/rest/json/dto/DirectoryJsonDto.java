@@ -7,12 +7,12 @@ public class DirectoryJsonDto extends FileSystemEntryJsonDto {
 
     }
 
-    public DirectoryJsonDto(int id, String name) {
-        super(id, name, true);
+    public DirectoryJsonDto(int id, String name, String stringPath) {
+        super(id, name, true, stringPath);
     }
 
     public static DirectoryJsonDto from(Directory directory) {
-        return new DirectoryJsonDto(directory.getId(), directory.getName());
+        return new DirectoryJsonDto(directory.getId(), directory.getName(), directory.getStringPath());
     }
 
     @Override

@@ -36,9 +36,6 @@ public class DirectoryFinderImpl implements DirectoryFinder {
 
     @Override
     public List<Directory> getSubdirectories(int directoryId) {
-        if(!isLogged())
-            return ImmutableList.of();
-
         User currentUser = getCurrentUser();
         Directory parentDirectory = directoryDao.getDirectoryWithSubdirectoriesAndOwner(directoryId);
         if(parentDirectory == null)
@@ -53,9 +50,6 @@ public class DirectoryFinderImpl implements DirectoryFinder {
 
     @Override
     public List<FileSystemEntry> getFileSystemEntries(int directoryId) {
-        if(!isLogged())
-            return ImmutableList.of();
-
         User currentUser = getCurrentUser();
         Directory parentDirectory = directoryDao.getDirectoryWithSubdirectoriesDocumentsAndOwner(directoryId);
         if(parentDirectory == null)
@@ -68,8 +62,14 @@ public class DirectoryFinderImpl implements DirectoryFinder {
         }
     }
 
-    private boolean isLogged() {
-        return securityFacade.isLogged(context);
+    @Override
+    public Directory getById(int id) {
+        User currentUser = getCurrentUser();
+        Directory directory = directoryDao.findById(id);
+        if(currentUser.isOwnerOfDirectory(directory))
+            return directory;
+        else
+            return null;
     }
 
     private User getCurrentUser() {

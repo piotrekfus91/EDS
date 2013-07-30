@@ -21,4 +21,13 @@ public interface DirectoryModifier {
      * @return katalog nadrzędny, jeśli istnieje, w przeciwnym wypadku null.
      */
     Directory delete(int id);
+
+    /**
+     * Zmienia nazwę podanego katalogu.
+     *
+     * @param id id katalogu.
+     * @param newName nowa nazwa.
+     * @return zmieniony katalog.
+     */
+    Directory rename(int id, String newName);
 }

@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import java.util.LinkedList;
@@ -49,6 +50,11 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getStringPath() {
+        return Strings.nullToEmpty(directory.getStringPath()) + FileSystemEntry.PATH_SEPARATOR + name;
     }
 
     public void setVersion(Integer version) {

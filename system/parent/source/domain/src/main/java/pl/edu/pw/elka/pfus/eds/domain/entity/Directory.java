@@ -19,8 +19,6 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
     private Directory parentDirectory;
     private List<Document> documents = new LinkedList<>();
 
-    private static final String PATH_SEPARATOR = "/";
-
     /**
      * Zwraca id encji.
      *
@@ -57,6 +55,7 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
      *
      * @return ścieżka w postaci string.
      */
+    @Override
     public String getStringPath() {
         String parentPath = "";
         if(hasParent())
@@ -64,9 +63,9 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
 
         String thisPath = "";
         if(Strings.isNullOrEmpty(name))
-            thisPath = "/";
+            thisPath = FileSystemEntry.PATH_SEPARATOR;
         else
-            thisPath = "/" + name;
+            thisPath = FileSystemEntry.PATH_SEPARATOR + name;
 
         return parentPath + thisPath;
     }

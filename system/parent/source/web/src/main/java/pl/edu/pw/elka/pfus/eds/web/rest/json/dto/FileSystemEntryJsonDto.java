@@ -20,24 +20,29 @@ public class FileSystemEntryJsonDto {
     @SerializedName("isLazy")
     protected boolean lazy = true;
 
+    @SerializedName("stringPath")
+    protected String stringPath;
+
     public FileSystemEntryJsonDto() {
 
     }
 
-    public FileSystemEntryJsonDto(int id, String name, Class<? extends FileSystemEntry> folder) {
+    public FileSystemEntryJsonDto(int id, String name, Class<? extends FileSystemEntry> folder, String stringPath) {
         this.id = id;
         this.name = name;
+        this.stringPath = stringPath;
         setFolder(folder);
     }
 
-    public FileSystemEntryJsonDto(int id, String name, boolean folder) {
+    public FileSystemEntryJsonDto(int id, String name, boolean folder, String stringPath) {
         this.id = id;
         this.name = name;
         this.folder = folder;
+        this.stringPath = stringPath;
     }
 
     public static FileSystemEntryJsonDto from(FileSystemEntry entry) {
-        return new FileSystemEntryJsonDto(entry.getId(), entry.getName(), entry.getClass());
+        return new FileSystemEntryJsonDto(entry.getId(), entry.getName(), entry.getClass(), entry.getStringPath());
     }
 
     public int getId() {
@@ -79,5 +84,13 @@ public class FileSystemEntryJsonDto {
 
     public void setLazy(boolean lazy) {
         this.lazy = lazy;
+    }
+
+    public String getStringPath() {
+        return stringPath;
+    }
+
+    public void setStringPath(String stringPath) {
+        this.stringPath = stringPath;
     }
 }

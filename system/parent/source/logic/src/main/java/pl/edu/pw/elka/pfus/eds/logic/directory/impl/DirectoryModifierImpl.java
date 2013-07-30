@@ -27,9 +27,6 @@ public class DirectoryModifierImpl implements DirectoryModifier {
 
     @Override
     public Directory delete(int id) {
-        if(!securityFacade.isLogged(context))
-            return null;
-
         try {
             directoryDao.beginTransaction();
             Directory directory = directoryDao.findById(id);
@@ -53,6 +50,22 @@ public class DirectoryModifierImpl implements DirectoryModifier {
             logger.info("removed directory with id " + id + " and name " + directory.getName());
             directoryDao.commitTransaction();
             return toReturn;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            directoryDao.rollbackTransaction();
+            return null;
+        }
+    }
+
+    @Override
+    public Directory rename(int id, String newName) {
+        try {
+            directoryDao.beginTransaction();
+            Directory directory = directoryDao.findById(id);
+            directory.setName(newName);
+            directoryDao.persist(directory);
+            directoryDao.commitTransaction();
+            return directory;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             directoryDao.rollbackTransaction();

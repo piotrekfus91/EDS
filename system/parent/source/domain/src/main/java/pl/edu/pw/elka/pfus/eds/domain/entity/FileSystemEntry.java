@@ -6,6 +6,11 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
  */
 public interface FileSystemEntry {
     /**
+     * Separator dla ścieżek, używany w metodzie {@see getStringPath()}.
+     */
+    String PATH_SEPARATOR = "/";
+
+    /**
      * Zwraca id na potrzeby systemu plikół.
      *
      * @return id na potrzeby systemu plików.
@@ -18,4 +23,12 @@ public interface FileSystemEntry {
      * @return nazwa na potrzeby systemu plików.
      */
     String getName();
+
+    /**
+     * Zwraca ścieżkę w postaci stringa z separatorem {@see PATH_SEPARATOR}.
+     * Przykładowa ścieżka: /parent/firstChild/thisDirectory.
+     *
+     * @return ścieżka w postaci string.
+     */
+    String getStringPath();
 }

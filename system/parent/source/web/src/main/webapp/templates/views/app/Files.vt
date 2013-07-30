@@ -17,3 +17,34 @@ $viewEnclosureTool.top()
         </td>
     </tr>
 </table>
+
+<div id="rename_directory" title="Zmiana nazwy katalogu">
+    <form>
+        <table>
+            <tr>
+                <td>
+                    Ścieżka:
+                </td>
+                <td>
+                    <span id="path"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Stara nazwa:
+                </td>
+                <td>
+                    <span id="old_directory_name" style="font-wieght: bold"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Nowa nazwa:
+                </td>
+                <td>
+                    <input id="new_directory_name" type="text" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
