@@ -27,21 +27,21 @@ License Type: Evaluation
         <property name="name" column="name" type="string" length="255" not-null="true" lazy="false"/>
         <property name="contentMd5" column="content_md5" type="string" length="32" not-null="true" lazy="false"/>
 
-		<list name="resourceGroups" table="resource_group_document" schema="eds" lazy="true" cascade="save-update,lock" inverse="true">
+		<list name="resourceGroups" table="resource_group_document" schema="eds" lazy="true" cascade="save-update,lock" inverse="true" access="field">
 			<key column="document_id" not-null="true"/>
             <list-index column="id" />
 			<many-to-many column="resource_group_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup">
 			</many-to-many>
 		</list>
 
-		<list name="tags" table="document_tag" schema="eds" lazy="true" cascade="save-update,lock">
+		<list name="tags" table="document_tag" schema="eds" lazy="true" cascade="save-update,lock" access="field">
 			<key column="document_id" not-null="true"/>
             <list-index column="id" />
 			<many-to-many column="tag_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Tag">
 			</many-to-many>
 		</list>
 
-		<list name="comments" lazy="true" cascade="save-update,lock,delete" inverse="true">
+		<list name="comments" lazy="true" cascade="save-update,lock,delete" inverse="true" access="field">
 			<key column="document_id" not-null="true"/>
             <list-index column="id" />
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Comment"/>

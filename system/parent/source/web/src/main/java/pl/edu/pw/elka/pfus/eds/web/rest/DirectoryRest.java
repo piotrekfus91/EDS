@@ -59,6 +59,18 @@ public class DirectoryRest {
         return Response.status(Response.Status.OK).entity(exportedDirectory).build();
     }
 
+    @POST
+    @Path("/create/{parentDirectoryId: \\d+}/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addDirectory(@PathParam("parentDirectoryId") int parentDirectoryId,
+                                 @PathParam("name") String name) {
+        Directory directory = directoryService.add(parentDirectoryId, name);
+        if(directory == null)
+            return Response.status(Response.Status.NO_CONTENT).build();
+        String exportedDirectory = directoryExporter.export(directory);
+        return Response.status(Response.Status.OK).entity(exportedDirectory).build();
+    }
+
     @DELETE
     @Path("/delete/{directoryId: \\d+}")
     @Produces(MediaType.APPLICATION_JSON)

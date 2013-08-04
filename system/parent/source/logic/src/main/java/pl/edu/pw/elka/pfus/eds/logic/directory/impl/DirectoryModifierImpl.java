@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pfus.eds.logic.directory.impl;
 import org.apache.log4j.Logger;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
+import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryModifier;
@@ -13,13 +14,43 @@ import java.util.List;
 public class DirectoryModifierImpl implements DirectoryModifier {
     private static final Logger logger = Logger.getLogger(DirectoryModifierImpl.class);
     private DirectoryDao directoryDao;
+    private UserDao userDao;
     private SecurityFacade securityFacade;
     private Context context;
 
-    public DirectoryModifierImpl(DirectoryDao directoryDao, SecurityFacade securityFacade, Context context) {
+    public DirectoryModifierImpl(DirectoryDao directoryDao, UserDao userDao, SecurityFacade securityFacade,
+                                 Context context) {
         this.directoryDao = directoryDao;
+        this.userDao = userDao;
         this.securityFacade = securityFacade;
         this.context = context;
+    }
+
+    @Override
+    public Directory add(int parentDirectoryId, String name) {
+        logger.info("adding subdirectory for directory with id " + parentDirectoryId + ", name is: " + name);
+        List<Directory> siblings = directoryDao.getSubdirectories(parentDirectoryId);
+        if(isAnyWithSameName(name, siblings)) {
+            return null;
+        }
+
+        Directory directory = new Directory();
+        directory.setName(name);
+        User owner = securityFacade.getCurrentUser(context);
+        owner = userDao.merge(owner);
+        directory.setOwner(owner); // TODO
+        directory.setParentDirectory(directoryDao.findById(parentDirectoryId));
+
+        try {
+            directoryDao.beginTransaction();
+            directoryDao.persist(directory);
+            directoryDao.commitTransaction();
+            return directory;
+        } catch (Exception e) {
+            directoryDao.rollbackTransaction();
+            logger.error(e.getMessage(), e);
+            return null;
+        }
     }
 
     @Override
@@ -53,8 +84,8 @@ public class DirectoryModifierImpl implements DirectoryModifier {
             directoryDao.commitTransaction();
             return toReturn;
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
             directoryDao.rollbackTransaction();
+            logger.error(e.getMessage(), e);
             return null;
         }
     }
@@ -71,14 +102,18 @@ public class DirectoryModifierImpl implements DirectoryModifier {
             directoryDao.commitTransaction();
             return directory;
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
             directoryDao.rollbackTransaction();
+            logger.error(e.getMessage(), e);
             return null;
         }
     }
 
     private boolean hasAnySiblingThisName(Directory directory, String name) {
         List<Directory> siblings = directoryDao.getSubdirectories(directory.getParentDirectory());
+        return isAnyWithSameName(name, siblings);
+    }
+
+    private boolean isAnyWithSameName(String name, List<Directory> siblings) {
         for(Directory sibling : siblings) {
             if(name.equals(sibling.getName()))
                 return true;

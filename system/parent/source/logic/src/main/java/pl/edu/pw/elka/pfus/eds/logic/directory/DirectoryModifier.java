@@ -7,6 +7,15 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
  */
 public interface DirectoryModifier {
     /**
+     * Tworzy nowy podkatalog w katalogu zadanym poprzez id.
+     *
+     * @param parentDirectoryId id katalogu nadrzędnego.
+     * @param name nazwa katalogu nadrzędnego.
+     * @return utworzony katalog.
+     */
+    Directory add(int parentDirectoryId, String name);
+
+    /**
      * Usuwa podany katalog wraz z podkatalogami i plikami.
      *
      * @param directory wybrany katalog.

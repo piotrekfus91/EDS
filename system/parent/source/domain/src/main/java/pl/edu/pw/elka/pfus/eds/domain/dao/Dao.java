@@ -29,6 +29,14 @@ public interface Dao<T extends GenericEntity> {
     void delete(T entity);
 
     /**
+     * Scala encję z sesją, to znaczy, że przestawia ją w tryb {@code attached}.
+     *
+     * @param entity encja do scalenia.
+     * @return scalona encja.
+     */
+    T merge(T entity);
+
+    /**
      * Zwraca liczbę utrwalonych elementów danego typu.
      *
      * @return liczba elementów.

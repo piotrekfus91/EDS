@@ -26,6 +26,11 @@ public abstract class GenericDao<T extends GenericEntity> implements Dao<T> {
     }
 
     @Override
+    public T merge(T entity) {
+        return (T) session.merge(entity);
+    }
+
+    @Override
     public void delete(T entity) {
         session.delete(entity);
     }

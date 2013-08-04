@@ -33,8 +33,10 @@ $(document).ready(function() {
 function bindContextMenu() {
     $('#files_tree').contextMenu({
         selector: 'li',
-        callback: function(key, options) {
-            if(key == "delete") {
+        callback: function(key) {
+            if(key == "add") {
+                $('#add_directory').dialog("open");
+            } else if(key == "delete") {
                 delete_file_system_entry(currentNode.data.key);
             } else if(key == "rename") {
                 var rename_directory_div = $('#rename_directory');
@@ -43,8 +45,6 @@ function bindContextMenu() {
                     dataType: "json",
                     url: rest("/directories/single/" + currentNode.data.key),
                     success: function(dir) {
-                        console.log(dir);
-                        console.log(dir.stringPath);
                         rename_directory_div.find("#path").text(dir.stringPath);
                     }
                 });
@@ -54,6 +54,13 @@ function bindContextMenu() {
             }
         },
         items: {
+            "add": {
+                name: "Dodaj katalog",
+                icon: "add",
+                disabled: function() {
+                    return !currentNode.data.isFolder;
+                }
+            },
             "rename": {
                 name: "Zmień nazwę",
                 icon: "edit"
@@ -85,6 +92,25 @@ function delete_file_system_entry(id) {
     });
 }
 
+function add_directory(parentDirectoryId, name) {
+    $.ajax({
+        type: "POST",
+        url: rest("/directories/create/" + parentDirectoryId + "/" + name),
+        success: function() {
+            post_message_now('success', 'Dodano katalog: ' + name);
+            currentNode.addChild({
+                title: name,
+                isFolder: true
+            });
+            clear_and_close_add_directory_div();
+        },
+        error: function() {
+            post_message_now('error', 'Błąd przy dodawaniu katalogu');
+            clear_and_close_add_directory_div();
+        }
+    });
+}
+
 function rename_directory(id, name) {
     $.ajax({
         type: "PUT",
@@ -93,14 +119,31 @@ function rename_directory(id, name) {
             post_message_now('success', 'Nazwa katalogu została zmieniona na ' + name);
             currentNode.data.title = name;
             currentNode.render();
-            clear_and_close_rename_div()
+            clear_and_close_rename_directory_div();
         },
         error: function() {
             post_message_now('error', 'Błąd przy zmianie nazwy');
-            clear_and_close_rename_div();
+            clear_and_close_rename_directory_div();
         }
     });
 }
+
+$('#add_directory').dialog({
+    autoOpen: false,
+    height: 150,
+    width: 400,
+    modal: true,
+    buttons: {
+        "Dodaj katalog": function() {
+            var parentDirectoryId = currentNode.data.key;
+            var name = $('#add_directory_value').val();
+            add_directory(parentDirectoryId, name);
+        },
+        "Anuluj": function() {
+            clear_and_close_add_directory_div();
+        }
+    }
+});
 
 $('#rename_directory').dialog({
     autoOpen: false,
@@ -114,12 +157,18 @@ $('#rename_directory').dialog({
             rename_directory(id, new_name);
         },
         "Anuluj": function() {
-            clear_and_close_rename_div();
+            clear_and_close_rename_directory_div();
         }
     }
 });
 
-function clear_and_close_rename_div() {
+function clear_and_close_add_directory_div() {
+    var add_directory_div = $('#add_directory');
+    add_directory_div.find('#add_directory_value').attr('value', '');
+    add_directory_div.dialog("close");
+}
+
+function clear_and_close_rename_directory_div() {
     var rename_directory_div = $('#rename_directory');
     rename_directory_div.find("#path").text("");
     rename_directory_div.find('#old_directory_name').text("");

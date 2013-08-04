@@ -87,6 +87,7 @@ public class DatabaseInitializer implements Startable {
 
         directoryDao.beginTransaction();
         fakeDir = directoryDao.findById(fakeDir.getId());
+        rootUser.removeDirectory(fakeDir);
         directoryDao.delete(fakeDir);
         directoryDao.commitTransaction();
     }

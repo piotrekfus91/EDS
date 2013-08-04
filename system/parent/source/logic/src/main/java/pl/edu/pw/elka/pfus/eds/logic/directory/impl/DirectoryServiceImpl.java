@@ -43,6 +43,11 @@ public class DirectoryServiceImpl implements DirectoryService {
     }
 
     @Override
+    public Directory add(int parentDirectoryId, String name) {
+        return directoryModifier.add(parentDirectoryId, name);
+    }
+
+    @Override
     public Directory delete(Directory directory) {
         return directoryModifier.delete(directory);
     }
