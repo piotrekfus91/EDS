@@ -7,6 +7,8 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.factory.EntityFactory;
 import pl.edu.pw.elka.pfus.eds.domain.dao.factory.UserFactory;
 import pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateDirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
+import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 
@@ -76,6 +78,17 @@ public class DirectoryDaoTest extends IdentifableDaoTest<Directory, DirectoryDao
         assertThat(actual.getOwner()).isEqualTo(expected.getOwner());
     }
 
+    @Test
+    public void testWithFileSystemEntriesAndOwner() throws Exception {
+        Directory expected = getFreeLevelStructure();
+
+        Directory actual = directoryDao.getDirectoryWithSubdirectoriesDocumentsAndOwner(expected.getId());
+        assertThat(actual).isEqualTo(expected);
+        assertThat(actual.getSubdirectories()).isEqualTo(expected.getSubdirectories());
+        assertThat(actual.getDocuments()).isEqualTo(expected.getDocuments());
+        assertThat(actual.getOwner()).isEqualTo(expected.getOwner());
+    }
+
     @Override
     public DirectoryDao getDao() {
         return directoryDao;
@@ -106,6 +119,14 @@ public class DirectoryDaoTest extends IdentifableDaoTest<Directory, DirectoryDao
         Directory parentDir = new Directory();
         parentDir.setName("parent");
         parentDir.setOwner(user);
+        MimeType mimeType = new MimeType();
+        mimeType.setDefaultExtension(".ext");
+        mimeType.setType("word");
+        Document document = new Document();
+        document.setName("document");
+        document.setMimeType(mimeType);
+        document.setContentMd5("md5:)");
+        parentDir.addDocument(document);
         Directory firstSubdir = new Directory();
         firstSubdir.setName("firstSubdir");
         firstSubdir.setOwner(user);

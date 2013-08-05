@@ -49,14 +49,24 @@ public abstract class IdentifableDaoTest<E extends IdentifableEntity, T extends 
     public void testUpdating() throws Exception {
         E entity = getSampleEntity();
         getDao().persist(entity);
-        int oldNumberOfUsers = getDao().count();
+        int oldNumberOfEntities = getDao().count();
 
         updateEntity(entity);
         getDao().persist(entity);
 
-        assertThat(getDao().count()).isEqualTo(oldNumberOfUsers);
+        assertThat(getDao().count()).isEqualTo(oldNumberOfEntities);
         E updatedEntity = (E) getDao().findById(entity.getId());
         assertEntities(updatedEntity, entity);
+    }
+
+    @Test(dependsOnMethods = "testPersistingNew")
+    public void testDeleting() throws Exception {
+        E entity = getSampleEntity();
+        getDao().persist(entity);
+        int numberOfEntities = getDao().count();
+
+        getDao().delete(entity);
+        assertThat(getDao().count()).isLessThan(numberOfEntities);
     }
 
     @Test

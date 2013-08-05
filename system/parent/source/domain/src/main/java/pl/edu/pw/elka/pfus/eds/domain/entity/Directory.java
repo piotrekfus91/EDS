@@ -197,10 +197,12 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
     }
 
     public void addDocument(Document document) {
+        document.setDirectory(this);
         documents.add(document);
     }
 
     public void removeDocument(Document document) {
+        document.setDirectory(null);
         documents.remove(document);
     }
 

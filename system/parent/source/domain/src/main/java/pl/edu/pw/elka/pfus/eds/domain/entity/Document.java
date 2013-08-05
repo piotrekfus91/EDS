@@ -118,6 +118,10 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
     }
 
     public void setDirectory(Directory directory) {
+        if(directory != null)
+            owner = directory.getOwner();
+        else
+            owner = null;
         this.directory = directory;
     }
 

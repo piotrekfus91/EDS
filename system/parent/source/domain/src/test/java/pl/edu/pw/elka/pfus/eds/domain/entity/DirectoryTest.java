@@ -60,6 +60,14 @@ public class DirectoryTest {
         assertThat(directory.containsDirectory(subdir)).isFalse();
     }
 
+    @Test(dependsOnMethods = "testSetParentToNull")
+    public void testSetParentToNullIfNotNull() throws Exception {
+        subdir.setParentDirectory(directory);
+        subdir.setParentDirectory(null);
+
+        assertThat(directory.containsDirectory(subdir)).isFalse();
+    }
+
     @Test
     public void testRemoveDirectory() throws Exception {
         directory.removeSubdirectory(subdir);
@@ -116,5 +124,25 @@ public class DirectoryTest {
     public void testIsRootForNotRoot() throws Exception {
         subdir.setParentDirectory(directory);
         assertThat(subdir.isRootDirectory()).isFalse();
+    }
+
+    @Test
+    public void testOwnerAfterAddDirectory() throws Exception {
+        User owner = new User();
+        directory.setOwner(owner);
+        Document document = new Document();
+        directory.addDocument(document);
+        assertThat(document.getOwner()).isSameAs(owner);
+    }
+
+    @Test
+    public void testOwnerAfterRemoveDirectory() throws Exception {
+        User owner = new User();
+        directory.setOwner(owner);
+        Document document = new Document();
+        directory.addDocument(document);
+
+        directory.removeDocument(document);
+        assertThat(document.getOwner()).isNull();
     }
 }
