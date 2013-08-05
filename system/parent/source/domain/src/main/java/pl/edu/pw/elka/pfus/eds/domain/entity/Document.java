@@ -54,7 +54,11 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
 
     @Override
     public String getStringPath() {
-        return Strings.nullToEmpty(directory.getStringPath()) + FileSystemEntry.PATH_SEPARATOR + name;
+        String fileNameWithPath = FileSystemEntry.PATH_SEPARATOR + name;
+        if(directory == null)
+            return fileNameWithPath;
+        else
+            return Strings.nullToEmpty(directory.getStringPath()) + fileNameWithPath;
     }
 
     public void setVersion(Integer version) {

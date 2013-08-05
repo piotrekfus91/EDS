@@ -124,15 +124,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.5.2</version>
-                <configuration>
-                    <threshold>High</threshold>
-                    <effort>Default</effort>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.0</version>
@@ -146,7 +137,20 @@
                             <groupId>org.jacoco</groupId>
                             <artifactId>jacoco-maven-plugin</artifactId>
                         </plugin>
+                        <plugin>
+                            <groupId>org.pitest</groupId>
+                            <artifactId>pitest-maven</artifactId>
+                        </plugin>
                     </reportPlugins>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <threshold>High</threshold>
+                    <effort>Default</effort>
                 </configuration>
             </plugin>
             <plugin>
@@ -164,6 +168,27 @@
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>0.30</version>
+                <configuration>
+                    <targetClasses>
+                        <param>pl.edu.pw.elka.pfus.eds*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>pl.edu.pw.elka.pfus.eds*</param>
+                    </targetTests>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>mutationCoverage</goal>
                         </goals>
                     </execution>
                 </executions>
