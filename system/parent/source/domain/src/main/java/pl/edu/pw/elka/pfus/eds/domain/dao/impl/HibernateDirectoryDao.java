@@ -16,12 +16,12 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
     }
 
     @Override
-    public List<Directory> getRootDirectories(User user) {
-        return getRootDirectories(user.getId());
+    public Directory getRootDirectory(User user) {
+        return getRootDirectory(user.getId());
     }
 
     @Override
-    public List<Directory> getRootDirectories(int userId) {
+    public Directory getRootDirectory(int userId) {
         String ROOT_DIRECTORIES_QUERY =
                 "SELECT dir " +
                 "FROM Directory dir " +
@@ -31,7 +31,7 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
                 "ORDER BY dir.name";
         Query query = session.createQuery(ROOT_DIRECTORIES_QUERY);
         query.setInteger("userId", userId);
-        return query.list();
+        return (Directory) query.uniqueResult();
     }
 
     @Override
@@ -66,7 +66,7 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
     }
 
     @Override
-    public Directory getDirectoryWithSubdirectoriesDocumentsAndOwner(int directoryId) {
+    public Directory getDirectoryWithFileSystemEntriesDocumentsAndOwner(int directoryId) {
         String DIRECTORIES_WITH_SUBDIRECTORIES_FILES_AND_OWNER =
                 "SELECT dir " +
                 "FROM Directory dir " +

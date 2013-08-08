@@ -10,7 +10,7 @@ $(document).ready(function() {
             url: rest('/directories/root')
         },
         onCreate: function(node, span) {
-            bindContextMenu(span);
+            bindContextMenuForFileSystemEntries(span);
         },
         onLazyRead: function(node) {
             node.appendAjax({
@@ -19,9 +19,9 @@ $(document).ready(function() {
         },
         onPostInit: function(isReloading, isError) {
             if(isError) {
-                post_message_now('error', 'Błąd wczytywania katalogów głównych');
+                post_message_now('error', 'Błąd wczytywania katalogu głównego');
             } else {
-                post_message_now('success', 'Wczytano katalogi główne');
+                post_message_now('success', 'Wczytano katalog główny');
             }
         },
         onActivate: function(node) {
@@ -30,7 +30,7 @@ $(document).ready(function() {
     });
 });
 
-function bindContextMenu() {
+function bindContextMenuForFileSystemEntries() {
     $('#files_tree').contextMenu({
         selector: 'li',
         callback: function(key) {

@@ -42,17 +42,11 @@ public class DatabaseInitializer implements Startable {
 
         directoryDao.setSession(userDao.getSession());
 
-        // chytry myk na polaczenie hsql-dynatree
-        // dynatree nie radzi sobie z id = 0,
-        // od ktorego startuje sekwencja w hsql
-        Directory fakeDir = new Directory();
-        fakeDir.setName("fake");
-        fakeDir.setOwner(rootUser);
-        directoryDao.persist(fakeDir);
+        Directory rootDirectory = directoryDao.getRootDirectory(rootUser);
 
         Directory documentsDirectory = new Directory();
         documentsDirectory.setName("dokumenty");
-        documentsDirectory.setOwner(rootUser);
+        documentsDirectory.setParentDirectory(rootDirectory);
             Directory schoolDocumentsDirectory = new Directory();
             schoolDocumentsDirectory.setName("szkolne");
             schoolDocumentsDirectory.setParentDirectory(documentsDirectory);
@@ -67,14 +61,14 @@ public class DatabaseInitializer implements Startable {
 
         Directory picturesDirectory = new Directory();
         picturesDirectory.setName("obrazki");
-        picturesDirectory.setOwner(rootUser);
+        picturesDirectory.setParentDirectory(rootDirectory);
             Directory lfcPicturesDirectory = new Directory();
             lfcPicturesDirectory.setName("LFC");
             lfcPicturesDirectory.setParentDirectory(picturesDirectory);
 
         Directory filesDirectory = new Directory();
         filesDirectory.setName("pliki");
-        filesDirectory.setOwner(rootUser);
+        filesDirectory.setParentDirectory(rootDirectory);
             Directory binariesDirectory = new Directory();
             binariesDirectory.setName("binarki");
             binariesDirectory.setParentDirectory(filesDirectory);
@@ -82,13 +76,6 @@ public class DatabaseInitializer implements Startable {
         directoryDao.persist(picturesDirectory);
         directoryDao.persist(documentsDirectory);
         directoryDao.persist(filesDirectory);
-
-        userDao.commitTransaction();
-
-        directoryDao.beginTransaction();
-        fakeDir = directoryDao.findById(fakeDir.getId());
-        rootUser.removeDirectory(fakeDir);
-        directoryDao.delete(fakeDir);
         directoryDao.commitTransaction();
     }
 
@@ -102,6 +89,7 @@ public class DatabaseInitializer implements Startable {
         logger.info("initializing security from ETL");
         session.getTransaction().begin();
         session.doWork(new SqlScriptLoader("/etl/security_inserts.sql"));
+        session.doWork(new SqlScriptLoader("/etl/user_create_root_directory_after_insert_trigger.sql"));
         session.getTransaction().commit();
     }
 }

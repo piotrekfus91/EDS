@@ -10,7 +10,6 @@ import pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryFinderImpl;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -33,18 +32,18 @@ public class DirectoryFinderTest {
     @Test
     public void testGetRootForNotLoggedUser() throws Exception {
         when(securityFacade.getCurrentUser(context)).thenReturn(null);
-        assertThat(finder.getRootDirectories()).isEmpty();
+        assertThat(finder.getRootDirectory()).isNull();
     }
 
     @Test
     public void testGetRootForLoggedUser() throws Exception {
-        List<Directory> expectedDirs = getSampleDirectories();
+        Directory expectedDir = getFreeLevelStructure();
         User user = getMockUser();
         when(securityFacade.isLogged(context)).thenReturn(true);
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
-        when(directoryDao.getRootDirectories(user)).thenReturn(expectedDirs);
+        when(directoryDao.getRootDirectory(user)).thenReturn(getFreeLevelStructure());
 
-        assertThat(finder.getRootDirectories()).isEqualTo(expectedDirs);
+        assertThat(finder.getRootDirectory()).isEqualTo(expectedDir);
     }
 
     @Test
@@ -70,7 +69,7 @@ public class DirectoryFinderTest {
 
     private DirectoryDao getMockDirectoryDao() {
         DirectoryDao directoryDao = mock(DirectoryDao.class);
-        when(directoryDao.getRootDirectories(1)).thenReturn(getSampleDirectories());
+        when(directoryDao.getRootDirectory(1)).thenReturn(getFreeLevelStructure());
         return directoryDao;
     }
 
@@ -86,10 +85,6 @@ public class DirectoryFinderTest {
         User user = mock(User.class);
         when(user.getId()).thenReturn(1);
         return user;
-    }
-
-    private List<Directory> getSampleDirectories() {
-        return new LinkedList(getFreeLevelStructure().getSubdirectories());
     }
 
     private Directory getFreeLevelStructure() {

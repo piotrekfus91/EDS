@@ -37,8 +37,8 @@ public class DirectoryModifierImpl implements DirectoryModifier {
         Directory directory = new Directory();
         directory.setName(name);
         User owner = securityFacade.getCurrentUser(context);
-        owner = userDao.merge(owner);
-        directory.setOwner(owner); // TODO
+        owner = userDao.findById(owner.getId());
+        directory.setOwner(owner);
         directory.setParentDirectory(directoryDao.findById(parentDirectoryId));
 
         try {

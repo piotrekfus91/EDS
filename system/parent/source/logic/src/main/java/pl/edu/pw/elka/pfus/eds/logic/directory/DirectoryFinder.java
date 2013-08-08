@@ -14,7 +14,7 @@ public interface DirectoryFinder {
      *
      * @return katalogi główne użytkownika.
      */
-    List<Directory> getRootDirectories();
+    Directory getRootDirectory();
 
     /**
      * Znajduje wszystkie podkatalogi podanego katalogu.

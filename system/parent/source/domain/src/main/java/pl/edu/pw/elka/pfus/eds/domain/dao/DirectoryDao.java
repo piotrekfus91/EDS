@@ -10,22 +10,24 @@ import java.util.List;
  */
 public interface DirectoryDao extends IdentifableDao<Directory> {
     /**
-     * Zwraca wszystkie główne katalogi użytkownika,
-     * to znaczy takie, których parent jest null-em.
+     * Zwraca katalog główny użytkownika, to znaczy
+     * taki, którego parent nie jest {@code null}.
+     *
      *
      * @param user dany użytkownik.
-     * @return główne katalogi.
+     * @return główny katalog.
      */
-    List<Directory> getRootDirectories(User user);
+    Directory getRootDirectory(User user);
 
     /**
-     * Zwraca wszystkie główne katalogi użytkownika,
-     * to znaczy takie, których parent jest null-em.
+     * Zwraca katalog główny użytkownika, to znaczy
+     * taki, którego parent nie jest {@code null}.
+     *
      *
      * @param userId id użytkownika.
-     * @return główne katalogi.
+     * @return główny katalog.
      */
-    List<Directory> getRootDirectories(int userId);
+    Directory getRootDirectory(int userId);
 
     /**
      * Zwraca wszystkie katalogi danego katalogu.
@@ -59,5 +61,5 @@ public interface DirectoryDao extends IdentifableDao<Directory> {
      * @param directoryId id katalogu.
      * @return wypełniony katalog.
      */
-    Directory getDirectoryWithSubdirectoriesDocumentsAndOwner(int directoryId);
+    Directory getDirectoryWithFileSystemEntriesDocumentsAndOwner(int directoryId);
 }

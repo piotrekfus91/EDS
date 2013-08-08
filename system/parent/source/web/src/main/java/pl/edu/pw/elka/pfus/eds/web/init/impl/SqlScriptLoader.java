@@ -51,7 +51,7 @@ public class SqlScriptLoader implements ScriptLoader {
 
     private String getWholeQuery() {
         InputStream sqlStream = SqlScriptLoader.class.getResourceAsStream(scriptUri);
-        BufferedReader bufferedReader = null;
+        BufferedReader bufferedReader;
         try {
             bufferedReader = new BufferedReader(new InputStreamReader(sqlStream, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -81,12 +81,5 @@ public class SqlScriptLoader implements ScriptLoader {
 
     private boolean isApplicableLine(String line) {
         return !Strings.isNullOrEmpty(line) && !line.startsWith(SQL_COMMENT);
-    }
-
-    private String stripUnreadableFirstChar(String line) {
-        char firstChar = line.charAt(0);
-        if(!Character.isLetterOrDigit(firstChar) && firstChar != SQL_COMMENT.charAt(0))
-            return line.substring(1);
-        return line;
     }
 }

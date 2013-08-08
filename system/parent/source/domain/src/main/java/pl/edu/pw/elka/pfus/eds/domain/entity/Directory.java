@@ -2,7 +2,9 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -80,7 +82,11 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
      *
      * @return lista elementów systemu plików.
      */
-    public List<FileSystemEntry> getSubdirectoriesAndDocuments() {
+    public List<FileSystemEntry> getFileSystemEntries() {
+        List<Directory> subdirectories = Lists.newLinkedList(this.subdirectories);
+        subdirectories.removeAll(Collections.singleton(null));
+        List<Document> documents = Lists.newLinkedList(this.documents);
+        documents.removeAll(Collections.singleton(null));
         return ImmutableList.<FileSystemEntry>builder().addAll(subdirectories).addAll(documents).build();
     }
 

@@ -24,9 +24,9 @@ public class DirectoryFinderImpl implements DirectoryFinder {
     }
 
     @Override
-    public List<Directory> getRootDirectories() {
+    public Directory getRootDirectory() {
         User currentUser = getCurrentUser();
-        return directoryDao.getRootDirectories(currentUser);
+        return directoryDao.getRootDirectory(currentUser);
     }
 
     @Override
@@ -51,12 +51,12 @@ public class DirectoryFinderImpl implements DirectoryFinder {
     @Override
     public List<FileSystemEntry> getFileSystemEntries(int directoryId) {
         User currentUser = getCurrentUser();
-        Directory parentDirectory = directoryDao.getDirectoryWithSubdirectoriesDocumentsAndOwner(directoryId);
+        Directory parentDirectory = directoryDao.getDirectoryWithFileSystemEntriesDocumentsAndOwner(directoryId);
         if(parentDirectory == null)
             return ImmutableList.of();
 
         if(currentUser.isOwnerOfDirectory(parentDirectory)) {
-            return parentDirectory.getSubdirectoriesAndDocuments();
+            return parentDirectory.getFileSystemEntries();
         } else {
             return ImmutableList.of();
         }
