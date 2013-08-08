@@ -26,6 +26,25 @@ $(document).ready(function() {
         },
         onActivate: function(node) {
             currentNode = node;
+        },
+        dnd: {
+            onDragStart: function() {
+                return true;
+            },
+            onDragOver: function(targetNode, sourceNode) {
+                if(!targetNode.data.isFolder || targetNode.isDescendantOf(sourceNode))
+                    return false;
+                return true;
+            },
+            onDragEnter: function(targetNode) {
+                return targetNode.data.isFolder;
+            },
+            onDrop: function(targetNode, sourceNode, hitMode) {
+                sourceNode.move(targetNode, hitMode);
+                targetNode.getParent().sortChildren(compareNodesByTitle, false);
+            },
+            autoExpandMS: 500,
+            preventVoidMoves: true
         }
     });
 });
@@ -174,4 +193,13 @@ function clear_and_close_rename_directory_div() {
     rename_directory_div.find('#old_directory_name').text("");
     rename_directory_div.find('#new_directory_name').attr('value', "");
     rename_directory_div.dialog("close");
+}
+
+function compareNodesByTitle(node1, node2) {
+    title1 = node1.data.title.toLocaleLowerCase();
+    title2 = node2.data.title.toLocaleLowerCase();
+    if(title1 == title2)
+        return 0;
+    else
+        return title1 > title2 ? 1 : -1;
 }
