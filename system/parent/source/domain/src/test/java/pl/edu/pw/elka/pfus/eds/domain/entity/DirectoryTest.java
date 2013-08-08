@@ -95,6 +95,16 @@ public class DirectoryTest {
     }
 
     @Test
+    public void testStringPathWithSlashAtBeginning() throws Exception {
+        directory.setName("/");
+        subdir.setName("child");
+        directory.addSubdirectory(subdir);
+
+        assertThat(directory.getStringPath()).isEqualTo("/");
+        assertThat(subdir.getStringPath()).isEqualTo("/child");
+    }
+
+    @Test
     public void testFindRootThisDirectory() throws Exception {
         assertThat(directory.findRoot()).isEqualTo(directory);
     }

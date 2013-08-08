@@ -63,8 +63,12 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
         if(hasParent())
             parentPath = parentDirectory.getStringPath();
 
-        String thisPath = "";
+        String thisPath;
         if(Strings.isNullOrEmpty(name))
+            thisPath = FileSystemEntry.PATH_SEPARATOR;
+        else if(parentPath.endsWith(FileSystemEntry.PATH_SEPARATOR))
+            thisPath = name;
+        else if(FileSystemEntry.PATH_SEPARATOR.equals(name))
             thisPath = FileSystemEntry.PATH_SEPARATOR;
         else
             thisPath = FileSystemEntry.PATH_SEPARATOR + name;
