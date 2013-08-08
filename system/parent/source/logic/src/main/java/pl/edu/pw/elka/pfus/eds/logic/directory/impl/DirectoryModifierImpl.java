@@ -109,6 +109,8 @@ public class DirectoryModifierImpl implements DirectoryModifier {
     }
 
     private boolean hasAnySiblingThisName(Directory directory, String name) {
+        if(directory.isRootDirectory())
+            return false;
         List<Directory> siblings = directoryDao.getSubdirectories(directory.getParentDirectory());
         return isAnyWithSameName(name, siblings);
     }
