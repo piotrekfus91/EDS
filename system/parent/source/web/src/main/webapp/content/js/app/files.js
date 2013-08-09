@@ -68,7 +68,7 @@ function bindContextMenuForFileSystemEntries() {
                     }
                 });
                 rename_directory_div.find('#old_directory_name').text(currentNode.data.title);
-                rename_directory_div.find('#new_directory_name').attr('value', currentNode.data.title);
+                rename_directory_div.find('#new_directory_name').val(currentNode.data.title);
                 rename_directory_div.dialog("open");
             }
         },
@@ -183,7 +183,7 @@ $('#rename_directory').dialog({
 
 function clear_and_close_add_directory_div() {
     var add_directory_div = $('#add_directory');
-    add_directory_div.find('#add_directory_value').attr('value', '');
+    add_directory_div.find('#add_directory_value').val('');
     add_directory_div.dialog("close");
 }
 
@@ -191,13 +191,13 @@ function clear_and_close_rename_directory_div() {
     var rename_directory_div = $('#rename_directory');
     rename_directory_div.find("#path").text("");
     rename_directory_div.find('#old_directory_name').text("");
-    rename_directory_div.find('#new_directory_name').attr('value', "");
+    rename_directory_div.find('#new_directory_name').val('');
     rename_directory_div.dialog("close");
 }
 
 function compareNodesByTitle(node1, node2) {
-    title1 = node1.data.title.toLocaleLowerCase();
-    title2 = node2.data.title.toLocaleLowerCase();
+    var title1 = node1.data.title.toLocaleLowerCase();
+    var title2 = node2.data.title.toLocaleLowerCase();
     if(title1 == title2)
         return 0;
     else
