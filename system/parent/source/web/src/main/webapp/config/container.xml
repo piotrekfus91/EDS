@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <container>
+    <!-- util -->
+    <component class-key="pl.edu.pw.elka.pfus.eds.util.config.Config"
+               class="pl.edu.pw.elka.pfus.eds.util.config.impl.DefaultClassLoaderPropertiesConfig" />
+
     <!-- domain -->
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory"
                class="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactoryImpl" />

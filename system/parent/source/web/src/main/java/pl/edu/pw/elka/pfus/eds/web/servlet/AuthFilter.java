@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.web.servlet;
 
-import pl.edu.pw.elka.pfus.eds.util.Constants;
+import pl.edu.pw.elka.pfus.eds.util.config.Config;
+import pl.edu.pw.elka.pfus.eds.util.config.impl.DefaultClassLoaderPropertiesConfig;
 import pl.edu.pw.elka.pfus.eds.util.ledge.UrlHelper;
 
 import javax.servlet.*;
@@ -15,6 +16,8 @@ import java.net.URLEncoder;
  * Jeśli nie, przekierowuje na formatkę logowania.
  */
 public class AuthFilter implements Filter {
+    private Config config = new DefaultClassLoaderPropertiesConfig();
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -57,7 +60,7 @@ public class AuthFilter implements Filter {
     }
 
     private boolean isAuthenticated(HttpServletRequest request) {
-        return request.getSession().getAttribute(Constants.LOGGED_USER) != null;
+        return request.getSession().getAttribute(config.getString("logged_user")) != null;
     }
 
     private void redirectToLoginForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -65,15 +68,15 @@ public class AuthFilter implements Filter {
     }
 
     private boolean isSafeUri(String uri) {
-        return Constants.ROOT_URL.equals(uri)
-                || UrlHelper.getViewName(uri).startsWith(Constants.APP_VIEW_NAME_FRONT);
+        return config.getString("root_url").equals(uri)
+                || UrlHelper.getViewName(uri).startsWith(config.getString("app_view_name_front"));
     }
 
     // package na potrzeby testów
     String buildLoginFormUrl(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
             throws UnsupportedEncodingException {
         String requestUri = getRequestUri(servletRequest);
-        return Constants.ROOT_URL + Constants.URL_PREFIX + Constants.AUTH_VIEW_NAME + "?" + Constants.REDIRECT_PARAM
-                + "=" + URLEncoder.encode(requestUri, "UTF-8");
+        return config.getString("root_url") + config.getString("url_prefix") + config.getString("auth_view_name") + "?"
+                + config.getString("redirect_param") + "=" + URLEncoder.encode(requestUri, config.getString("encoding"));
     }
 }

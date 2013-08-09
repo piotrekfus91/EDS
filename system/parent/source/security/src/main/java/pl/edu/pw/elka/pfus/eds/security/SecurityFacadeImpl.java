@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.security;
 
+import org.apache.log4j.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.context.Context;
 import org.objectledge.hibernate.HibernateSessionFactory;
@@ -8,18 +9,22 @@ import org.objectledge.security.object.hibernate.HibernateDataBackend;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.security.exception.SecurityInitializationException;
-import pl.edu.pw.elka.pfus.eds.util.Constants;
+import pl.edu.pw.elka.pfus.eds.util.config.Config;
 import pl.edu.pw.elka.pfus.eds.util.ledge.LedgeHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 public class SecurityFacadeImpl implements SecurityFacade {
+    private static final Logger logger = Logger.getLogger(SecurityFacadeImpl.class);
+    private Config config;
     private LedgeHelper ledgeHelper = new LedgeHelper();
     private DataBackend dataBackend;
     private UserDao userDao;
 
-    public SecurityFacadeImpl(Context context, HibernateSessionFactory hibernateSessionFactory, UserDao userDao) {
+    public SecurityFacadeImpl(Context context, HibernateSessionFactory hibernateSessionFactory, Config config,
+                              UserDao userDao) {
+        this.config = config;
         this.userDao = userDao;
         try {
             dataBackend = new HibernateDataBackend(context, hibernateSessionFactory);
@@ -56,12 +61,12 @@ public class SecurityFacadeImpl implements SecurityFacade {
 
     @Override
     public User getCurrentUser(Context context) {
-        return (User) ledgeHelper.getFromSession(context, Constants.LOGGED_USER);
+        return (User) ledgeHelper.getFromSession(context, config.getString("logged_user"));
     }
 
     @Override
     public User getCurrentUser(HttpServletRequest request) {
-        return (User) request.getSession().getAttribute(Constants.LOGGED_USER);
+        return (User) request.getSession().getAttribute(config.getString("logged_user"));
     }
 
     @Override
@@ -81,7 +86,7 @@ public class SecurityFacadeImpl implements SecurityFacade {
 
     private User preLogInUser(Context context, User candidate) {
         ledgeHelper.invalidateSession(context);
-        ledgeHelper.putInSession(context, Constants.LOGGED_USER, candidate);
+        ledgeHelper.putInSession(context, config.getString("logged_user"), candidate);
         return candidate;
     }
 }
