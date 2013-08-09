@@ -7,6 +7,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryModifier;
+import pl.edu.pw.elka.pfus.eds.logic.exception.*;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
         logger.info("adding subdirectory for directory with id " + parentDirectoryId + ", name is: " + name);
         List<Directory> siblings = directoryDao.getSubdirectories(parentDirectoryId);
         if(isAnyWithSameName(name, siblings)) {
-            return null;
+            throw new AlreadyExistsException();
         }
 
         Directory directory = new Directory();
@@ -49,7 +50,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
         } catch (Exception e) {
             directoryDao.rollbackTransaction();
             logger.error(e.getMessage(), e);
-            return null;
+            throw new InternalException();
         }
     }
 
@@ -65,10 +66,11 @@ public class DirectoryModifierImpl implements DirectoryModifier {
             Directory directory = directoryDao.findById(id);
             User currentUser = securityFacade.getCurrentUser(context);
 
-            if(directory == null || !currentUser.isOwnerOfDirectory(directory)) {
-                logger.warn("directory with id " + id + " not found or is not owned by user " + currentUser);
-                return null;
-            }
+            if(directory == null)
+                throw new ObjectNotFoundException();
+
+            if(!currentUser.isOwnerOfDirectory(directory))
+                throw new InvalidPrivilegesException();
 
             Directory toReturn;
             if(directory.isRootDirectory()) {
@@ -86,25 +88,29 @@ public class DirectoryModifierImpl implements DirectoryModifier {
         } catch (Exception e) {
             directoryDao.rollbackTransaction();
             logger.error(e.getMessage(), e);
-            return null;
+            throw new InternalException();
         }
     }
 
     @Override
     public Directory rename(int id, String newName) {
+        Directory directory = directoryDao.findById(id);
+        if(directory.isRootDirectory())
+            throw new LogicException("Nie można zmienić nazwy katalogu głównego");
+        if(directory.getName().equals(newName))
+            return directory;
+        if(hasAnySiblingThisName(directory, newName))
+            throw new AlreadyExistsException();
+        directory.setName(newName);
         try {
             directoryDao.beginTransaction();
-            Directory directory = directoryDao.findById(id);
-            if(hasAnySiblingThisName(directory, newName))
-                return null;
-            directory.setName(newName);
             directoryDao.persist(directory);
             directoryDao.commitTransaction();
             return directory;
         } catch (Exception e) {
             directoryDao.rollbackTransaction();
             logger.error(e.getMessage(), e);
-            return null;
+            throw new InternalException();
         }
     }
 

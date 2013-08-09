@@ -1,12 +1,13 @@
 package pl.edu.pw.elka.pfus.eds.logic.directory.impl;
 
-import com.google.common.collect.ImmutableList;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder;
+import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
+import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import java.util.LinkedList;
@@ -39,12 +40,12 @@ public class DirectoryFinderImpl implements DirectoryFinder {
         User currentUser = getCurrentUser();
         Directory parentDirectory = directoryDao.getDirectoryWithSubdirectoriesAndOwner(directoryId);
         if(parentDirectory == null)
-            return ImmutableList.of();
+            throw new ObjectNotFoundException();
 
         if(currentUser.isOwnerOfDirectory(parentDirectory)) {
             return new LinkedList<>(parentDirectory.getSubdirectories());
         } else {
-            return ImmutableList.of();
+            throw new InvalidPrivilegesException();
         }
     }
 
@@ -53,12 +54,12 @@ public class DirectoryFinderImpl implements DirectoryFinder {
         User currentUser = getCurrentUser();
         Directory parentDirectory = directoryDao.getDirectoryWithFileSystemEntriesDocumentsAndOwner(directoryId);
         if(parentDirectory == null)
-            return ImmutableList.of();
+            throw new ObjectNotFoundException();
 
         if(currentUser.isOwnerOfDirectory(parentDirectory)) {
             return parentDirectory.getFileSystemEntries();
         } else {
-            return ImmutableList.of();
+            throw new InvalidPrivilegesException();
         }
     }
 
@@ -69,7 +70,7 @@ public class DirectoryFinderImpl implements DirectoryFinder {
         if(currentUser.isOwnerOfDirectory(directory))
             return directory;
         else
-            return null;
+            throw new InvalidPrivilegesException();
     }
 
     private User getCurrentUser() {

@@ -10,6 +10,10 @@ function post_message_now(type, text) {
     post_message(type, text, current_time());
 }
 
+function post_error_from_result(result) {
+    post_message_now('error', result.error_message);
+}
+
 $.noty.defaults = {
     layout: 'topRight',
     theme: 'defaultTheme',

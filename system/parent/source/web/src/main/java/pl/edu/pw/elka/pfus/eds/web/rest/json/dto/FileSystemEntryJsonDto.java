@@ -42,6 +42,8 @@ public class FileSystemEntryJsonDto {
     }
 
     public static FileSystemEntryJsonDto from(FileSystemEntry entry) {
+        if(entry == null)
+            return new FileSystemEntryJsonDto();
         return new FileSystemEntryJsonDto(entry.getId(), entry.getName(), entry.getClass(), entry.getStringPath());
     }
 

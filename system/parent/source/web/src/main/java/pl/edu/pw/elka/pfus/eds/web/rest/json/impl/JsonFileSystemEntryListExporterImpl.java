@@ -1,6 +1,5 @@
 package pl.edu.pw.elka.pfus.eds.web.rest.json.impl;
 
-import org.apache.log4j.Logger;
 import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.AbstractJsonExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonFileSystemEntryListExporter;
@@ -9,18 +8,25 @@ import pl.edu.pw.elka.pfus.eds.web.rest.json.dto.FileSystemEntryJsonDto;
 import java.util.LinkedList;
 import java.util.List;
 
-public class JsonFileSystemEntryListExporterImpl extends AbstractJsonExporter<List<FileSystemEntry>>
-        implements JsonFileSystemEntryListExporter {
-    private static final Logger logger = Logger.getLogger(JsonFileSystemEntryListExporterImpl.class);
-
+public class JsonFileSystemEntryListExporterImpl extends AbstractJsonExporter implements JsonFileSystemEntryListExporter {
     @Override
-    public String export(List<FileSystemEntry> entries) {
+    public String exportSuccess(List<FileSystemEntry> entries) {
         List<FileSystemEntryJsonDto> exports = new LinkedList<>();
         for(FileSystemEntry entry : entries) {
             exports.add(FileSystemEntryJsonDto.from(entry));
         }
-        String result = getGson().toJson(exports);
-        logger.info("exported: " + result);
-        return result;
+        return super.success(exports);
+    }
+
+    @Override
+    public String exportFailure(String errorMessage, List<FileSystemEntry> object) {
+        List<FileSystemEntryJsonDto> exports = null;
+        if (object != null) {
+            exports = new LinkedList<>();
+            for (FileSystemEntry entry : object) {
+                exports.add(FileSystemEntryJsonDto.from(entry));
+            }
+        }
+        return super.failure(errorMessage, exports);
     }
 }

@@ -19,7 +19,7 @@ $viewEnclosureTool.top()
 </table>
 
 <div id="add_directory" title="Nowy katalog" style="display: none">
-    <form>
+    <form onsubmit="return false;">
         <table>
             <tr>
                 <td>Nazwa:</td>
@@ -30,7 +30,7 @@ $viewEnclosureTool.top()
 </div>
 
 <div id="rename_directory" title="Zmiana nazwy katalogu" style="display: none">
-    <form>
+    <form onsubmit="return false;">
         <table>
             <tr>
                 <td>

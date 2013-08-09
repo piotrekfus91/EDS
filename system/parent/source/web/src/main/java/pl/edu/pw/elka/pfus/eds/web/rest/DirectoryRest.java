@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryService;
+import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryListExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonFileSystemEntryListExporter;
@@ -39,7 +40,7 @@ public class DirectoryRest {
     public Response getRootDirectories() {
         Directory userRootDirectory = directoryService.getRootDirectory();
         List<Directory> userRootDirectories = Lists.newArrayList(userRootDirectory);
-        String exportedRootDirectories = directoryListExporter.export(userRootDirectories);
+        String exportedRootDirectories = directoryListExporter.exportSuccess(userRootDirectories);
         return Response.status(Response.Status.OK).entity(exportedRootDirectories).build();
     }
 
@@ -48,7 +49,7 @@ public class DirectoryRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDirectoriesById(@PathParam("directoryId") int directoryId) {
         List<FileSystemEntry> fileSystemEntriesOfDirectory = directoryService.getFileSystemEntries(directoryId);
-        String exportedFileSystemEntries = fileSystemEntryListExporter.export(fileSystemEntriesOfDirectory);
+        String exportedFileSystemEntries = fileSystemEntryListExporter.exportSuccess(fileSystemEntriesOfDirectory);
         return Response.status(Response.Status.OK).entity(exportedFileSystemEntries).build();
     }
 
@@ -57,7 +58,7 @@ public class DirectoryRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSingleDirectoryById(@PathParam("directoryId") int directoryId) {
         Directory directory = directoryService.getById(directoryId);
-        String exportedDirectory = directoryExporter.export(directory);
+        String exportedDirectory = directoryExporter.exportSuccess(directory);
         return Response.status(Response.Status.OK).entity(exportedDirectory).build();
     }
 
@@ -66,35 +67,46 @@ public class DirectoryRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addDirectory(@PathParam("parentDirectoryId") int parentDirectoryId,
                                  @PathParam("name") String name) {
-        Directory directory = directoryService.add(parentDirectoryId, name);
-        if(directory == null)
-            return Response.status(Response.Status.NO_CONTENT).build();
-        String exportedDirectory = directoryExporter.export(directory);
-        return Response.status(Response.Status.OK).entity(exportedDirectory).build();
+        String exported;
+        Directory directory = null;
+        try {
+            directory = directoryService.add(parentDirectoryId, name);
+            exported = directoryExporter.exportSuccess(directory);
+        } catch (LogicException e) {
+            logger.error(e.getMessage(), e);
+            exported = directoryExporter.exportFailure(e.getMessage(), null);
+        }
+        return Response.status(Response.Status.OK).entity(exported).build();
     }
 
     @DELETE
     @Path("/delete/{directoryId: \\d+}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteDirectoryById(@PathParam("directoryId") int directoryId) {
-        Directory parentDirectory = directoryService.delete(directoryId);
-        if(parentDirectory == null) {
-            return Response.status(Response.Status.NO_CONTENT).build();
+        String exported;
+        try {
+            Directory parentDirectory = directoryService.delete(directoryId);
+            List<FileSystemEntry> fileSystemEntries = parentDirectory.getFileSystemEntries();
+            exported = fileSystemEntryListExporter.exportSuccess(fileSystemEntries);
+        } catch (LogicException e) {
+            logger.error(e.getMessage(), e);
+            exported = fileSystemEntryListExporter.exportFailure(e.getMessage(), null);
         }
-        List<FileSystemEntry> fileSystemEntries = parentDirectory.getFileSystemEntries();
-        String exportedFileSystemEntries = fileSystemEntryListExporter.export(fileSystemEntries);
-        return Response.status(Response.Status.OK).entity(exportedFileSystemEntries).build();
+        return Response.status(Response.Status.OK).entity(exported).build();
     }
 
     @PUT
     @Path("/rename/{directoryId: \\d+}/{newName}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response renameDirectory(@PathParam("directoryId") int directoryId, @PathParam("newName") String newName) {
-        Directory renamedDirectory = directoryService.rename(directoryId, newName);
-        if(renamedDirectory == null) {
-            return Response.status(Response.Status.NO_CONTENT).build();
+        String exported;
+        try {
+            Directory renamedDirectory = directoryService.rename(directoryId, newName);
+            exported = directoryExporter.exportSuccess(renamedDirectory);
+        } catch (LogicException e) {
+            logger.error(e.getMessage(), e);
+            exported = directoryExporter.exportFailure(e.getMessage(), null);
         }
-        String exportedDirectory = directoryExporter.export(renamedDirectory);
-        return Response.status(Response.Status.OK).entity(exportedDirectory).build();
+        return Response.status(Response.Status.OK).entity(exported).build();
     }
 }

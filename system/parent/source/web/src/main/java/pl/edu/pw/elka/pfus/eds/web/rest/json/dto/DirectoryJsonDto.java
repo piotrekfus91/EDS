@@ -12,6 +12,8 @@ public class DirectoryJsonDto extends FileSystemEntryJsonDto {
     }
 
     public static DirectoryJsonDto from(Directory directory) {
+        if(directory == null)
+            return new DirectoryJsonDto();
         return new DirectoryJsonDto(directory.getId(), directory.getName(), directory.getStringPath());
     }
 
