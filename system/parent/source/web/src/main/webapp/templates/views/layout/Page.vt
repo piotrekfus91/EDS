@@ -8,6 +8,7 @@ $pageTool.insertTitlePrefix('EDS')
     <link rel="stylesheet" href="$link.content('css/jquery-ui/jquery-ui.css')" />
     <link rel="stylesheet" href="$link.content('css/dynatree/skin/ui.dynatree.css')" />
     <link rel="stylesheet" href="$link.content('css/contextMenu/jquery.contextMenu.css')" />
+    <link rel="stylesheet" href="$link.content('css/plupload/jquery.ui.plupload.css')" />
     <script src="$link.content('js/jquery/jquery-1.9.1.js')"></script>
     <script src="$link.content('js/jquery-ui/jquery-ui.js')"></script>
     <script src="$link.content('js/corners/jquery.corners.js')"></script>
@@ -35,10 +36,10 @@ $pageTool.insertTitlePrefix('EDS')
 <div id="noty_container"></div>
 <div class="tabs" id="tabs">
     <ul>
-        <li><a href="#search">Wyszukiwarka</a></li>
-        <li><a href="$link.view('app.Files')">Pliki</a></li>
+        <li><a href="$link.view('app.Upload')">Upload</a></li>
         <li><a href="#data">Moje dane</a></li>
-        <li><a href="#password">Zmiana hasła</a></li>
+        <li><a href="$link.view('app.Files')">Pliki</a></li>
+        <li><a href="#search">Wyszukiwarka</a></li>
         <li>
             <a id="logout_link" href="$link.view('auth.Form').action('auth.Logout')">
                 <img src="$link.content('images/logout.png')" style="height: 16px" />
@@ -48,7 +49,6 @@ $pageTool.insertTitlePrefix('EDS')
     </ul>
     <div id="search">wyszukiwarka</div>
     <div id="data">dane</div>
-    <div id="password">haslo</div>
 </div>
 </body>
 </html>
