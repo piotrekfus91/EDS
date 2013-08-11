@@ -32,6 +32,12 @@ public class Md5InpuStreamHasherTest {
         };
     }
 
+    @Test(expectedExceptions = RuntimeException.class)
+    public void testException() throws Exception {
+        hasher = new MockMd5InpuStreamHasher();
+        hasher.getString(null);
+    }
+
     @Test
     public void testPaddingMissingZeros() throws Exception {
         assertThat(hasher.addStartingPaddingOfZeros("123456789012345678901234567890"))

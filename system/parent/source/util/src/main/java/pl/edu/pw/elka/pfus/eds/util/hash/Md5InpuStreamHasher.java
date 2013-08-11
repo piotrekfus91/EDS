@@ -35,13 +35,18 @@ public class Md5InpuStreamHasher implements InputStreamHasher {
     }
 
     private void updateDigestByInputStream(InputStream inputStream, MessageDigest digest) {
-        DigestInputStream digestInputStream = new DigestInputStream(inputStream, digest);
+        DigestInputStream digestInputStream = getDigestInputStream(inputStream, digest);
         byte[] bytes = new byte[2048];
         try {
             while(digestInputStream.read(bytes, 0, bytes.length) > 0) { }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @VisibleForTesting
+    DigestInputStream getDigestInputStream(InputStream inputStream, MessageDigest digest) {
+        return new DigestInputStream(inputStream, digest);
     }
 
     private MessageDigest getMessageDigest() {

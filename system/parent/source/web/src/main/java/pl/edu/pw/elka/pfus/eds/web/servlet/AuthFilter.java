@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.web.servlet;
 
+import com.google.common.annotations.VisibleForTesting;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
 import pl.edu.pw.elka.pfus.eds.util.config.impl.DefaultClassLoaderPropertiesConfig;
 import pl.edu.pw.elka.pfus.eds.util.ledge.UrlHelper;
@@ -72,7 +73,7 @@ public class AuthFilter implements Filter {
                 || UrlHelper.getViewName(uri).startsWith(config.getString("app_view_name_front"));
     }
 
-    // package na potrzeby testów
+    @VisibleForTesting
     String buildLoginFormUrl(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
             throws UnsupportedEncodingException {
         String requestUri = getRequestUri(servletRequest);
