@@ -3,6 +3,8 @@
     <!-- util -->
     <component class-key="pl.edu.pw.elka.pfus.eds.util.config.Config"
                class="pl.edu.pw.elka.pfus.eds.util.config.impl.DefaultClassLoaderPropertiesConfig" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.util.hash.InputStreamHasher"
+               class="pl.edu.pw.elka.pfus.eds.util.hash.Md5InpuStreamHasher" />
 
     <!-- domain -->
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory"
