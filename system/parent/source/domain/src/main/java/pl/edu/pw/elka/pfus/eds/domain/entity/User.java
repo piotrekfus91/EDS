@@ -80,6 +80,16 @@ public class User extends IdentifableEntity implements Named, Versionable {
         return this.equals(directory.getOwner());
     }
 
+    /**
+     * Sprawdza czy ten użytkownik jest właścicielem dokumentu.
+     *
+     * @param document dany dokument.
+     * @return true jeśli użytkownik jest właścicielem dokumentu, w przeciwnym razie false.
+     */
+    public boolean isOwnerOfDocument(Document document) {
+        return this.equals(document.getOwner());
+    }
+
     public void setVersion(Integer version) {
         this.version = version;
     }

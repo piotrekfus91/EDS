@@ -61,5 +61,5 @@ public interface DirectoryDao extends IdentifableDao<Directory> {
      * @param directoryId id katalogu.
      * @return wypełniony katalog.
      */
-    Directory getDirectoryWithFileSystemEntriesDocumentsAndOwner(int directoryId);
+    Directory getDirectoryWithFileSystemEntriesAndOwner(int directoryId);
 }

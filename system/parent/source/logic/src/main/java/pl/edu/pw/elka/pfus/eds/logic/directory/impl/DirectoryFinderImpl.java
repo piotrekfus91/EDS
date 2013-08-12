@@ -52,7 +52,7 @@ public class DirectoryFinderImpl implements DirectoryFinder {
     @Override
     public List<FileSystemEntry> getFileSystemEntries(int directoryId) {
         User currentUser = getCurrentUser();
-        Directory parentDirectory = directoryDao.getDirectoryWithFileSystemEntriesDocumentsAndOwner(directoryId);
+        Directory parentDirectory = directoryDao.getDirectoryWithFileSystemEntriesAndOwner(directoryId);
         if(parentDirectory == null)
             throw new ObjectNotFoundException();
 

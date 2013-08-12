@@ -83,7 +83,7 @@ public class DirectoryDaoTest extends IdentifableDaoTest<Directory, DirectoryDao
     public void testWithFileSystemEntriesAndOwner() throws Exception {
         Directory expected = getFreeLevelStructure();
 
-        Directory actual = directoryDao.getDirectoryWithFileSystemEntriesDocumentsAndOwner(expected.getId());
+        Directory actual = directoryDao.getDirectoryWithFileSystemEntriesAndOwner(expected.getId());
         assertThat(actual).isEqualTo(expected);
         assertThat(actual.getSubdirectories()).isEqualTo(expected.getSubdirectories());
         assertThat(actual.getDocuments()).isEqualTo(expected.getDocuments());

@@ -5,9 +5,9 @@ $(document).ready(function() {
         type: "GET",
         url: rest('/directories/root'),
         success: function(result) {
-            if(isSuccess(result)) {
+            if(is_success(result)) {
                 var root = result.data;
-                initTree(root);
+                init_tree(root);
             } else {
                 post_message_now('error', result.error_message);
             }
@@ -18,7 +18,7 @@ $(document).ready(function() {
     })
 });
 
-function initTree(root) {
+function init_tree(root) {
     $('#files_tree').dynatree({
         fx: {
             height: 'toggle',
@@ -26,10 +26,10 @@ function initTree(root) {
         },
         children: root,
         onCreate: function (node, span) {
-            bindContextMenuForFileSystemEntries(span);
+            bind_context_menu_for_file_system_entries(span);
         },
         onLazyRead: function (node) {
-            var children = getChildren(node.data.key);
+            var children = get_children(node.data.key);
             if(children.length > 0) {
                 $.each(children, function() {
                     node.addChild(this);
@@ -62,8 +62,14 @@ function initTree(root) {
                 return targetNode.data.isFolder;
             },
             onDrop: function (targetNode, sourceNode, hitMode) {
-                sourceNode.move(targetNode, hitMode);
-                targetNode.getParent().sortChildren(compareNodesByTitle, false);
+                var success;
+                console.log("moving " + sourceNode.data.title + " to " + targetNode.data.title);
+                if(!sourceNode.data.isFolder)
+                    success = move_document(sourceNode.data.key, targetNode.data.key);
+                if(success) {
+                    sourceNode.move(targetNode, hitMode);
+                    targetNode.getParent().sortChildren(compare_nodes_by_title, false);
+                }
             },
             autoExpandMS: 500,
             preventVoidMoves: true
@@ -71,14 +77,14 @@ function initTree(root) {
     });
 }
 
-function getChildren(key) {
+function get_children(key) {
     var children = [];
     $.ajax({
         type: "GET",
         async: false,
         url: rest('/directories/' + key),
         success: function(result) {
-            if(isSuccess(result)) {
+            if(is_success(result)) {
                 children = result.data;
             } else {
                 post_message_now('error', 'Błąd wczytywania katalogu');
@@ -88,7 +94,7 @@ function getChildren(key) {
     return children;
 }
 
-function bindContextMenuForFileSystemEntries() {
+function bind_context_menu_for_file_system_entries() {
     $('#files_tree').contextMenu({
         selector: 'li',
         callback: function(key) {
@@ -137,7 +143,7 @@ function delete_file_system_entry(id) {
         type: "DELETE",
         url: rest("/directories/delete/" + id),
         success: function(result) {
-            if(isSuccess(result)) {
+            if(is_success(result)) {
                 post_message_now('information', 'Katalog usunięty: ' + currentNode.data.title);
                 currentNode.remove();
             } else {
@@ -155,7 +161,7 @@ function add_directory(parentDirectoryId, name) {
         type: "POST",
         url: rest("/directories/create/" + parentDirectoryId + "/" + name),
         success: function(result) {
-            if(isSuccess(result)) {
+            if(is_success(result)) {
                 post_message_now('success', 'Dodano katalog: ' + name);
                 currentNode.addChild({
                     title: name,
@@ -178,7 +184,7 @@ function rename_directory(id, name) {
         type: "PUT",
         url: rest("/directories/rename/" + id + "/" + name),
         success: function(result) {
-            if(isSuccess(result)) {
+            if(is_success(result)) {
                 post_message_now('success', 'Nazwa katalogu została zmieniona na ' + name);
                 currentNode.data.title = name;
                 currentNode.render();
@@ -192,6 +198,23 @@ function rename_directory(id, name) {
             clear_and_close_rename_directory_div();
         }
     });
+}
+
+function move_document(documentId, destinationFolderId) {
+    var success = false;
+    $.ajax({
+        method: "PUT",
+        url: rest('/documents/move/' + documentId + '/' + destinationFolderId),
+        async: false,
+        success: function(result) {
+            if(is_success(result)) {
+                success = true;
+            } else {
+                post_error_from_result(result);
+            }
+        }
+    });
+    return success;
 }
 
 $('#add_directory').dialog({
@@ -242,7 +265,7 @@ function clear_and_close_rename_directory_div() {
     rename_directory_div.dialog("close");
 }
 
-function compareNodesByTitle(node1, node2) {
+function compare_nodes_by_title(node1, node2) {
     var title1 = node1.data.title.toLocaleLowerCase();
     var title2 = node2.data.title.toLocaleLowerCase();
     if(title1 == title2)
@@ -251,6 +274,6 @@ function compareNodesByTitle(node1, node2) {
         return title1 > title2 ? 1 : -1;
 }
 
-function isSuccess(result) {
+function is_success(result) {
     return result.result == "SUCCESS";
 }

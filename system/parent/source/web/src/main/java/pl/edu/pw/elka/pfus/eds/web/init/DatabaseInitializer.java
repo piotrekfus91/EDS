@@ -6,6 +6,8 @@ import org.picocontainer.Startable;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
+import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 import pl.edu.pw.elka.pfus.eds.web.init.impl.SqlScriptLoader;
@@ -29,6 +31,10 @@ public class DatabaseInitializer implements Startable {
     public void start() {
         logger.info("initializing database");
         initFromScripts();
+
+        MimeType plainTextMimeType = new MimeType();
+        plainTextMimeType.setType("plain");
+        plainTextMimeType.setDefaultExtension("txt");
 
         userDao.beginTransaction();
         User rootUser = new User();
@@ -65,6 +71,22 @@ public class DatabaseInitializer implements Startable {
             Directory lfcPicturesDirectory = new Directory();
             lfcPicturesDirectory.setName("LFC");
             lfcPicturesDirectory.setParentDirectory(picturesDirectory);
+                Document gerrard20 = new Document();
+                gerrard20.setName("Gerrard20.jpeg");
+                gerrard20.setCreated(new Date());
+                gerrard20.setContentMd5("be4c71489e5964dcca00b6b3b3519631");
+                gerrard20.setMimeType(plainTextMimeType);
+                plainTextMimeType.addDocument(gerrard20);
+                gerrard20.setDirectory(lfcPicturesDirectory);
+                lfcPicturesDirectory.addDocument(gerrard20);
+                Document lfc_226410 = new Document();
+                lfc_226410.setName("lfc_226410.jpg");
+                lfc_226410.setCreated(new Date());
+                lfc_226410.setContentMd5("abbda56a02ca7d81fda888760d08127c");
+                lfc_226410.setMimeType(plainTextMimeType);
+                plainTextMimeType.addDocument(lfc_226410);
+                lfc_226410.setDirectory(lfcPicturesDirectory);
+                lfcPicturesDirectory.addDocument(lfc_226410);
 
         Directory filesDirectory = new Directory();
         filesDirectory.setName("pliki");

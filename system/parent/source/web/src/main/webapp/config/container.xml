@@ -43,6 +43,10 @@
                class="pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryModifierImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryService"
                class="pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryServiceImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.document.DocumentModifier"
+               class="pl.edu.pw.elka.pfus.eds.logic.document.impl.DocumentModifierImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.document.DocumentService"
+               class="pl.edu.pw.elka.pfus.eds.logic.document.impl.DocumentServiceImpl" />
 
     <!-- web -->
     <component class="pl.edu.pw.elka.pfus.eds.web.init.DatabaseInitializer" />
@@ -52,6 +56,8 @@
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonDirectoryExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryListExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonDirectoryListExporterImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResultExporter"
+               class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResultExporterImpl" />
 
 
     <!-- jersey -->

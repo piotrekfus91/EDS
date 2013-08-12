@@ -66,7 +66,7 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
     }
 
     @Override
-    public Directory getDirectoryWithFileSystemEntriesDocumentsAndOwner(int directoryId) {
+    public Directory getDirectoryWithFileSystemEntriesAndOwner(int directoryId) {
         String DIRECTORIES_WITH_SUBDIRECTORIES_FILES_AND_OWNER =
                 "SELECT dir " +
                 "FROM Directory dir " +
