@@ -9,7 +9,9 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.logic.exception.AlreadyExistsException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
+import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -46,12 +48,54 @@ public class DocumentModifierImplTest {
         documentModifier = new DocumentModifierImpl(documentDao, directoryDao, userDao, securityFacade, context);
     }
 
+    @Test
+    public void testRenamingForMoveToSameDir() throws Exception {
+        when(documentDao.findById(anyInt())).thenReturn(document);
+        document.setName("name");
+
+        documentModifier.rename(1, "name");
+
+        assertThat(true).isTrue();
+    }
+
+    @Test(expectedExceptions = AlreadyExistsException.class)
+    public void testRenamingForSameFileInDirectory() throws Exception {
+        when(documentDao.findById(anyInt())).thenReturn(document);
+        document.setName("");
+        document.setDirectory(directory);
+        directory.addDocument(document2);
+        document2.setName("name");
+
+        documentModifier.rename(1, "name");
+    }
+
+    @Test
+    public void testRenamingSuccess() throws Exception {
+        when(documentDao.findById(anyInt())).thenReturn(document);
+        document.setName("");
+        document.setDirectory(directory);
+
+        documentModifier.rename(1, "name");
+    }
+
     @Test(expectedExceptions = InvalidPrivilegesException.class)
     public void testMovingForUserNotOwnerOfDocument() throws Exception {
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
         when(documentDao.findById(anyInt())).thenReturn(document);
         when(directoryDao.findById(anyInt())).thenReturn(directory);
         document.setDirectory(directory);
+        directory.setId(2);
+
+        documentModifier.move(1, 1);
+    }
+
+    @Test
+    public void testMovingToSameDir() throws Exception {
+        when(securityFacade.getCurrentUser(context)).thenReturn(user);
+        when(documentDao.findById(anyInt())).thenReturn(document);
+        when(directoryDao.findById(anyInt())).thenReturn(directory);
+        document.setDirectory(directory);
+        directory.setId(1);
 
         documentModifier.move(1, 1);
     }
@@ -64,6 +108,7 @@ public class DocumentModifierImplTest {
         document.setDirectory(directory);
         document.setOwner(user);
         directory.setOwner(user);
+        directory.setId(2); // inne niz parametr wywolania
         directory2.setOwner(user);
 
         documentModifier.move(1, 1);
@@ -79,7 +124,79 @@ public class DocumentModifierImplTest {
 
         documentModifier.delete(1);
 
-        assertThat(true);
+        assertThat(true).isTrue();
+    }
+
+    @Test
+    public void testIsMoveToSameDirectoryExpectedTrue() throws Exception {
+        directory.setId(1);
+
+        assertThat(documentModifier.isMoveToSameDirectory(1, directory)).isTrue();
+    }
+
+    @Test
+    public void testIsMoveToSameDirectoryExpectedFalse() throws Exception {
+        directory.setId(1);
+
+        assertThat(documentModifier.isMoveToSameDirectory(2, directory)).isFalse();
+    }
+
+    @Test
+    public void testValidateOwnershipOverDocumentNoEx() throws Exception {
+        document.setOwner(user);
+
+        documentModifier.validateOwnershipOverDocument(user, document);
+
+        assertThat(true).isTrue();
+    }
+
+    @Test(expectedExceptions = InvalidPrivilegesException.class)
+    public void testValidateOwnershipOverDocumentEx() throws Exception {
+        documentModifier.validateOwnershipOverDocument(user, document);
+    }
+
+    @Test
+    public void testValidateOwnershipOverDirectoryNoEx() throws Exception {
+        directory.setOwner(user);
+
+        documentModifier.validateOwnershipOverDirectory(user, directory);
+
+        assertThat(true).isTrue();
+    }
+
+    @Test(expectedExceptions = InvalidPrivilegesException.class)
+    public void testValidateOwnershipOverDirectoryEx() throws Exception {
+        documentModifier.validateOwnershipOverDirectory(user, directory);
+    }
+
+    @Test
+    public void testValidateExistenceNoEx() throws Exception {
+        documentModifier.validateExistence(document);
+
+        assertThat(true).isTrue();
+    }
+
+    @Test(expectedExceptions = ObjectNotFoundException.class)
+    public void testValidateExistenceEx() throws Exception {
+        documentModifier.validateExistence(null);
+    }
+
+    @Test
+    public void testIsFileWithNameInDirectoryForNoSuchFile() throws Exception {
+        document.setName("name1");
+        document2.setName("name2");
+        directory.addDocument(document);
+        directory.addDocument(document2);
+
+        assertThat(documentModifier.isFileWithNameInDirectory(directory, "name3")).isFalse();
+    }
+
+    @Test
+    public void testIsFileWithNameInDirectoryForFile() throws Exception {
+        document.setName("name");
+        directory.addDocument(document);
+
+        assertThat(documentModifier.isFileWithNameInDirectory(directory, "name")).isTrue();
     }
 
     private Context getContext() {

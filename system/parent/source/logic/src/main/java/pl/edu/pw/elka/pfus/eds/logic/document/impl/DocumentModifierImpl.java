@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.logic.document.impl;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.log4j.Logger;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
@@ -45,6 +46,7 @@ public class DocumentModifierImpl implements DocumentModifier {
         try {
             documentDao.beginTransaction();
             document.setName(newName);
+            documentDao.persist(document);
             documentDao.commitTransaction();
         } catch (Exception e) {
             documentDao.rollbackTransaction();
@@ -62,6 +64,9 @@ public class DocumentModifierImpl implements DocumentModifier {
         Document document = documentDao.findById(documentId);
         Directory sourceDirectory = document.getDirectory();
 
+        if(isMoveToSameDirectory(destinationDirectoryId, sourceDirectory))
+            return;
+
         validateOwnershipOverDirectory(currentUser, sourceDirectory);
         validateOwnershipOverDocument(currentUser, document);
 
@@ -78,7 +83,6 @@ public class DocumentModifierImpl implements DocumentModifier {
             document.setDirectory(destinationDirectory);
             sourceDirectory = directoryDao.merge(sourceDirectory);
             destinationDirectory = directoryDao.merge(destinationDirectory);
-            userDao.merge(currentUser);
             directoryDao.persist(sourceDirectory);
             directoryDao.persist(destinationDirectory);
             directoryDao.commitTransaction();
@@ -108,22 +112,31 @@ public class DocumentModifierImpl implements DocumentModifier {
         }
     }
 
-    private void validateOwnershipOverDocument(User currentUser, Document document) {
+    @VisibleForTesting
+    boolean isMoveToSameDirectory(int destinationDirectoryId, Directory sourceDirectory) {
+        return sourceDirectory.getId().equals(destinationDirectoryId);
+    }
+
+    @VisibleForTesting
+    void validateOwnershipOverDocument(User currentUser, Document document) {
         if(!currentUser.isOwnerOfDocument(document))
             throw new InvalidPrivilegesException();
     }
 
-    private void validateOwnershipOverDirectory(User currentUser, Directory sourceDirectory) {
+    @VisibleForTesting
+    void validateOwnershipOverDirectory(User currentUser, Directory sourceDirectory) {
         if(!currentUser.isOwnerOfDirectory(sourceDirectory))
             throw new InvalidPrivilegesException();
     }
 
-    private void validateExistence(Document document) {
+    @VisibleForTesting
+    void validateExistence(Document document) {
         if(document == null)
             throw new ObjectNotFoundException();
     }
 
-    private boolean isFileWithNameInDirectory(Directory directory, String name) {
+    @VisibleForTesting
+    boolean isFileWithNameInDirectory(Directory directory, String name) {
         for(Document document : directory.getDocuments()) {
             if(name.equals(document.getName()))
                 return true;

@@ -34,6 +34,7 @@ function init_tree(root) {
                 $.each(children, function() {
                     node.addChild(this);
                 });
+                node.sortChildren(compare_nodes_by_title, false);
             } else {
                 node.expand(false);
                 node.expand(true);
