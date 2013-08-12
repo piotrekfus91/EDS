@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pfus.eds.util.hash;
+package pl.edu.pw.elka.pfus.eds.util.hash.impl;
 
 import org.apache.log4j.Logger;
 
@@ -12,7 +12,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class MockMd5InpuStreamHasher extends Md5InpuStreamHasher {
+public class MockMd5InpuStreamHasher extends Md5InputStreamHasher {
     private static final Logger logger = Logger.getLogger(MockMd5InpuStreamHasher.class);
 
     @Override
