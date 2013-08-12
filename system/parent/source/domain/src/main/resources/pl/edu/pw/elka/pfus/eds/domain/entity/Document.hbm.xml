@@ -25,6 +25,7 @@ License Type: Evaluation
 		</many-to-one>
 
         <property name="name" column="name" type="string" length="255" not-null="true" lazy="false"/>
+        <property name="created" column="created" type="date" not-null="true" lazy="false" />
         <property name="contentMd5" column="content_md5" type="string" length="32" not-null="true" lazy="false"/>
 
 		<list name="resourceGroups" table="resource_group_document" schema="eds" lazy="true" cascade="save-update,lock" inverse="true" access="field">

@@ -7,6 +7,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryFinderImpl;
+import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import java.util.LinkedList;
@@ -46,12 +47,12 @@ public class DirectoryFinderTest {
         assertThat(finder.getRootDirectory()).isEqualTo(expectedDir);
     }
 
-    @Test
+    @Test(expectedExceptions = ObjectNotFoundException.class)
     public void testGetSubdirectoriesForNotLoggedUser() throws Exception {
         when(securityFacade.getCurrentUser(context)).thenReturn(null);
         Directory parent = getFreeLevelStructure();
         parent.setId(1);
-        assertThat(finder.getSubdirectories(parent)).isEmpty();
+        finder.getSubdirectories(parent).isEmpty();
     }
 
     @Test

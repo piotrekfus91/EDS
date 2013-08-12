@@ -12,6 +12,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -124,6 +125,7 @@ public class DirectoryDaoTest extends IdentifableDaoTest<Directory, DirectoryDao
         mimeType.setType("word");
         Document document = new Document();
         document.setName("document");
+        document.setCreated(new Date());
         document.setMimeType(mimeType);
         document.setContentMd5("md5:)");
         parentDir.addDocument(document);

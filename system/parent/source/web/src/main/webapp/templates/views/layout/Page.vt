@@ -36,8 +36,8 @@ $pageTool.insertTitlePrefix('EDS')
 <div id="noty_container"></div>
 <div class="tabs" id="tabs">
     <ul>
-        <li><a href="$link.view('app.Upload')">Upload</a></li>
         <li><a href="#data">Moje dane</a></li>
+        <li><a href="$link.view('app.Upload')">Upload</a></li>
         <li><a href="$link.view('app.Files')">Pliki</a></li>
         <li><a href="#search">Wyszukiwarka</a></li>
         <li>

@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class Document extends IdentifableEntity implements Versionable, FileSystemEntry {
     private Integer id;
     private String name;
+    private Date created;
     private String contentMd5;
     private Integer version;
     private List<ResourceGroup> resourceGroups = new LinkedList<>();
@@ -71,6 +73,14 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     public String getContentMd5() {
