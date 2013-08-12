@@ -4,7 +4,13 @@
     <component class-key="pl.edu.pw.elka.pfus.eds.util.config.Config"
                class="pl.edu.pw.elka.pfus.eds.util.config.impl.DefaultClassLoaderPropertiesConfig" />
     <component class-key="pl.edu.pw.elka.pfus.eds.util.hash.InputStreamHasher"
-               class="pl.edu.pw.elka.pfus.eds.util.hash.Md5InpuStreamHasher" />
+               class="pl.edu.pw.elka.pfus.eds.util.hash.impl.AbstractInpuStreamHasher" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.util.hash.ByteArrayHasher"
+               class="pl.edu.pw.elka.pfus.eds.util.hash.impl.Md5ByteArrayHasher" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.util.file.system.PathCreator"
+               class="pl.edu.pw.elka.pfus.eds.util.file.system.impl.PathCreatorImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.util.file.system.FileCreator"
+               class="pl.edu.pw.elka.pfus.eds.util.file.system.impl.FileCreatorImpl" />
 
     <!-- domain -->
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory"
