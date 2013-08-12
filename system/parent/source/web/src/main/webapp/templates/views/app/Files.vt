@@ -29,7 +29,7 @@ $viewEnclosureTool.top()
     </form>
 </div>
 
-<div id="rename_directory" title="Zmiana nazwy katalogu" style="display: none">
+<div id="rename_div" title="Zmiana nazwy" style="display: none">
     <form onsubmit="return false;">
         <table>
             <tr>
@@ -45,7 +45,7 @@ $viewEnclosureTool.top()
                     Stara nazwa:
                 </td>
                 <td>
-                    <span id="old_directory_name" style="font-wieght: bold"></span>
+                    <span id="rename_old_name" style="font-wieght: bold"></span>
                 </td>
             </tr>
             <tr>
@@ -53,7 +53,7 @@ $viewEnclosureTool.top()
                     Nowa nazwa:
                 </td>
                 <td>
-                    <input id="new_directory_name" type="text" />
+                    <input id="rename_new_name" type="text" />
                 </td>
             </tr>
         </table>

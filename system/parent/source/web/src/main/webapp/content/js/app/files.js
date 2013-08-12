@@ -106,18 +106,19 @@ function bind_context_menu_for_file_system_entries() {
                 else
                     delete_document(currentNode.data.key);
             } else if(key == "rename") {
-                var rename_directory_div = $('#rename_directory');
+                var rename_div = $('#rename_div');
                 $.ajax({
                     type: "GET",
                     dataType: "json",
                     url: rest("/directories/single/" + currentNode.data.key),
-                    success: function(dir) {
-                        rename_directory_div.find("#path").text(dir.stringPath);
+                    success: function(result) {
+                        if(is_success(result))
+                            rename_div.find("#path").text(result.data.stringPath);
                     }
                 });
-                rename_directory_div.find('#old_directory_name').text(currentNode.data.title);
-                rename_directory_div.find('#new_directory_name').val(currentNode.data.title);
-                rename_directory_div.dialog("open");
+                rename_div.find('#rename_old_name').text(currentNode.data.title);
+                rename_div.find('#rename_new_name').val(currentNode.data.title);
+                rename_div.dialog("open");
             }
         },
         items: {
@@ -194,11 +195,32 @@ function rename_directory(id, name) {
             } else {
                 post_error_from_result(result);
             }
-            clear_and_close_rename_directory_div();
+            clear_and_close_rename_div();
         },
         error: function() {
             post_message_now('error', 'Błąd przy zmianie nazwy');
-            clear_and_close_rename_directory_div();
+            clear_and_close_rename_div();
+        }
+    });
+}
+
+function rename_document(id, name) {
+    $.ajax({
+        type: "PUT",
+        url: rest("/documents/rename/" + id + "/" + name),
+        success: function(result) {
+            if(is_success(result)) {
+                post_message_now('success', 'Nazwa pliku została zmieniona na ' + name);
+                currentNode.data.title = name;
+                currentNode.render();
+            } else {
+                post_error_from_result(result);
+            }
+            clear_and_close_rename_div();
+        },
+        error: function() {
+            post_message_now('error', 'Błąd przy zmianie nazwy');
+            clear_and_close_rename_div();
         }
     });
 }
@@ -255,7 +277,7 @@ $('#add_directory').dialog({
     }
 });
 
-$('#rename_directory').dialog({
+$('#rename_div').dialog({
     autoOpen: false,
     height: 300,
     width: 400,
@@ -263,11 +285,14 @@ $('#rename_directory').dialog({
     buttons: {
         "Zmień nazwę": function() {
             var id = currentNode.data.key;
-            var new_name = $('#new_directory_name').val();
-            rename_directory(id, new_name);
+            var newName = $('#rename_new_name').val();
+            if(currentNode.data.isFolder)
+                rename_directory(id, newName);
+            else
+                rename_document(id, newName);
         },
         "Anuluj": function() {
-            clear_and_close_rename_directory_div();
+            clear_and_close_rename_div();
         }
     }
 });
@@ -278,11 +303,11 @@ function clear_and_close_add_directory_div() {
     add_directory_div.dialog("close");
 }
 
-function clear_and_close_rename_directory_div() {
-    var rename_directory_div = $('#rename_directory');
+function clear_and_close_rename_div() {
+    var rename_directory_div = $('#rename_div');
     rename_directory_div.find("#path").text("");
-    rename_directory_div.find('#old_directory_name').text("");
-    rename_directory_div.find('#new_directory_name').val('');
+    rename_directory_div.find('#rename_old_name').text("");
+    rename_directory_div.find('#rename_new_name').val('');
     rename_directory_div.dialog("close");
 }
 

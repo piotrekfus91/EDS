@@ -5,6 +5,13 @@ package pl.edu.pw.elka.pfus.eds.logic.document;
  */
 public interface DocumentModifier {
     /**
+     * Zmienia nazwę podanego przez id dokumentu na podaną.
+     *
+     * @param documentId id dokumentu.
+     * @param newName nowa nazwa.
+     */
+    void rename(int documentId, String  newName);
+    /**
      * Przenosi plik do wskazanego za pomocą id katalogu.
      *
      * @param documentId id dokumentu.

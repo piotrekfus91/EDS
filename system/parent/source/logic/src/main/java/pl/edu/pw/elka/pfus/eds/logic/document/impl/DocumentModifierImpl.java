@@ -33,6 +33,27 @@ public class DocumentModifierImpl implements DocumentModifier {
     }
 
     @Override
+    public void rename(int documentId, String newName) {
+        Document document = documentDao.findById(documentId);
+        if(document.getName().equals(newName))
+            return;
+
+        Directory directory = document.getDirectory();
+        if(isFileWithNameInDirectory(directory, newName))
+            throw new AlreadyExistsException();
+
+        try {
+            documentDao.beginTransaction();
+            document.setName(newName);
+            documentDao.commitTransaction();
+        } catch (Exception e) {
+            documentDao.rollbackTransaction();
+            logger.error(e.getMessage(), e);
+            throw new InternalException();
+        }
+    }
+
+    @Override
     public void move(int documentId, int destinationDirectoryId) {
         directoryDao.setSession(documentDao.getSession());
         userDao.setSession(documentDao.getSession());

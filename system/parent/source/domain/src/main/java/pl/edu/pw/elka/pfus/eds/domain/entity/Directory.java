@@ -199,6 +199,7 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
     }
 
     public List<Document> getDocuments() {
+        documents.removeAll(Collections.singleton(null));
         return ImmutableList.copyOf(documents);
     }
 

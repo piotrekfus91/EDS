@@ -11,6 +11,11 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public void rename(int documentId, String newName) {
+        documentModifier.rename(documentId, newName);
+    }
+
+    @Override
     public void move(int documentId, int destinationDirectoryId) {
         documentModifier.move(documentId, destinationDirectoryId);
     }

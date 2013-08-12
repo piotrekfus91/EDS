@@ -24,6 +24,23 @@ public class DocumentRest {
     }
 
     @PUT
+    @Path("/rename/{documentId: \\d+}/{newName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response renameDocument(@PathParam("documentId") int documentId,
+                                   @PathParam("newName") String newName) {
+        logger.info("renaming document " + documentId + " to " + newName);
+        String exported;
+        try {
+            documentService.rename(documentId, newName);
+            exported = resultExporter.exportSuccess(null);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            exported = resultExporter.exportFailure(e.getMessage(), null);
+        }
+        return Response.status(Response.Status.OK).entity(exported).build();
+    }
+
+    @PUT
     @Path("/move/{documentId: \\d+}/{destinationDirectoryId: \\d+}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response moveDocument(@PathParam("documentId") int documentId,
