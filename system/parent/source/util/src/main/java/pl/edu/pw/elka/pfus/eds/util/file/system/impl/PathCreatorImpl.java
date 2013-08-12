@@ -25,10 +25,10 @@ public class PathCreatorImpl implements PathCreator {
 
     @Override
     public void createPath(String rootPath, String[] hashedPath) {
-        String currentPath = StringHelper.decorateWithLeadingSlash(rootPath);
+        StringBuilder currentPath = new StringBuilder(StringHelper.decorateWithLeadingSlash(rootPath));
         for(String dirName : hashedPath) {
-            createIfNotExists(currentPath, dirName);
-            currentPath += StringHelper.decorateWithLeadingSlash(dirName);
+            createIfNotExists(currentPath.toString(), dirName);
+            currentPath.append(StringHelper.decorateWithLeadingSlash(dirName));
         }
     }
 
@@ -37,7 +37,7 @@ public class PathCreatorImpl implements PathCreator {
         File dirFile = new File(path);
         if(!dirFile.exists()) {
             if(!dirFile.mkdir())
-                throw new RuntimeException("Błąd przy tworzeniu katalogu: " + path);
+                throw new FileSystemException("Błąd przy tworzeniu katalogu: " + path);
             logger.info("created directory: " + path);
         }
     }
