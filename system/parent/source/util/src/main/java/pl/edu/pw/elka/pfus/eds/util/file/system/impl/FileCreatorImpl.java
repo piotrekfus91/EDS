@@ -8,6 +8,7 @@ import pl.edu.pw.elka.pfus.eds.util.config.Config;
 import pl.edu.pw.elka.pfus.eds.util.config.impl.DefaultClassLoaderPropertiesConfig;
 import pl.edu.pw.elka.pfus.eds.util.file.system.FileCreator;
 import pl.edu.pw.elka.pfus.eds.util.file.system.PathCreator;
+import pl.edu.pw.elka.pfus.eds.util.file.system.PathHelper;
 import pl.edu.pw.elka.pfus.eds.util.file.system.exception.FileSystemException;
 import pl.edu.pw.elka.pfus.eds.util.hash.ByteArrayHasher;
 
@@ -59,20 +60,13 @@ public class FileCreatorImpl implements FileCreator {
 
     private String getFileSystemRoot() {
         String fileSystemRoot = config.getString("file_system_root");
-        return countFileSystemRoot(fileSystemRoot);
+        return PathHelper.countFileSystemRoot(fileSystemRoot);
     }
 
     @VisibleForTesting
     String getHashedPath(String hash) {
         String[] splittedHash = splitHash(hash);
         return Joiner.on(File.separator).join(splittedHash);
-    }
-
-    @VisibleForTesting
-    String countFileSystemRoot(String basePath) {
-        if(basePath.startsWith("~"))
-            return System.getProperty("user.home") + basePath.substring("~".length());
-        return basePath;
     }
 
     @VisibleForTesting

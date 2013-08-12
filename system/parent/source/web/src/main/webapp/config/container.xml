@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <container>
     <!-- util -->
+    <component class="pl.edu.pw.elka.pfus.eds.util.file.system.init.FileSystemInitializer" />
     <component class-key="pl.edu.pw.elka.pfus.eds.util.config.Config"
                class="pl.edu.pw.elka.pfus.eds.util.config.impl.DefaultClassLoaderPropertiesConfig" />
     <component class-key="pl.edu.pw.elka.pfus.eds.util.hash.InputStreamHasher"

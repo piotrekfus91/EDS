@@ -21,26 +21,6 @@ public class FileCreatorImplTest {
     }
 
     @Test
-    public void testFileSystemRootForSimple() throws Exception {
-        assertThat(fileCreator.countFileSystemRoot("/home/piotrek/.eds")).isEqualTo("/home/piotrek/.eds");
-    }
-
-    @Test
-    public void testFileSystemRootForTildaInTheMiddle() throws Exception {
-        assertThat(fileCreator.countFileSystemRoot("/home/piotrek/~/.eds")).isEqualTo("/home/piotrek/~/.eds");
-    }
-
-    @Test
-    public void testFileSystemRootStartingWithTilda() throws Exception {
-        assertThat(fileCreator.countFileSystemRoot("~/.eds")).isEqualTo(System.getProperty("user.home") + "/.eds");
-    }
-
-    @Test
-    public void testWindowsPathWithTilda() throws Exception {
-        assertThat(fileCreator.countFileSystemRoot("C:\\.eds")).isEqualTo("C:\\.eds");
-    }
-
-    @Test
     public void testGetPartNumber() throws Exception {
         assertThat(fileCreator.getPartNumber("1", 4)).isEqualTo(1);
         assertThat(fileCreator.getPartNumber("12", 4)).isEqualTo(1);

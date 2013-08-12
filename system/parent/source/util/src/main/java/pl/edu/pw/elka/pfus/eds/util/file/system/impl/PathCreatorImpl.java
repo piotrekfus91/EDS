@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import pl.edu.pw.elka.pfus.eds.util.StringHelper;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
 import pl.edu.pw.elka.pfus.eds.util.file.system.PathCreator;
+import pl.edu.pw.elka.pfus.eds.util.file.system.PathHelper;
 import pl.edu.pw.elka.pfus.eds.util.file.system.exception.FileSystemException;
 
 import java.io.File;
@@ -20,6 +21,7 @@ public class PathCreatorImpl implements PathCreator {
     @Override
     public void createFileSystemRoot() {
         String fileSystemRoot = config.getString("file_system_root");
+        fileSystemRoot = PathHelper.countFileSystemRoot(fileSystemRoot);
         createIfNotExists(fileSystemRoot);
     }
 
