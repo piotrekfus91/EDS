@@ -71,6 +71,17 @@ public class DocumentModifierImplTest {
         assertThat(document.getDirectory()).isEqualTo(directory2);
     }
 
+    @Test
+    public void testDeleting() throws Exception {
+        when(securityFacade.getCurrentUser(context)).thenReturn(user);
+        when(documentDao.findById(anyInt())).thenReturn(document);
+        document.setOwner(user);
+
+        documentModifier.delete(1);
+
+        assertThat(true);
+    }
+
     private Context getContext() {
         return mock(Context.class);
     }

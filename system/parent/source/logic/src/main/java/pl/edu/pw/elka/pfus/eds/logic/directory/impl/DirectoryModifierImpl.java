@@ -61,17 +61,17 @@ public class DirectoryModifierImpl implements DirectoryModifier {
 
     @Override
     public Directory delete(int id) {
+        Directory directory = directoryDao.findById(id);
+        User currentUser = securityFacade.getCurrentUser(context);
+
+        if(directory == null)
+            throw new ObjectNotFoundException();
+
+        if(!currentUser.isOwnerOfDirectory(directory))
+            throw new InvalidPrivilegesException();
+
         try {
             directoryDao.beginTransaction();
-            Directory directory = directoryDao.findById(id);
-            User currentUser = securityFacade.getCurrentUser(context);
-
-            if(directory == null)
-                throw new ObjectNotFoundException();
-
-            if(!currentUser.isOwnerOfDirectory(directory))
-                throw new InvalidPrivilegesException();
-
             Directory toReturn;
             if(directory.isRootDirectory()) {
                 directoryDao.delete(directory);

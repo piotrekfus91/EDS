@@ -12,6 +12,7 @@ import pl.edu.pw.elka.pfus.eds.logic.document.DocumentModifier;
 import pl.edu.pw.elka.pfus.eds.logic.exception.AlreadyExistsException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
+import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 public class DocumentModifierImpl implements DocumentModifier {
@@ -67,6 +68,25 @@ public class DocumentModifierImpl implements DocumentModifier {
         }
     }
 
+    @Override
+    public void delete(int documentId) {
+        Document document = documentDao.findById(documentId);
+        validateExistence(document);
+
+        User currentUser = securityFacade.getCurrentUser(context);
+        validateOwnershipOverDocument(currentUser, document);
+
+        try {
+            documentDao.beginTransaction();
+            documentDao.delete(document);
+            documentDao.commitTransaction();
+        } catch (Exception e) {
+            documentDao.rollbackTransaction();
+            logger.error(e.getMessage(), e);
+            throw new InternalException();
+        }
+    }
+
     private void validateOwnershipOverDocument(User currentUser, Document document) {
         if(!currentUser.isOwnerOfDocument(document))
             throw new InvalidPrivilegesException();
@@ -75,6 +95,11 @@ public class DocumentModifierImpl implements DocumentModifier {
     private void validateOwnershipOverDirectory(User currentUser, Directory sourceDirectory) {
         if(!currentUser.isOwnerOfDirectory(sourceDirectory))
             throw new InvalidPrivilegesException();
+    }
+
+    private void validateExistence(Document document) {
+        if(document == null)
+            throw new ObjectNotFoundException();
     }
 
     private boolean isFileWithNameInDirectory(Directory directory, String name) {

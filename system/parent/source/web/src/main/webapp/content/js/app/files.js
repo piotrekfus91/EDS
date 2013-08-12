@@ -101,7 +101,10 @@ function bind_context_menu_for_file_system_entries() {
             if(key == "add") {
                 $('#add_directory').dialog("open");
             } else if(key == "delete") {
-                delete_file_system_entry(currentNode.data.key);
+                if(currentNode.data.isFolder)
+                    delete_directory(currentNode.data.key);
+                else
+                    delete_document(currentNode.data.key);
             } else if(key == "rename") {
                 var rename_directory_div = $('#rename_directory');
                 $.ajax({
@@ -138,7 +141,7 @@ function bind_context_menu_for_file_system_entries() {
 }
 
 
-function delete_file_system_entry(id) {
+function delete_directory(id) {
     $.ajax({
         type: "DELETE",
         url: rest("/directories/delete/" + id),
@@ -215,6 +218,24 @@ function move_document(documentId, destinationFolderId) {
         }
     });
     return success;
+}
+
+function delete_document(documentId) {
+    $.ajax({
+        method: "DELETE",
+        url: rest('/documents/delete/' + documentId),
+        success: function(result) {
+            if(is_success(result)) {
+                post_message('success', 'Plik został usunięty');
+                currentNode.remove();
+            } else {
+                post_error_from_result(result);
+            }
+        },
+        error: function() {
+            post_message_now('error', 'Błąd przy usuwaniu pliku');
+        }
+    });
 }
 
 $('#add_directory').dialog({

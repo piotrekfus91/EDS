@@ -14,4 +14,9 @@ public class DocumentServiceImpl implements DocumentService {
     public void move(int documentId, int destinationDirectoryId) {
         documentModifier.move(documentId, destinationDirectoryId);
     }
+
+    @Override
+    public void delete(int documentId) {
+        documentModifier.delete(documentId);
+    }
 }
