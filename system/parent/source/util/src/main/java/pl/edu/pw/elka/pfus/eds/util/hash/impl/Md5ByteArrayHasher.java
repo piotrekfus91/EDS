@@ -1,12 +1,11 @@
 package pl.edu.pw.elka.pfus.eds.util.hash.impl;
 
 import org.apache.log4j.Logger;
-import pl.edu.pw.elka.pfus.eds.util.hash.ByteArrayHasher;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Md5ByteArrayHasher extends AbstractByteArrayHasher implements ByteArrayHasher {
+public class Md5ByteArrayHasher extends AbstractByteArrayHasher {
     private static final Logger logger = Logger.getLogger(Md5ByteArrayHasher.class);
 
     @Override

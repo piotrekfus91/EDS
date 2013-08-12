@@ -14,7 +14,7 @@ public class Md5ByteArrayHasherTest {
         hasher = new Md5ByteArrayHasher();
     }
 
-    @Test(dataProvider = "byteArrayAndHashes")
+    @Test(dataProvider = "byteArraysAndHashes")
     public void testHash(byte[] input, String expected) throws Exception {
         assertThat(hasher.getString(input)).isEqualTo(expected);
     }

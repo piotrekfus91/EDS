@@ -3,21 +3,21 @@ package pl.edu.pw.elka.pfus.eds.util.file.system.impl;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pl.edu.pw.elka.pfus.eds.util.config.impl.MapConfig;
-import pl.edu.pw.elka.pfus.eds.util.hash.impl.Md5InputStreamHasher;
+import pl.edu.pw.elka.pfus.eds.util.hash.impl.Md5ByteArrayHasher;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class FileCreatorTest {
+public class FileCreatorImplTest {
     private FileCreatorImpl fileCreator;
 
     @BeforeMethod
     private void setUp() {
         Map<String, String> map = new HashMap<>();
         map.put("part_length", "2");
-        fileCreator = new FileCreatorImpl(new MapConfig(map), new Md5InputStreamHasher(), null);
+        fileCreator = new FileCreatorImpl(new MapConfig(map), new Md5ByteArrayHasher(), null);
     }
 
     @Test

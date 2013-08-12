@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.util.file.system.impl;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.log4j.Logger;
 import pl.edu.pw.elka.pfus.eds.util.StringHelper;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
@@ -31,7 +32,8 @@ public class PathCreatorImpl implements PathCreator {
         }
     }
 
-    private void createIfNotExists(String path) {
+    @VisibleForTesting
+    void createIfNotExists(String path) {
         File dirFile = new File(path);
         if(!dirFile.exists()) {
             if(!dirFile.mkdir())
@@ -40,7 +42,8 @@ public class PathCreatorImpl implements PathCreator {
         }
     }
 
-    private void createIfNotExists(String path, String dirName) {
+    @VisibleForTesting
+    void createIfNotExists(String path, String dirName) {
         File rootPath = new File(path);
         if(!rootPath.exists() || !rootPath.isDirectory())
             throw new FileSystemException("Ścieżka nie istnieje lub nie jest katalogiem: " + path);

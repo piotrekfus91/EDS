@@ -36,8 +36,9 @@ public class FileCreatorImpl implements FileCreator {
 
     @Override
     public void create(byte[] input, String fileName) {
-        pathCreator.createPath(getFileSystemRoot(), splitHash(hasher.getString(input)));
-        createFileFromByteArray(input, getFullPath(input, fileName));
+        String hash = hasher.getString(input);
+        pathCreator.createPath(getFileSystemRoot(), splitHash(hash));
+        createFileFromByteArray(input, getFullPath(hash, fileName));
     }
 
     private void createFileFromByteArray(byte[] input, String fullPath) {
@@ -50,8 +51,7 @@ public class FileCreatorImpl implements FileCreator {
         }
     }
 
-    private String getFullPath(byte[] input, String fileName) {
-        String hash = hasher.getString(input);
+    private String getFullPath(String hash, String fileName) {
         String fileSystemRoot = StringHelper.decorateWithLeadingSlash(getFileSystemRoot());
         String hashedPath = StringHelper.decorateWithLeadingSlash(getHashedPath(hash));
         return fileSystemRoot + hashedPath + fileName;
