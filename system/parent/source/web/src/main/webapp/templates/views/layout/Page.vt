@@ -33,7 +33,6 @@ $pageTool.insertTitlePrefix('EDS')
 </head>
 <body>
 <div id="ajax_loading"></div>
-<div id="noty_container"></div>
 <div class="tabs" id="tabs">
     <ul>
         <li><a href="#data">Moje dane</a></li>
