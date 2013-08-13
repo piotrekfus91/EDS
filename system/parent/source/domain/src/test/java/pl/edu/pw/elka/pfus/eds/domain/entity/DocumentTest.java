@@ -3,6 +3,8 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.GregorianCalendar;
+
 import static org.fest.assertions.Assertions.assertThat;
 
 public class DocumentTest {
@@ -49,5 +51,12 @@ public class DocumentTest {
         document.setDirectory(null);
 
         assertThat(document.getOwner()).isNull();
+    }
+
+    @Test
+    public void testGetFileSystemName() throws Exception {
+        document.setCreated(new GregorianCalendar(1971, 0, 1).getTime());
+
+        assertThat(document.getFileSystemName()).isEqualTo("31532400000");
     }
 }

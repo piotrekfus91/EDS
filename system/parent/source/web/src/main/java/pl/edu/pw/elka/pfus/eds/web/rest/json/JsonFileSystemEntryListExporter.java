@@ -7,5 +7,5 @@ import java.util.List;
 /**
  * Eksportuje listę {@link FileSystemEntry} do stringa.
  */
-public interface JsonFileSystemEntryListExporter extends JsonExporter<List<FileSystemEntry>> {
+public interface JsonFileSystemEntryListExporter extends SuccessFailureJsonExporter<List<FileSystemEntry>> {
 }

@@ -5,7 +5,7 @@ package pl.edu.pw.elka.pfus.eds.web.rest.json;
  *
  * @param <T> typ exportowany.
  */
-public interface JsonExporter<T>  {
+public interface SuccessFailureJsonExporter<T>  {
     /**
      * Dokonuje eksportu zadanego obiektu jeśli operacje poprzedzające
      * zakończyły się sukcesem.

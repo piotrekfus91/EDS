@@ -54,6 +54,10 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
         return name;
     }
 
+    public String getFileSystemName() {
+        return "" + created.getTime();
+    }
+
     @Override
     public String getStringPath() {
         String fileNameWithPath = FileSystemEntry.PATH_SEPARATOR + name;

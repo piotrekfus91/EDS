@@ -5,6 +5,6 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 /**
  * Exporter dla obiektów {@link Directory}.
  */
-public interface JsonDirectoryExporter extends JsonExporter<Directory> {
+public interface JsonDirectoryExporter extends SuccessFailureJsonExporter<Directory> {
 
 }

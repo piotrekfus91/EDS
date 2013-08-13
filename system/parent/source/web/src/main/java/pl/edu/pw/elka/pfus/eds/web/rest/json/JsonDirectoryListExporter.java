@@ -7,6 +7,6 @@ import java.util.List;
 /**
  * Exporter dla kolekcji typu {@link List} typu {@link Directory}.
  */
-public interface JsonDirectoryListExporter extends JsonExporter<List<Directory>> {
+public interface JsonDirectoryListExporter extends SuccessFailureJsonExporter<List<Directory>> {
 
 }

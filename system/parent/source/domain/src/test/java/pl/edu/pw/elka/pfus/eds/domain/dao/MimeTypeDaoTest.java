@@ -30,6 +30,20 @@ public class MimeTypeDaoTest extends IdentifableDaoTest<MimeType, MimeTypeDao> {
         assertThat(mimeType.isEnabled()).isFalse();
     }
 
+    @Test
+    public void testByNameForNotFound() throws Exception {
+        assertThat(getDao().findByType("type")).isNull();
+    }
+
+    @Test
+    public void testByNameForFound() throws Exception {
+        MimeType mimeType = getSampleEntity();
+        mimeType.setType("type");
+        getDao().persist(mimeType);
+
+        assertThat(getDao().findByType("type")).isEqualTo(mimeType);
+    }
+
     @Override
     public MimeTypeDao getDao() {
         return mimeTypeDao;

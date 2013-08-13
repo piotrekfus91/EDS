@@ -36,16 +36,17 @@ public class FileCreatorImpl implements FileCreator {
     }
 
     @Override
-    public void create(byte[] input, String fileName) {
+    public File create(byte[] input, String fileName) {
         String hash = hasher.getString(input);
         pathCreator.createPath(getFileSystemRoot(), splitHash(hash));
-        createFileFromByteArray(input, getFullPath(hash, fileName));
+        return createFileFromByteArray(input, getFullPath(hash, fileName));
     }
 
-    private void createFileFromByteArray(byte[] input, String fullPath) {
+    private File createFileFromByteArray(byte[] input, String fullPath) {
         File file = createFile(fullPath);
         try(OutputStream outputStream = new FileOutputStream(file)) {
             outputStream.write(input);
+            return file;
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             throw new FileSystemException("Błąd przy tworzeniu pliku", e);

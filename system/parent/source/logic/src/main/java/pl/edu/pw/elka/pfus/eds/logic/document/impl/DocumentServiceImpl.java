@@ -11,6 +11,11 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public void create(String name, byte[] input) {
+        documentModifier.create(name, input);
+    }
+
+    @Override
     public void rename(int documentId, String newName) {
         documentModifier.rename(documentId, newName);
     }

@@ -4,7 +4,9 @@ import com.google.common.io.ByteStreams;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import pl.edu.pw.elka.pfus.eds.util.file.system.FileCreator;
+import pl.edu.pw.elka.pfus.eds.logic.document.DocumentService;
+import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonPluploadExporter;
+import pl.edu.pw.elka.pfus.eds.web.rest.json.dto.plupload.PluploadJsonDto;
 
 import javax.inject.Inject;
 import javax.ws.rs.POST;
@@ -16,24 +18,28 @@ import java.io.InputStream;
 @Path("/upload")
 public class UploadRest {
     private static final Logger logger = Logger.getLogger(UploadRest.class);
-    private FileCreator fileCreator;
+    private JsonPluploadExporter pluploadExporter;
+    private DocumentService documentService;
 
     @Inject
-    public UploadRest(FileCreator fileCreator) {
-        this.fileCreator = fileCreator;
+    public UploadRest(JsonPluploadExporter pluploadExporter, DocumentService documentService) {
+        this.pluploadExporter = pluploadExporter;
+        this.documentService = documentService;
     }
 
     @POST
     public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
                                @FormDataParam("file")FormDataContentDisposition uploadedFileInfo) {
         logger.info("loading: " + uploadedFileInfo.getFileName());
+        String exported;
         byte[] bytes = null;
         try {
             bytes = ByteStreams.toByteArray(uploadedInputStream);
+            exported = pluploadExporter.export(new PluploadJsonDto());
         } catch (IOException e) {
-            e.printStackTrace();
+            exported = pluploadExporter.export(new PluploadJsonDto(e.getMessage()));
+            logger.error(e.getMessage(), e);
         }
-        fileCreator.create(bytes, uploadedFileInfo.getFileName());
-        return Response.status(Response.Status.OK).entity("{\"jsonrpc\" : \"2.0\", \"result\" : null, \"id\" : \"id\"}").build();
+        return Response.status(Response.Status.OK).entity(exported).build();
     }
 }

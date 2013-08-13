@@ -13,6 +13,10 @@ import pl.edu.pw.elka.pfus.eds.logic.exception.AlreadyExistsException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
+import pl.edu.pw.elka.pfus.eds.util.file.system.FileCreator;
+
+import java.io.File;
+import java.util.Date;
 
 public class DocumentModifierImpl implements DocumentModifier {
     private static final Logger logger = Logger.getLogger(DocumentModifierImpl.class);
@@ -20,15 +24,27 @@ public class DocumentModifierImpl implements DocumentModifier {
     private DirectoryDao directoryDao;
     private UserDao userDao;
     private SecurityFacade securityFacade;
+    private FileCreator fileCreator;
     private Context context;
 
     public DocumentModifierImpl(DocumentDao documentDao, DirectoryDao directoryDao,
-                                UserDao userDao, SecurityFacade securityFacade, Context context) {
+                                UserDao userDao, SecurityFacade securityFacade, FileCreator fileCreator, Context context) {
         this.documentDao = documentDao;
         this.directoryDao = directoryDao;
         this.userDao = userDao;
         this.securityFacade = securityFacade;
+        this.fileCreator = fileCreator;
         this.context = context;
+    }
+
+    @Override
+    public void create(String name, byte[] input) {
+        Document document = new Document();
+        document.setName(name);
+        document.setCreated(new Date());
+
+        File file = fileCreator.create(input, ""+document.getCreated().getTime());
+
     }
 
     @Override
