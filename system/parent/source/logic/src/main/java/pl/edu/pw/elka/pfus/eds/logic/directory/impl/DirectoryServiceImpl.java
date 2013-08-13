@@ -48,6 +48,11 @@ public class DirectoryServiceImpl implements DirectoryService {
     }
 
     @Override
+    public void move(int directoryId, int destinationDirectoryId) {
+        directoryModifier.move(directoryId, destinationDirectoryId);
+    }
+
+    @Override
     public Directory delete(Directory directory) {
         return directoryModifier.delete(directory);
     }

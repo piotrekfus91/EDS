@@ -9,6 +9,7 @@ import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryListExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonFileSystemEntryListExporter;
+import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResultExporter;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -23,15 +24,17 @@ public class DirectoryRest {
     private JsonDirectoryListExporter directoryListExporter;
     private JsonFileSystemEntryListExporter fileSystemEntryListExporter;
     private JsonDirectoryExporter directoryExporter;
+    private JsonResultExporter resultExporter;
 
     @Inject
     public DirectoryRest(DirectoryService directoryService, JsonDirectoryListExporter directoryListExporter,
                          JsonFileSystemEntryListExporter fileSystemEntryListExporter,
-                         JsonDirectoryExporter directoryExporter) {
+                         JsonDirectoryExporter directoryExporter, JsonResultExporter resultExporter) {
         this.directoryService = directoryService;
         this.directoryListExporter = directoryListExporter;
         this.fileSystemEntryListExporter = fileSystemEntryListExporter;
         this.directoryExporter = directoryExporter;
+        this.resultExporter = resultExporter;
     }
 
     @GET
@@ -75,6 +78,22 @@ public class DirectoryRest {
         } catch (LogicException e) {
             logger.error(e.getMessage(), e);
             exported = directoryExporter.exportFailure(e.getMessage(), null);
+        }
+        return Response.status(Response.Status.OK).entity(exported).build();
+    }
+
+    @PUT
+    @Path("/move/{directoryId: \\d+}/{destinationDirectoryId: \\d+}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response moveDirectory(@PathParam("directoryId") int directoryId,
+                                  @PathParam("destinationDirectoryId") int destinationDirectoryId) {
+        String exported;
+        try {
+            directoryService.move(directoryId, destinationDirectoryId);
+            exported = resultExporter.exportSuccess(null);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            exported = resultExporter.exportFailure(e.getMessage(), null);
         }
         return Response.status(Response.Status.OK).entity(exported).build();
     }

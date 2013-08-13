@@ -67,6 +67,8 @@ function init_tree(root) {
                 console.log("moving " + sourceNode.data.title + " to " + targetNode.data.title);
                 if(!sourceNode.data.isFolder)
                     success = move_document(sourceNode.data.key, targetNode.data.key);
+                else
+                    success = move_directory(sourceNode.data.key, targetNode.data.key);
                 if(success) {
                     sourceNode.move(targetNode, hitMode);
                     targetNode.getParent().sortChildren(compare_nodes_by_title, false);
@@ -161,6 +163,23 @@ function delete_directory(id) {
     });
 }
 
+function move_directory(directoryId, destinationDirectoryId) {
+    var success = false;
+    $.ajax({
+        method: "PUT",
+        url: rest('/directories/move/' + directoryId + '/' + destinationDirectoryId),
+        async: false,
+        success: function(result) {
+            if(is_success(result)) {
+                success = true;
+            } else {
+                post_error_from_result(result);
+            }
+        }
+    });
+    return success;
+}
+
 function add_directory(parentDirectoryId, name) {
     $.ajax({
         type: "POST",
@@ -226,11 +245,11 @@ function rename_document(id, name) {
     });
 }
 
-function move_document(documentId, destinationFolderId) {
+function move_document(documentId, destinationDirectoryId) {
     var success = false;
     $.ajax({
         method: "PUT",
-        url: rest('/documents/move/' + documentId + '/' + destinationFolderId),
+        url: rest('/documents/move/' + documentId + '/' + destinationDirectoryId),
         async: false,
         success: function(result) {
             if(is_success(result)) {

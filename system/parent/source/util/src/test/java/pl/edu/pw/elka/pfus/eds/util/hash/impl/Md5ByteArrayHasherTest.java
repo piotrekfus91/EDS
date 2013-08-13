@@ -22,8 +22,7 @@ public class Md5ByteArrayHasherTest {
     @DataProvider
     private Object[][] byteArraysAndHashes() {
         return new Object[][] {
-                {"test".getBytes(), "098f6bcd4621d373cade4e832627b4f6"},
-                {"zażółć gęślą jaźń".getBytes(), "930b9b78f35b80ccb414cd7486bb4cdb"}
+                {"test".getBytes(), "098f6bcd4621d373cade4e832627b4f6"}
         };
     }
 }

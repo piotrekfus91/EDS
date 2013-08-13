@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pfus.eds.logic.directory;
+package pl.edu.pw.elka.pfus.eds.logic.directory.impl;
 
 import org.objectledge.context.Context;
 import org.testng.annotations.BeforeMethod;
@@ -6,17 +6,20 @@ import org.testng.annotations.Test;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder;
 import pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryFinderImpl;
+import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import java.util.LinkedList;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class DirectoryFinderTest {
+public class DirectoryFinderImplTest {
     private DirectoryFinder finder;
     private Context context;
     private SecurityFacade securityFacade;
@@ -66,6 +69,56 @@ public class DirectoryFinderTest {
         when(directoryDao.getDirectoryWithSubdirectoriesAndOwner(1)).thenReturn(parent);
 
         assertThat(finder.getSubdirectories(1)).isEqualTo(new LinkedList<>(parent.getSubdirectories()));
+    }
+
+    @Test(expectedExceptions = InvalidPrivilegesException.class)
+    public void testGetByIdForNotOwner() throws Exception {
+        User user = getMockUser();
+        when(securityFacade.getCurrentUser(context)).thenReturn(user);
+        Directory directory = new Directory();
+        directory.setOwner(new User());
+        when(directoryDao.findById(anyInt())).thenReturn(directory);
+
+        finder.getById(1);
+    }
+
+    @Test
+    public void testGetByIdForOwner() throws Exception {
+        User user = new User();
+        when(securityFacade.getCurrentUser(context)).thenReturn(user);
+        Directory directory = new Directory();
+        directory.setOwner(user);
+        when(directoryDao.findById(anyInt())).thenReturn(directory);
+
+        assertThat(finder.getById(1)).isEqualTo(directory);
+    }
+
+    @Test(expectedExceptions = ObjectNotFoundException.class)
+    public void testFileSystemEntriesIfParentDirNotFound() throws Exception {
+        when(directoryDao.getDirectoryWithFileSystemEntriesAndOwner(anyInt())).thenReturn(null);
+
+        finder.getFileSystemEntries(1);
+    }
+
+    @Test(expectedExceptions = InvalidPrivilegesException.class)
+    public void testFileSystemEntriesForNotOwner() throws Exception {
+        Directory parentDirectory = getFreeLevelStructure();
+        when(directoryDao.getDirectoryWithFileSystemEntriesAndOwner(anyInt())).thenReturn(parentDirectory);
+        User user = new User();
+        when(securityFacade.getCurrentUser(context)).thenReturn(user);
+
+        finder.getFileSystemEntries(1);
+    }
+
+    @Test
+    public void testFileSystemEntriesForSuccess() throws Exception {
+        Directory parentDirectory = getFreeLevelStructure();
+        when(directoryDao.getDirectoryWithFileSystemEntriesAndOwner(anyInt())).thenReturn(parentDirectory);
+        User user = new User();
+        parentDirectory.setOwner(user);
+        when(securityFacade.getCurrentUser(context)).thenReturn(user);
+
+        assertThat(finder.getFileSystemEntries(1)).isEqualTo(parentDirectory.getFileSystemEntries());
     }
 
     private DirectoryDao getMockDirectoryDao() {

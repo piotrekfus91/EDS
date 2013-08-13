@@ -16,6 +16,14 @@ public interface DirectoryModifier {
     Directory add(int parentDirectoryId, String name);
 
     /**
+     * Przenosi wybrany katalog do podanego katalogu docelowego.
+     *
+     * @param directoryId id katalogu do przeniesienia.
+     * @param destinationDirectoryId id katalogu docelowego.
+     */
+    void move(int directoryId, int destinationDirectoryId);
+
+    /**
      * Usuwa podany katalog wraz z podkatalogami i plikami.
      *
      * @param directory wybrany katalog.
