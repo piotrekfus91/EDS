@@ -17,6 +17,7 @@ import pl.edu.pw.elka.pfus.eds.logic.mime.type.detector.MimeTypeDetector;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
+import pl.edu.pw.elka.pfus.eds.util.hash.ByteArrayHasher;
 
 import java.util.Date;
 
@@ -29,11 +30,12 @@ public class DocumentModifierImpl implements DocumentModifier {
     private SecurityFacade securityFacade;
     private FileManager fileManager;
     private MimeTypeDetector mimeTypeDetector;
+    private ByteArrayHasher hasher;
     private Context context;
 
     public DocumentModifierImpl(DocumentDao documentDao, MimeTypeDao mimeTypeDao, DirectoryDao directoryDao,
                                 UserDao userDao, SecurityFacade securityFacade, FileManager fileManager,
-                                MimeTypeDetector mimeTypeDetector, Context context) {
+                                MimeTypeDetector mimeTypeDetector, ByteArrayHasher hasher, Context context) {
         this.documentDao = documentDao;
         this.mimeTypeDao = mimeTypeDao;
         this.directoryDao = directoryDao;
@@ -41,27 +43,33 @@ public class DocumentModifierImpl implements DocumentModifier {
         this.securityFacade = securityFacade;
         this.fileManager = fileManager;
         this.mimeTypeDetector = mimeTypeDetector;
+        this.hasher = hasher;
         this.context = context;
     }
 
     @Override
     public void create(String name, byte[] input) {
         mimeTypeDao.setSession(documentDao.getSession());
+        userDao.setSession(documentDao.getSession());
         mimeTypeDetector.setSession(documentDao.getSession());
-        Document document = new Document();
-        document.setName(name);
-        document.setCreated(new Date());
-        document.setOwner(securityFacade.getCurrentUser(context));
 
         MimeType mimeType = mimeTypeDetector.detect(input);
         LogicValidator.validateMimeTypeEnabled(mimeType);
+
+        User owner = userDao.findById(securityFacade.getCurrentUser(context).getId());
+
+        Document document = new Document();
+        document.setName(name);
+        document.setCreated(new Date());
+        document.setOwner(owner);
+        document.setContentMd5(hasher.getString(input));
+
 
         mimeType.addDocument(document);
         document.setMimeType(mimeType);
 
         try {
             documentDao.beginTransaction();
-            mimeType = mimeTypeDao.merge(mimeType);
             documentDao.persist(document);
             mimeTypeDao.persist(mimeType);
             fileManager.create(input, document.getFileSystemName());
