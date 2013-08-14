@@ -46,7 +46,8 @@ public class DocumentModifierImplTest {
         userDao = getUserDao();
         securityFacade = getSecurityFacade();
         context = getContext();
-        documentModifier = new DocumentModifierImpl(documentDao, directoryDao, userDao, securityFacade, null, context);
+        documentModifier = new DocumentModifierImpl(documentDao, null, directoryDao, userDao, securityFacade,
+                null, null, context);
     }
 
     @Test

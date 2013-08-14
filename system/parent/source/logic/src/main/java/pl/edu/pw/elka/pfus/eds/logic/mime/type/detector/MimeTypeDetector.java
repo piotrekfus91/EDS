@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.logic.mime.type.detector;
 
+import org.hibernate.Session;
 import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 
 import java.io.File;
@@ -32,4 +33,9 @@ public interface MimeTypeDetector {
      * @return typ mime.
      */
     MimeType detect(byte[] input);
+
+    /**
+     * Hak bez którego ledge nie puści:)
+     */
+    void setSession(Session session);
 }

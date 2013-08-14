@@ -4,7 +4,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidMimeTypeException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 
@@ -74,6 +76,22 @@ public class LogicValidatorTest {
     @Test(expectedExceptions = ObjectNotFoundException.class)
     public void testValidateExistenceEx() throws Exception {
         LogicValidator.validateExistence(null);
+    }
+
+    @Test
+    public void testValidateMimeTypeNoEx() throws Exception {
+        MimeType mimeType = new MimeType();
+        LogicValidator.validateMimeTypeEnabled(mimeType);
+
+        assertThat(true).isTrue();
+    }
+
+    @Test(expectedExceptions = InvalidMimeTypeException.class)
+    public void testValidateMimeTypeEx() throws Exception {
+        MimeType mimeType = new MimeType();
+        mimeType.setEnabled(false);
+
+        LogicValidator.validateMimeTypeEnabled(mimeType);
     }
 
     @Test

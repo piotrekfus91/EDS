@@ -10,14 +10,14 @@ import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class FileCreatorImplTest {
-    private FileCreatorImpl fileCreator;
+public class FileManagerImplTest {
+    private FileManagerImpl fileCreator;
 
     @BeforeMethod
     private void setUp() {
         Map<String, String> map = new HashMap<>();
         map.put("part_length", "2");
-        fileCreator = new FileCreatorImpl(new MapConfig(map), new Md5ByteArrayHasher(), null);
+        fileCreator = new FileManagerImpl(new MapConfig(map), new Md5ByteArrayHasher(), null);
     }
 
     @Test

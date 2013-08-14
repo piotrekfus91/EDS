@@ -2,7 +2,9 @@ package pl.edu.pw.elka.pfus.eds.logic.validator;
 
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidMimeTypeException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 
@@ -28,6 +30,11 @@ public class LogicValidator {
     public static void validateExistence(Object object) {
         if(object == null)
             throw new ObjectNotFoundException();
+    }
+
+    public static void validateMimeTypeEnabled(MimeType mimeType) {
+        if(mimeType == null || !mimeType.isEnabled())
+            throw new InvalidMimeTypeException();
     }
 
     public static boolean isFileWithNameInDirectory(Directory directory, String name) {

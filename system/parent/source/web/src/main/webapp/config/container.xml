@@ -10,8 +10,8 @@
                class="pl.edu.pw.elka.pfus.eds.util.hash.impl.Md5ByteArrayHasher" />
     <component class-key="pl.edu.pw.elka.pfus.eds.util.file.system.PathCreator"
                class="pl.edu.pw.elka.pfus.eds.util.file.system.impl.PathCreatorImpl" />
-    <component class-key="pl.edu.pw.elka.pfus.eds.util.file.system.FileCreator"
-               class="pl.edu.pw.elka.pfus.eds.util.file.system.impl.FileCreatorImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.util.file.system.FileManager"
+               class="pl.edu.pw.elka.pfus.eds.util.file.system.impl.FileManagerImpl" />
 
     <!-- domain -->
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory"

@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.picocontainer.Startable;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
+import pl.edu.pw.elka.pfus.eds.domain.dao.MimeTypeDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
@@ -20,11 +21,16 @@ public class DatabaseInitializer implements Startable {
     private SessionFactory sessionFactory;
     private UserDao userDao;
     private DirectoryDao directoryDao;
+    private MimeTypeDao mimeTypeDao;
 
-    public DatabaseInitializer(SessionFactory sessionFactory, UserDao userDao, DirectoryDao directoryDao) {
+    private MimeType jpegMimeType;
+
+    public DatabaseInitializer(SessionFactory sessionFactory, UserDao userDao, DirectoryDao directoryDao,
+                               MimeTypeDao mimeTypeDao) {
         this.sessionFactory = sessionFactory;
         this.userDao = userDao;
         this.directoryDao = directoryDao;
+        this.mimeTypeDao = mimeTypeDao;
     }
 
     @Override
@@ -32,9 +38,7 @@ public class DatabaseInitializer implements Startable {
         logger.info("initializing database");
         initFromScripts();
 
-        MimeType plainTextMimeType = new MimeType();
-        plainTextMimeType.setType("plain");
-        plainTextMimeType.setDefaultExtension("txt");
+        initMimeTypes();
 
         userDao.beginTransaction();
         User rootUser = new User();
@@ -47,6 +51,9 @@ public class DatabaseInitializer implements Startable {
         userDao.persist(rootUser);
 
         directoryDao.setSession(userDao.getSession());
+        mimeTypeDao.setSession(userDao.getSession());
+
+        jpegMimeType = mimeTypeDao.findById(jpegMimeType.getId());
 
         Directory rootDirectory = directoryDao.getRootDirectory(rootUser);
 
@@ -75,16 +82,16 @@ public class DatabaseInitializer implements Startable {
                 gerrard20.setName("Gerrard20.jpeg");
                 gerrard20.setCreated(new Date());
                 gerrard20.setContentMd5("be4c71489e5964dcca00b6b3b3519631");
-                gerrard20.setMimeType(plainTextMimeType);
-                plainTextMimeType.addDocument(gerrard20);
+                gerrard20.setMimeType(jpegMimeType);
+                jpegMimeType.addDocument(gerrard20);
                 gerrard20.setDirectory(lfcPicturesDirectory);
                 lfcPicturesDirectory.addDocument(gerrard20);
                 Document lfc_226410 = new Document();
                 lfc_226410.setName("lfc_226410.jpg");
                 lfc_226410.setCreated(new Date());
                 lfc_226410.setContentMd5("abbda56a02ca7d81fda888760d08127c");
-                lfc_226410.setMimeType(plainTextMimeType);
-                plainTextMimeType.addDocument(lfc_226410);
+                lfc_226410.setMimeType(jpegMimeType);
+                jpegMimeType.addDocument(lfc_226410);
                 lfc_226410.setDirectory(lfcPicturesDirectory);
                 lfcPicturesDirectory.addDocument(lfc_226410);
 
@@ -95,6 +102,8 @@ public class DatabaseInitializer implements Startable {
             binariesDirectory.setName("binarki");
             binariesDirectory.setParentDirectory(filesDirectory);
 
+        mimeTypeDao.setSession(directoryDao.getSession());
+        mimeTypeDao.persist(jpegMimeType);
         directoryDao.persist(picturesDirectory);
         directoryDao.persist(documentsDirectory);
         directoryDao.persist(filesDirectory);
@@ -113,5 +122,15 @@ public class DatabaseInitializer implements Startable {
         session.doWork(new SqlScriptLoader("/etl/security_inserts.sql"));
         session.doWork(new SqlScriptLoader("/etl/user_create_root_directory_after_insert_trigger.sql"));
         session.getTransaction().commit();
+    }
+
+    private void initMimeTypes() {
+        jpegMimeType = new MimeType();
+        jpegMimeType.setDefaultExtension(".jpg");
+        jpegMimeType.setType("image/jpeg");
+
+        mimeTypeDao.beginTransaction();
+        mimeTypeDao.persist(jpegMimeType);
+        mimeTypeDao.commitTransaction();
     }
 }

@@ -4,47 +4,74 @@ import org.apache.log4j.Logger;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
+import pl.edu.pw.elka.pfus.eds.domain.dao.MimeTypeDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.document.DocumentModifier;
 import pl.edu.pw.elka.pfus.eds.logic.exception.AlreadyExistsException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
+import pl.edu.pw.elka.pfus.eds.logic.mime.type.detector.MimeTypeDetector;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
-import pl.edu.pw.elka.pfus.eds.util.file.system.FileCreator;
+import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
 
-import java.io.File;
 import java.util.Date;
 
 public class DocumentModifierImpl implements DocumentModifier {
     private static final Logger logger = Logger.getLogger(DocumentModifierImpl.class);
     private DocumentDao documentDao;
+    private MimeTypeDao mimeTypeDao;
     private DirectoryDao directoryDao;
     private UserDao userDao;
     private SecurityFacade securityFacade;
-    private FileCreator fileCreator;
+    private FileManager fileManager;
+    private MimeTypeDetector mimeTypeDetector;
     private Context context;
 
-    public DocumentModifierImpl(DocumentDao documentDao, DirectoryDao directoryDao,
-                                UserDao userDao, SecurityFacade securityFacade, FileCreator fileCreator, Context context) {
+    public DocumentModifierImpl(DocumentDao documentDao, MimeTypeDao mimeTypeDao, DirectoryDao directoryDao,
+                                UserDao userDao, SecurityFacade securityFacade, FileManager fileManager,
+                                MimeTypeDetector mimeTypeDetector, Context context) {
         this.documentDao = documentDao;
+        this.mimeTypeDao = mimeTypeDao;
         this.directoryDao = directoryDao;
         this.userDao = userDao;
         this.securityFacade = securityFacade;
-        this.fileCreator = fileCreator;
+        this.fileManager = fileManager;
+        this.mimeTypeDetector = mimeTypeDetector;
         this.context = context;
     }
 
     @Override
     public void create(String name, byte[] input) {
+        mimeTypeDao.setSession(documentDao.getSession());
+        mimeTypeDetector.setSession(documentDao.getSession());
         Document document = new Document();
         document.setName(name);
         document.setCreated(new Date());
+        document.setOwner(securityFacade.getCurrentUser(context));
 
-        File file = fileCreator.create(input, ""+document.getCreated().getTime());
+        MimeType mimeType = mimeTypeDetector.detect(input);
+        LogicValidator.validateMimeTypeEnabled(mimeType);
 
+        mimeType.addDocument(document);
+        document.setMimeType(mimeType);
+
+        try {
+            documentDao.beginTransaction();
+            mimeType = mimeTypeDao.merge(mimeType);
+            documentDao.persist(document);
+            mimeTypeDao.persist(mimeType);
+            fileManager.create(input, document.getFileSystemName());
+            documentDao.commitTransaction();
+        } catch (Exception e) {
+            documentDao.rollbackTransaction();
+            logger.error(e.getMessage(), e);
+            fileManager.delete(document.getFileSystemName(), document.getContentMd5());
+            throw new InternalException();
+        }
     }
 
     @Override

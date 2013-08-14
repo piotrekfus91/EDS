@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import pl.edu.pw.elka.pfus.eds.util.StringHelper;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
 import pl.edu.pw.elka.pfus.eds.util.config.impl.DefaultClassLoaderPropertiesConfig;
-import pl.edu.pw.elka.pfus.eds.util.file.system.FileCreator;
+import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
 import pl.edu.pw.elka.pfus.eds.util.file.system.PathCreator;
 import pl.edu.pw.elka.pfus.eds.util.file.system.PathHelper;
 import pl.edu.pw.elka.pfus.eds.util.file.system.exception.FileSystemException;
@@ -17,18 +17,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class FileCreatorImpl implements FileCreator {
-    private static final Logger logger = Logger.getLogger(FileCreatorImpl.class);
+public class FileManagerImpl implements FileManager {
+    private static final Logger logger = Logger.getLogger(FileManagerImpl.class);
     private Config config;
     private ByteArrayHasher hasher;
     private PathCreator pathCreator;
     public final int PART_LENGTH;
 
-    public FileCreatorImpl(ByteArrayHasher hasher, PathCreator pathCreator) {
+    public FileManagerImpl(ByteArrayHasher hasher, PathCreator pathCreator) {
         this(new DefaultClassLoaderPropertiesConfig(), hasher, pathCreator);
     }
 
-    public FileCreatorImpl(Config config, ByteArrayHasher hasher, PathCreator pathCreator) {
+    public FileManagerImpl(Config config, ByteArrayHasher hasher, PathCreator pathCreator) {
         this.config = config;
         this.hasher = hasher;
         this.pathCreator = pathCreator;
@@ -40,6 +40,14 @@ public class FileCreatorImpl implements FileCreator {
         String hash = hasher.getString(input);
         pathCreator.createPath(getFileSystemRoot(), splitHash(hash));
         return createFileFromByteArray(input, getFullPath(hash, fileName));
+    }
+
+    @Override
+    public void delete(String name, String hash) {
+        String fullPath = getFullPath(hash, name);
+        File file = new File(fullPath);
+        if(file.exists() && file.isFile())
+            file.delete();
     }
 
     private File createFileFromByteArray(byte[] input, String fullPath) {

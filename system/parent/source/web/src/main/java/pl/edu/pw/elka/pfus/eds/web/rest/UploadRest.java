@@ -32,9 +32,9 @@ public class UploadRest {
                                @FormDataParam("file")FormDataContentDisposition uploadedFileInfo) {
         logger.info("loading: " + uploadedFileInfo.getFileName());
         String exported;
-        byte[] bytes = null;
         try {
-            bytes = ByteStreams.toByteArray(uploadedInputStream);
+            byte[] bytes = ByteStreams.toByteArray(uploadedInputStream);
+            documentService.create(uploadedFileInfo.getFileName(), bytes);
             exported = pluploadExporter.export(new PluploadJsonDto());
         } catch (IOException e) {
             exported = pluploadExporter.export(new PluploadJsonDto(e.getMessage()));

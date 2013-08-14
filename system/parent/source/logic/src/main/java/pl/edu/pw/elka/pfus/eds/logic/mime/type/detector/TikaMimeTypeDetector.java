@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pfus.eds.logic.mime.type.detector;
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.log4j.Logger;
 import org.apache.tika.Tika;
+import org.hibernate.Session;
 import pl.edu.pw.elka.pfus.eds.domain.dao.MimeTypeDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidMimeTypeException;
@@ -52,6 +53,11 @@ public class TikaMimeTypeDetector implements MimeTypeDetector {
             logger.error(e.getMessage(), e);
             throw new MimeTypeDetectionException(e);
         }
+    }
+
+    @Override
+    public void setSession(Session session) {
+        mimeTypeDao.setSession(session);
     }
 
     @VisibleForTesting
