@@ -165,4 +165,19 @@ public class DocumentModifierImpl implements DocumentModifier {
             throw new InternalException();
         }
     }
+
+    @Override
+    public void cleanSessionDocuments() {
+        User currentUser = securityFacade.getCurrentUser(context);
+
+        try {
+            documentDao.beginTransaction();
+            documentDao.deleteSessionDocuments(currentUser);
+            documentDao.commitTransaction();
+        } catch (Exception e) {
+            documentDao.rollbackTransaction();
+            logger.error(e.getMessage(), e);
+            throw new InternalException();
+        }
+    }
 }

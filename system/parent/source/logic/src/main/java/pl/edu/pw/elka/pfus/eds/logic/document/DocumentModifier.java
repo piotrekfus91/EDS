@@ -36,4 +36,9 @@ public interface DocumentModifier {
      * @param documentId id dokumentu.
      */
     void delete(int documentId);
+
+    /**
+     * Usuwa wszystkie pliki sesyjne.
+     */
+    void cleanSessionDocuments();
 }

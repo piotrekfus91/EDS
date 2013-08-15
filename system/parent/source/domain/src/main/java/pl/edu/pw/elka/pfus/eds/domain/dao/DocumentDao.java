@@ -26,4 +26,18 @@ public interface DocumentDao extends IdentifableDao<Document> {
      * @return lista dokumentów sesyjnych.
      */
     List<Document> getSessionDocuments(int userId);
+
+    /**
+     * Usuwa pliki sesyjne podanego użytkownika.
+     *
+     * @param user użytkownik.
+     */
+    void deleteSessionDocuments(User user);
+
+    /**
+     * Usuwa pliki sesyjne podanego użytkownika.
+     *
+     * @param userId id użytkownika.
+     */
+    void cleanSessionDocuments(int userId);
 }

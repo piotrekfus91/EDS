@@ -29,4 +29,9 @@ public class DocumentServiceImpl implements DocumentService {
     public void delete(int documentId) {
         documentModifier.delete(documentId);
     }
+
+    @Override
+    public void cleanSessionDocuments() {
+        documentModifier.cleanSessionDocuments();
+    }
 }
