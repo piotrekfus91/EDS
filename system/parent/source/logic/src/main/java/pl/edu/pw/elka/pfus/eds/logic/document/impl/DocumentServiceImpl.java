@@ -1,13 +1,22 @@
 package pl.edu.pw.elka.pfus.eds.logic.document.impl;
 
+import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.logic.document.DocumentFinder;
 import pl.edu.pw.elka.pfus.eds.logic.document.DocumentModifier;
 import pl.edu.pw.elka.pfus.eds.logic.document.DocumentService;
 
 public class DocumentServiceImpl implements DocumentService {
+    private DocumentFinder documentFinder;
     private DocumentModifier documentModifier;
 
-    public DocumentServiceImpl(DocumentModifier documentModifier) {
+    public DocumentServiceImpl(DocumentFinder documentFinder, DocumentModifier documentModifier) {
+        this.documentFinder = documentFinder;
         this.documentModifier = documentModifier;
+    }
+
+    @Override
+    public Document getById(int id) {
+        return documentFinder.getById(id);
     }
 
     @Override

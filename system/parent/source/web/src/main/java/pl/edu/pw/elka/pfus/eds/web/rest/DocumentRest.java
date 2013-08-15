@@ -1,8 +1,10 @@
 package pl.edu.pw.elka.pfus.eds.web.rest;
 
 import org.apache.log4j.Logger;
+import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.logic.document.DocumentService;
 import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
+import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDocumentExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResultExporter;
 
 import javax.inject.Inject;
@@ -15,12 +17,30 @@ public class DocumentRest {
     private static final Logger logger = Logger.getLogger(DocumentRest.class);
 
     private DocumentService documentService;
+    private JsonDocumentExporter documentExporter;
     private JsonResultExporter resultExporter;
 
     @Inject
-    public DocumentRest(DocumentService documentService, JsonResultExporter resultExporter) {
+    public DocumentRest(DocumentService documentService, JsonDocumentExporter documentExporter,
+                        JsonResultExporter resultExporter) {
         this.documentService = documentService;
+        this.documentExporter = documentExporter;
         this.resultExporter = resultExporter;
+    }
+
+    @GET
+    @Path("/single/{documentId: \\d+}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getDocumentById(@PathParam("documentId") int documentId) {
+        String exported;
+        try {
+            Document document = documentService.getById(documentId);
+            exported = documentExporter.exportSuccess(document);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            exported = documentExporter.exportFailure(e.getMessage(), null);
+        }
+        return Response.status(Response.Status.OK).entity(exported).build();
     }
 
     @PUT

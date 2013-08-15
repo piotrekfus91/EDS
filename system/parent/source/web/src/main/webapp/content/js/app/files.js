@@ -49,6 +49,10 @@ function init_tree(root) {
         },
         onActivate: function (node) {
             currentNode = node;
+            if(node.data.isFolder)
+                update_directory_info(node.data.key);
+            else
+                update_document_info(node.data.key);
         },
         dnd: {
             onDragStart: function () {
@@ -159,6 +163,50 @@ function delete_directory(id) {
         },
         error: function() {
             post_message_now('error', 'Błąd przy usuwaniu katalogu');
+        }
+    });
+}
+
+function update_directory_info(directoryId) {
+    $.ajax({
+        type: "GET",
+        url: rest("/directories/single/" + directoryId),
+        success: function(result) {
+            if(is_success(result)) {
+                $('.files_document').css('display', 'none');
+                var info = result.data;
+                $('#files_type').text('Katalog');
+                $('#files_name').text(info.title);
+                $('#files_path').text(info.stringPath);
+            } else {
+                post_error_from_result(result);
+            }
+        },
+        error: function() {
+            post_message_now('error', 'Błąd przy wczytywaniu szczegółów katalogu');
+        }
+    });
+}
+
+function update_document_info(documentId) {
+    $.ajax({
+        type: "GET",
+        url: rest("/documents/single/" + documentId),
+        success: function(result) {
+            if(is_success(result)) {
+                $('.files_document').css('display', 'block');
+                var info = result.data;
+                $('#files_type').text('Dokument');
+                $('#files_name').text(info.title);
+                $('#files_path').text(info.stringPath);
+                $('#files_created').text(info.created);
+                $('#files_mime').text(info.mime);
+            } else {
+                post_error_from_result(result);
+            }
+        },
+        error: function() {
+            post_message_now('error', 'Błąd przy wczytywaniu szczegółów dokumentu');
         }
     });
 }

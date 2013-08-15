@@ -12,7 +12,29 @@ $viewEnclosureTool.top()
         </td>
         <td>
             <fieldset class="files_fieldset">
-                <legend>Lista plików</legend>
+                <legend>Szczegóły</legend>
+                <table>
+                    <tr>
+                        <td>Typ</td>
+                        <td><span id="files_type" /></td>
+                    </tr>
+                    <tr>
+                        <td>Nazwa</td>
+                        <td><span id="files_name" /></td>
+                    </tr>
+                    <tr>
+                        <td>Ścieżka</td>
+                        <td><span id="files_path" /></td>
+                    </tr>
+                    <tr class="files_document">
+                        <td>Data uploadu</td>
+                        <td><span id="files_created" /></td>
+                    </tr>
+                    <tr class="files_document">
+                        <td>Typ MIME</td>
+                        <td><span id="files_mime" /></td>
+                    </tr>
+                </table>
             </fieldset>
         </td>
     </tr>

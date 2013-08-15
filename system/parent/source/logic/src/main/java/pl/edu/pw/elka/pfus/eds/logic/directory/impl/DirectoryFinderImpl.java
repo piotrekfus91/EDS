@@ -10,6 +10,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
+import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import java.util.LinkedList;
@@ -79,10 +80,9 @@ public class DirectoryFinderImpl implements DirectoryFinder {
     public Directory getById(int id) {
         User currentUser = getCurrentUser();
         Directory directory = directoryDao.findById(id);
-        if(currentUser.isOwnerOfDirectory(directory))
-            return directory;
-        else
-            throw new InvalidPrivilegesException();
+
+        LogicValidator.validateOwnershipOverDirectory(currentUser, directory);
+        return directory;
     }
 
     private User getCurrentUser() {

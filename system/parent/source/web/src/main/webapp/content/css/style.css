@@ -37,6 +37,10 @@ html, body {
     height: 100%;
 }
 
+.files_document {
+    display: none;
+}
+
 .tree {
     background-color: #ffffee;
 }
