@@ -34,7 +34,14 @@ $viewEnclosureTool.top()
                         <td class="info_key">Typ MIME</td>
                         <td class="info_value" id="files_mime" /></td>
                     </tr>
+                    <tr>
+                        <td class="info_key">Tagi</td>
+                        <td class="info_value" id="files_tags"></td>
+                    </tr>
                 </table>
+                <div id="files_comments">
+
+                </div>
             </fieldset>
         </td>
     </tr>

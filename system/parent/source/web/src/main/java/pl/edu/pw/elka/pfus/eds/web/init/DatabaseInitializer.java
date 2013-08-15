@@ -3,13 +3,11 @@ package pl.edu.pw.elka.pfus.eds.web.init;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.picocontainer.Startable;
+import pl.edu.pw.elka.pfus.eds.domain.dao.CommentDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.MimeTypeDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
-import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
-import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
-import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
-import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.domain.entity.*;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 import pl.edu.pw.elka.pfus.eds.web.init.impl.SqlScriptLoader;
 
@@ -22,15 +20,17 @@ public class DatabaseInitializer implements Startable {
     private UserDao userDao;
     private DirectoryDao directoryDao;
     private MimeTypeDao mimeTypeDao;
+    private CommentDao commentDao;
 
     private MimeType jpegMimeType;
 
     public DatabaseInitializer(SessionFactory sessionFactory, UserDao userDao, DirectoryDao directoryDao,
-                               MimeTypeDao mimeTypeDao) {
+                               MimeTypeDao mimeTypeDao, CommentDao commentDao) {
         this.sessionFactory = sessionFactory;
         this.userDao = userDao;
         this.directoryDao = directoryDao;
         this.mimeTypeDao = mimeTypeDao;
+        this.commentDao = commentDao;
     }
 
     @Override
@@ -52,6 +52,7 @@ public class DatabaseInitializer implements Startable {
 
         directoryDao.setSession(userDao.getSession());
         mimeTypeDao.setSession(userDao.getSession());
+        commentDao.setSession(userDao.getSession());
 
         jpegMimeType = mimeTypeDao.findById(jpegMimeType.getId());
 
@@ -94,6 +95,21 @@ public class DatabaseInitializer implements Startable {
                 jpegMimeType.addDocument(lfc_226410);
                 lfc_226410.setDirectory(lfcPicturesDirectory);
                 lfcPicturesDirectory.addDocument(lfc_226410);
+                String[] commentsContent = new String[]{
+                        "Bardzo ładny obrazek.",
+                        "You'll never walk alone!",
+                        "Fajne, skąd to masz?",
+                        "Ja też taki chcę!",
+                        "Ustawię sobie na tapecie."
+                };
+                for(int i = 0; i < commentsContent.length; i++) {
+                    Comment comment = new Comment();
+                    comment.setCreated(new Date());
+                    comment.setContent(commentsContent[i]);
+                    comment.setDocument(lfc_226410);
+                    comment.setUser(rootUser);
+                    commentDao.persist(comment);
+                }
 
         Directory filesDirectory = new Directory();
         filesDirectory.setName("pliki");

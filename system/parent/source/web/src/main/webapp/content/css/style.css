@@ -37,10 +37,6 @@ html, body {
     height: 100%;
 }
 
-.files_document {
-    display: none;
-}
-
 .tree {
     background-color: #ffffee;
 }
@@ -58,4 +54,32 @@ html, body {
 .info_value {
     font-style: italic;
     vertical-align: top;
+}
+
+.files_comments {
+    margin: 20px 5%;
+    width: 90%;
+}
+
+.files_comment_even {
+    padding-top: 3px;
+    background-color: white;
+}
+
+.files_comment_odd {
+    padding-top: 3px;
+}
+
+.files_comment_footer {
+    margin-top: 10px;
+    margin-bottom: 3px;
+    text-align: right;
+}
+
+.files_comment_author {
+    font-style: italic;
+}
+
+.files_comment_date {
+
 }

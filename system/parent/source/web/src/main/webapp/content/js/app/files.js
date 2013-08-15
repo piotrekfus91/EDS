@@ -180,6 +180,7 @@ function update_directory_info(directoryId) {
                 $('#files_path').text(info.stringPath);
                 $('#files_created').text('n/d');
                 $('#files_mime').text('n/d');
+                clear_comments();
             } else {
                 post_error_from_result(result);
             }
@@ -203,6 +204,8 @@ function update_document_info(documentId) {
                 $('#files_path').text(info.stringPath);
                 $('#files_created').text(info.created);
                 $('#files_mime').text(info.mime);
+                clear_comments();
+                add_comments(info.comments);
             } else {
                 post_error_from_result(result);
             }
@@ -328,6 +331,31 @@ function delete_document(documentId) {
             post_message_now('error', 'Błąd przy usuwaniu pliku');
         }
     });
+}
+
+function add_comments(comments) {
+    var comments_div = $('#files_comments');
+    $.each(comments, function(index) {
+        var comment_div_class = index % 2 == 0 ? 'files_comment_even' : 'files_comment_odd';
+        var commentBody = "<div class=\"" + comment_div_class + "\">";
+            commentBody += "<div class=\"files_comment_content\">";
+                commentBody += this.content;
+            commentBody += "</div>";
+            commentBody += "<div class=\"files_comment_footer\">";
+                commentBody += "<span class=\"files_comment_author\">";
+                    commentBody += this.user;
+                commentBody += "</span>,&nbsp;";
+                commentBody += "<span class=\"files_comment_date\">";
+                    commentBody += this.created;
+                commentBody += "</span>";
+            commentBody += "</div>";
+        commentBody += "</div>";
+        comments_div.append(commentBody);
+    });
+}
+
+function clear_comments() {
+    $('#files_comments').html('');
 }
 
 $('#add_directory').dialog({
