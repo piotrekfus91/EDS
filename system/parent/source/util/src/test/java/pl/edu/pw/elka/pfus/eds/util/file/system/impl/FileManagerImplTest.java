@@ -1,10 +1,12 @@
 package pl.edu.pw.elka.pfus.eds.util.file.system.impl;
 
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pl.edu.pw.elka.pfus.eds.util.config.impl.MapConfig;
 import pl.edu.pw.elka.pfus.eds.util.hash.impl.Md5ByteArrayHasher;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +47,41 @@ public class FileManagerImplTest {
 
     @Test
     public void testGetHashedPath() throws Exception {
-        assertThat(fileCreator.getHashedPath("123456")).isEqualTo("12/34/56");
+        assertThat(fileCreator.getHashedPath("123456")).isEqualTo("12" + File.separator + "34" + File.separator + "56");
+    }
+
+    @Test(expectedExceptions = StringIndexOutOfBoundsException.class, dataProvider = "wrongPartsNumber")
+    public void testValidatePartNumberEx(String hash, int partNumber) throws Exception {
+        fileCreator.validatePartNumber(hash, partNumber);
+    }
+
+    @DataProvider
+    private Object[][] wrongPartsNumber() {
+        return new Object[][] {
+                {"1", 2},
+                {"123", 2},
+                {"12345", 2},
+                {"1", 4},
+                {"123", 4},
+                {"12345", 4}
+        };
+    }
+
+    @Test(dataProvider = "correctPartsNumber")
+    public void testValidatePartNumberNoEx(String hash, int partNumber) throws Exception {
+        fileCreator.validatePartNumber(hash, partNumber);
+
+        assertThat(true).isTrue();
+    }
+
+    @DataProvider
+    private Object[][] correctPartsNumber() {
+        return new Object[][] {
+                {"12", 2},
+                {"1234", 2},
+                {"1256", 2},
+                {"1234", 4},
+                {"12345678", 4}
+        };
     }
 }

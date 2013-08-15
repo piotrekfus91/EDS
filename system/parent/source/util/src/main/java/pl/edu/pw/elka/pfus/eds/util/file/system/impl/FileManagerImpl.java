@@ -46,12 +46,15 @@ public class FileManagerImpl implements FileManager {
     public void delete(String name, String hash) {
         String fullPath = getFullPath(hash, name);
         File file = new File(fullPath);
-        if(file.exists() && file.isFile())
-            file.delete();
+        if(file.exists() && file.isFile()) {
+            if (!file.delete()) {
+                logger.warn("file hasn't been deleted, hash: " + hash + ", name: " + name);
+            }
+        }
     }
 
     private File createFileFromByteArray(byte[] input, String fullPath) {
-        File file = createFile(fullPath);
+        File file = createEmptyFile(fullPath);
         try(OutputStream outputStream = new FileOutputStream(file)) {
             outputStream.write(input);
             return file;
@@ -94,12 +97,13 @@ public class FileManagerImpl implements FileManager {
         return (int) Math.ceil((double)hash.length() / partLength);
     }
 
-    private void validatePartNumber(String hash, int partNumber) {
+    @VisibleForTesting
+    void validatePartNumber(String hash, int partNumber) {
         if(hash.length() % partNumber != 0)
             throw new StringIndexOutOfBoundsException("Długość hasha musi być wielokrotnością długości części (part_length)");
     }
 
-    private File createFile(String path) {
+    private File createEmptyFile(String path) {
         logger.info("creating file: " + path);
         File file = new File(path);
         if(!file.exists()) {
