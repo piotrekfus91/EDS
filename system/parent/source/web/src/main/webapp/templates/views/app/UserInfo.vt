@@ -1,0 +1,15 @@
+$viewEnclosureTool.top()
+<table>
+    <tr>
+        <td>Login</td>
+        <td>$currentUser.name</td>
+    </tr>
+    <tr>
+        <td>Imię</td>
+        <td>$currentUser.firstName</td>
+    </tr>
+    <tr>
+        <Td>Nazwisko</Td>
+        <td>$currentUser.lastName</td>
+    </tr>
+</table>

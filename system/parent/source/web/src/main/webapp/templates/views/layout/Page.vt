@@ -35,7 +35,7 @@ $pageTool.insertTitlePrefix('EDS')
 <div id="ajax_loading"></div>
 <div class="tabs" id="tabs">
     <ul>
-        <li><a href="#data">Moje dane</a></li>
+        <li><a href="$link.view('app.UserInfo')">Moje dane</a></li>
         <li><a href="$link.view('app.Upload')">Upload</a></li>
         <li><a href="$link.view('app.Files')">Pliki</a></li>
         <li><a href="#search">Wyszukiwarka</a></li>
@@ -47,7 +47,6 @@ $pageTool.insertTitlePrefix('EDS')
         </li>
     </ul>
     <div id="search">wyszukiwarka</div>
-    <div id="data">dane</div>
 </div>
 </body>
 </html>
