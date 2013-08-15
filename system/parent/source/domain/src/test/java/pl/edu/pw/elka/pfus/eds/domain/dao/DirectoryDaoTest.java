@@ -37,27 +37,19 @@ public class DirectoryDaoTest extends IdentifableDaoTest<Directory, DirectoryDao
 
     @Test
     public void testRootDirectoriesForUser() throws Exception {
-//        User user = userFactory.getSampleEntity();
-//        Directory firstRoot = factory.getSampleEntity();
-//        firstRoot.setName("firstRoot");
-//        firstRoot.setOwner(user);
-//        Directory firstChild = factory.getSampleEntity();
-//        firstChild.setName("firstChild");
-//        firstChild.setParentDirectory(firstRoot);
-//        firstChild.setOwner(user);
-//        Directory secondRoot = factory.getSampleEntity();
-//        secondRoot.setName("secondRoot");
-//        secondRoot.setOwner(user);
-//        Directory secondChild = factory.getSampleEntity();
-//        secondChild.setName("secondChild");
-//        secondChild.setParentDirectory(secondRoot);
-//        secondChild.setOwner(user);
-//        directoryDao.persist(firstRoot);
-//        directoryDao.persist(secondRoot);
-//
-//        Directory expectedOnlyRoots = directoryDao.getRootDirectory(user.getId());
-//
-//        assertThat(expectedOnlyRoots).containsOnly(firstRoot, secondRoot);
+        User user = userFactory.getSampleEntity();
+        Directory firstRoot = factory.getSampleEntity();
+        firstRoot.setName("firstRoot");
+        firstRoot.setOwner(user);
+        Directory firstChild = factory.getSampleEntity();
+        firstChild.setName("firstChild");
+        firstChild.setParentDirectory(firstRoot);
+        firstChild.setOwner(user);
+        directoryDao.persist(firstRoot);
+
+        Directory expectedOnlyRoots = directoryDao.getRootDirectory(user.getId());
+
+        assertThat(expectedOnlyRoots).isEqualTo(firstRoot);
     }
 
     @Test

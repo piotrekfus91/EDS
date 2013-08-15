@@ -18,8 +18,8 @@ public class DirectoryServiceImpl implements DirectoryService {
     }
 
     @Override
-    public Directory getRootDirectory() {
-        return directoryFinder.getRootDirectory();
+    public List<FileSystemEntry> getRootDirectoryAndSessionDocuments() {
+        return directoryFinder.getRootDirectoryAndSessionDocuments();
     }
 
     @Override

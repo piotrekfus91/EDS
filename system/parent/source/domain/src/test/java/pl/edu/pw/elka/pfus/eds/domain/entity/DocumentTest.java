@@ -59,4 +59,18 @@ public class DocumentTest {
 
         assertThat(document.getFileSystemName()).isEqualTo("31532400000");
     }
+
+    @Test
+    public void testIsSessionDocumentForSession() throws Exception {
+        document.setDirectory(null);
+
+        assertThat(document.isSessionDocument()).isTrue();
+    }
+
+    @Test
+    public void testIsSessionDocumentForNotSession() throws Exception {
+        document.setDirectory(new Directory());
+
+        assertThat(document.isSessionDocument()).isFalse();
+    }
 }

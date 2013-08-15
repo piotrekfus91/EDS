@@ -10,11 +10,12 @@ import java.util.List;
  */
 public interface DirectoryFinder {
     /**
-     * Znajduje wszystkie katalogi główne bieżącego użytkownika.
+     * Wyszukuje katalog główny użytkownika oraz pliki świeżo uploadowane,
+     * nie mające katalogu, które zostaną usunięte na koniec sesji.
      *
-     * @return katalogi główne użytkownika.
+     * @return katalogi główne użytkownika + nowe pliki.
      */
-    Directory getRootDirectory();
+    List<FileSystemEntry> getRootDirectoryAndSessionDocuments();
 
     /**
      * Znajduje wszystkie podkatalogi podanego katalogu.

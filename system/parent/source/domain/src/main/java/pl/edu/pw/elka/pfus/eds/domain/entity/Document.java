@@ -54,8 +54,25 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
         return name;
     }
 
+    /**
+     * Zwraca nazwę, pod jaką leży plik w systemie plików.
+     *
+     * @return nazwa w systemie plikół.
+     */
     public String getFileSystemName() {
         return "" + created.getTime();
+    }
+
+    /**
+     * Zwraca informację czy dokument jest sesyjny.
+     * Jako dokument sesyjny uważamy świeżo podgrane dokumenty,
+     * nie leżące jeszcze w żadnym katalogu.
+     * Dokumenty takie są usuwane na koniec sesji.
+     *
+     * @return czy jest dokument sesyjny.
+     */
+    public boolean isSessionDocument() {
+        return directory == null;
     }
 
     @Override

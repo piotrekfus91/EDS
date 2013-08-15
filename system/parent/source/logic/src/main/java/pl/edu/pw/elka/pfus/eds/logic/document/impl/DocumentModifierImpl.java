@@ -113,11 +113,14 @@ public class DocumentModifierImpl implements DocumentModifier {
         Document document = documentDao.findById(documentId);
         Directory sourceDirectory = document.getDirectory();
 
-        if(LogicValidator.isMoveToSameDirectory(destinationDirectoryId, sourceDirectory))
-            return;
-
-        LogicValidator.validateOwnershipOverDirectory(currentUser, sourceDirectory);
         LogicValidator.validateOwnershipOverDocument(currentUser, document);
+        if(!document.isSessionDocument()) {
+            if (LogicValidator.isMoveToSameDirectory(destinationDirectoryId, sourceDirectory)) {
+                return;
+            }
+            LogicValidator.validateOwnershipOverDirectory(currentUser, sourceDirectory);
+        }
+
 
         Directory destinationDirectory = directoryDao.findById(destinationDirectoryId);
         LogicValidator.validateOwnershipOverDirectory(currentUser, destinationDirectory);
@@ -127,12 +130,14 @@ public class DocumentModifierImpl implements DocumentModifier {
 
         try {
             directoryDao.beginTransaction();
-            sourceDirectory.removeDocument(document);
             destinationDirectory.addDocument(document);
             document.setDirectory(destinationDirectory);
-            sourceDirectory = directoryDao.merge(sourceDirectory);
             destinationDirectory = directoryDao.merge(destinationDirectory);
-            directoryDao.persist(sourceDirectory);
+            if(sourceDirectory != null) {
+                sourceDirectory.removeDocument(document);
+                sourceDirectory = directoryDao.merge(sourceDirectory);
+                directoryDao.persist(sourceDirectory);
+            }
             directoryDao.persist(destinationDirectory);
             directoryDao.commitTransaction();
         } catch(Exception e) {

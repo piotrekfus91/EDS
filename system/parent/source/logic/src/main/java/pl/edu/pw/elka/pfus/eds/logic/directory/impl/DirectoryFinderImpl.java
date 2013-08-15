@@ -2,7 +2,9 @@ package pl.edu.pw.elka.pfus.eds.logic.directory.impl;
 
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
+import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
+import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder;
@@ -17,17 +19,27 @@ public class DirectoryFinderImpl implements DirectoryFinder {
     private Context context;
     private SecurityFacade securityFacade;
     private DirectoryDao directoryDao;
+    private DocumentDao documentDao;
 
-    public DirectoryFinderImpl(Context context, SecurityFacade securityFacade, DirectoryDao directoryDao) {
+    public DirectoryFinderImpl(Context context, SecurityFacade securityFacade, DirectoryDao directoryDao,
+                               DocumentDao documentDao) {
         this.context = context;
         this.securityFacade = securityFacade;
         this.directoryDao = directoryDao;
+        this.documentDao = documentDao;
     }
 
     @Override
-    public Directory getRootDirectory() {
+    public List<FileSystemEntry> getRootDirectoryAndSessionDocuments() {
         User currentUser = getCurrentUser();
-        return directoryDao.getRootDirectory(currentUser);
+        if(currentUser == null)
+            return null;
+        Directory rootDirectory = directoryDao.getRootDirectory(currentUser);
+        List<Document> sessionDocuments = documentDao.getSessionDocuments(currentUser);
+        List<FileSystemEntry> result = new LinkedList<>();
+        result.add(rootDirectory);
+        result.addAll(sessionDocuments);
+        return result;
     }
 
     @Override

@@ -1,21 +1,41 @@
 package pl.edu.pw.elka.pfus.eds.domain.dao;
 
 import org.objectledge.context.Context;
-import pl.edu.pw.elka.pfus.eds.domain.dao.factory.DocumentFactory;
-import pl.edu.pw.elka.pfus.eds.domain.dao.factory.EntityFactory;
-import pl.edu.pw.elka.pfus.eds.domain.dao.factory.MimeTypeFactory;
-import pl.edu.pw.elka.pfus.eds.domain.dao.factory.UserFactory;
+import org.testng.annotations.Test;
+import pl.edu.pw.elka.pfus.eds.domain.dao.factory.*;
 import pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateDocumentDao;
+import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 public class DocumentDaoTest extends IdentifableDaoTest<Document, DocumentDao> {
     private DocumentDao documentDao;
     private DocumentFactory factory = new DocumentFactory();
+    private DirectoryFactory directoryFactory = new DirectoryFactory();
     private UserFactory userFactory = new UserFactory();
     private MimeTypeFactory mimeTypeFactory = new MimeTypeFactory();
+
+    @Test
+    public void testGetSessionFiles() throws Exception {
+        User user = userFactory.getSampleEntity();
+        Directory directory = directoryFactory.getSampleEntity();
+        directory.setOwner(user);
+        Document nonSessionDocument = factory.getSampleEntity();
+        nonSessionDocument.setOwner(user);
+        Document sessionDocument = factory.getSampleEntity();
+        sessionDocument.setOwner(user);
+        directory.addDocument(nonSessionDocument);
+        nonSessionDocument.setDirectory(directory);
+
+        documentDao.persist(sessionDocument);
+        documentDao.persist(nonSessionDocument);
+
+        assertThat(documentDao.getSessionDocuments(user)).containsExactly(sessionDocument);
+    }
 
     @Override
     public DocumentDao getDao() {

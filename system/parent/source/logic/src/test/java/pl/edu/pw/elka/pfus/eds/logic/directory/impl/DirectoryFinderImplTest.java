@@ -1,18 +1,22 @@
 package pl.edu.pw.elka.pfus.eds.logic.directory.impl;
 
+import com.google.common.collect.Lists;
 import org.objectledge.context.Context;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
+import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
+import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryFinder;
-import pl.edu.pw.elka.pfus.eds.logic.directory.impl.DirectoryFinderImpl;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
@@ -24,19 +28,21 @@ public class DirectoryFinderImplTest {
     private Context context;
     private SecurityFacade securityFacade;
     private DirectoryDao directoryDao;
+    private DocumentDao documentDao;
 
     @BeforeMethod
     private void beforeMethod() {
         context = getMockContext();
         securityFacade = getMockSecurityFacade();
         directoryDao = getMockDirectoryDao();
-        finder = new DirectoryFinderImpl(context, securityFacade, directoryDao);
+        documentDao = getMockDocumentDao();
+        finder = new DirectoryFinderImpl(context, securityFacade, directoryDao, documentDao);
     }
 
     @Test
     public void testGetRootForNotLoggedUser() throws Exception {
         when(securityFacade.getCurrentUser(context)).thenReturn(null);
-        assertThat(finder.getRootDirectory()).isNull();
+        assertThat(finder.getRootDirectoryAndSessionDocuments()).isNull();
     }
 
     @Test
@@ -46,8 +52,12 @@ public class DirectoryFinderImplTest {
         when(securityFacade.isLogged(context)).thenReturn(true);
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
         when(directoryDao.getRootDirectory(user)).thenReturn(getFreeLevelStructure());
+        Document document = new Document();
+        expectedDir.addDocument(document);
+        when(documentDao.getSessionDocuments(user)).thenReturn(Lists.newArrayList(document));
 
-        assertThat(finder.getRootDirectory()).isEqualTo(expectedDir);
+        List<FileSystemEntry> result = finder.getRootDirectoryAndSessionDocuments();
+        assertThat(result).containsExactly(expectedDir, document);
     }
 
     @Test(expectedExceptions = ObjectNotFoundException.class)
@@ -125,6 +135,10 @@ public class DirectoryFinderImplTest {
         DirectoryDao directoryDao = mock(DirectoryDao.class);
         when(directoryDao.getRootDirectory(1)).thenReturn(getFreeLevelStructure());
         return directoryDao;
+    }
+
+    private DocumentDao getMockDocumentDao() {
+        return mock(DocumentDao.class);
     }
 
     private SecurityFacade getMockSecurityFacade() {

@@ -1,6 +1,5 @@
 package pl.edu.pw.elka.pfus.eds.web.rest;
 
-import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
@@ -40,11 +39,10 @@ public class DirectoryRest {
     @GET
     @Path("/root")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRootDirectories() {
-        Directory userRootDirectory = directoryService.getRootDirectory();
-        List<Directory> userRootDirectories = Lists.newArrayList(userRootDirectory);
-        String exportedRootDirectories = directoryListExporter.exportSuccess(userRootDirectories);
-        return Response.status(Response.Status.OK).entity(exportedRootDirectories).build();
+    public Response getRootDirectoryAndSessionFiles() {
+        List<FileSystemEntry> result = directoryService.getRootDirectoryAndSessionDocuments();
+        String exported = fileSystemEntryListExporter.exportSuccess(result);
+        return Response.status(Response.Status.OK).entity(exported).build();
     }
 
     @GET
