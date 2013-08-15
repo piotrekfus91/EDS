@@ -178,6 +178,8 @@ function update_directory_info(directoryId) {
                 $('#files_type').text('Katalog');
                 $('#files_name').text(info.title);
                 $('#files_path').text(info.stringPath);
+                $('#files_created').text('n/d');
+                $('#files_mime').text('n/d');
             } else {
                 post_error_from_result(result);
             }

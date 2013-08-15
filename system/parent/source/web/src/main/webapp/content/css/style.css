@@ -44,3 +44,18 @@ html, body {
 .tree {
     background-color: #ffffee;
 }
+
+.info_table {
+    margin: 20px 5%;
+    width: 90%;
+}
+
+.info_key {
+    width: 150px;
+    vertical-align: top;
+}
+
+.info_value {
+    font-style: italic;
+    vertical-align: top;
+}

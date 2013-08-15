@@ -1,15 +1,15 @@
 $viewEnclosureTool.top()
-<table>
+<table class="info_table">
     <tr>
-        <td>Login</td>
-        <td>$currentUser.name</td>
+        <td class="info_key">Login</td>
+        <td class="info_value">$currentUser.name</td>
     </tr>
     <tr>
-        <td>Imię</td>
-        <td>$currentUser.firstName</td>
+        <td class="info_key">Imię</span></td>
+        <td class="info_value">$currentUser.firstName</td>
     </tr>
     <tr>
-        <Td>Nazwisko</Td>
-        <td>$currentUser.lastName</td>
+        <td class="info_key">Nazwisko</td>
+        <td class="info_value">$currentUser.lastName</td>
     </tr>
 </table>
