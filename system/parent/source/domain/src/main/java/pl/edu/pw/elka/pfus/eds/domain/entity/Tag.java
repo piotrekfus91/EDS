@@ -32,6 +32,11 @@ public class Tag extends IdentifableEntity {
         return id;
     }
 
+    @Override
+    public void removeFromAssociations() {
+        documents.remove(this);
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }

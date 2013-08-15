@@ -76,6 +76,13 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
         return parentPath + thisPath;
     }
 
+    @Override
+    public void removeFromAssociations() {
+        resourceGroups.remove(this);
+        subdirectories.remove(this);
+        documents.remove(this);
+    }
+
     public boolean isRootDirectory() {
         return parentDirectory == null;
     }

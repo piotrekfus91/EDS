@@ -268,7 +268,7 @@ function delete_document(documentId) {
         url: rest('/documents/delete/' + documentId),
         success: function(result) {
             if(is_success(result)) {
-                post_message('success', 'Plik został usunięty');
+                post_message_now('success', 'Plik został usunięty');
                 currentNode.remove();
             } else {
                 post_error_from_result(result);

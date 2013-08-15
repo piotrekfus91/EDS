@@ -32,6 +32,7 @@ public abstract class GenericDao<T extends GenericEntity> implements Dao<T> {
 
     @Override
     public void delete(T entity) {
+        entity.removeFromAssociations();
         session.delete(entity);
     }
 

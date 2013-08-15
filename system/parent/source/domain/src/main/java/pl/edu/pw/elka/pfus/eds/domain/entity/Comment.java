@@ -36,6 +36,11 @@ public class Comment extends IdentifableEntity implements Versionable {
         return version;
     }
 
+    @Override
+    public void removeFromAssociations() {
+        // brak kolekcji
+    }
+
     public void setVersion(Integer version) {
         this.version = version;
     }

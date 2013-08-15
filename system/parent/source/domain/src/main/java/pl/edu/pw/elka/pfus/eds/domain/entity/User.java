@@ -56,6 +56,14 @@ public class User extends IdentifableEntity implements Named, Versionable {
         return version;
     }
 
+    @Override
+    public void removeFromAssociations() {
+        directories.remove(this);
+        comments.remove(this);
+        documents.remove(this);
+        resourceGroups.remove(this);
+    }
+
     /**
      * Zwraca sformatowaną nazwę użytkownika.
      * Jeśli są podane imię, to zwraca imię i ewentualnie nazwisko,

@@ -48,6 +48,12 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
         return version;
     }
 
+    @Override
+    public void removeFromAssociations() {
+        directories.remove(this);
+        documents.remove(this);
+    }
+
     public void setVersion(Integer version) {
         this.version = version;
     }

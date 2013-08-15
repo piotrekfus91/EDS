@@ -84,6 +84,13 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
             return Strings.nullToEmpty(directory.getStringPath()) + fileNameWithPath;
     }
 
+    @Override
+    public void removeFromAssociations() {
+        resourceGroups.remove(this);
+        tags.remove(this);
+        comments.remove(this);
+    }
+
     public void setVersion(Integer version) {
         this.version = version;
     }
