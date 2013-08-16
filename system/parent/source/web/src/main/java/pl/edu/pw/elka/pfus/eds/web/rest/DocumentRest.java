@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pfus.eds.web.rest;
 import org.apache.log4j.Logger;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.logic.document.DocumentService;
+import pl.edu.pw.elka.pfus.eds.logic.document.dto.DocumentNameBytesDto;
 import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDocumentExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResultExporter;
@@ -41,6 +42,22 @@ public class DocumentRest {
             exported = documentExporter.exportFailure(e.getMessage(), null);
         }
         return Response.status(Response.Status.OK).entity(exported).build();
+    }
+
+    @GET
+    @Path("/download/{documentId: \\d+}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response downloadById(@PathParam("documentId") int documentId) {
+        DocumentNameBytesDto dto;
+        try {
+            dto = documentService.getDocumentNameAndBytesById(documentId);
+            return Response.status(Response.Status.OK)
+                    .header("Content-Disposition", "attachment; filename=" + dto.getName()).entity(dto.getBytes())
+                    .build();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PUT

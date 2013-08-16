@@ -107,6 +107,8 @@ function bind_context_menu_for_file_system_entries() {
         callback: function(key) {
             if(key == "add") {
                 $('#add_directory').dialog("open");
+            } else if(key == "download") {
+                download_document(currentNode.data.key);
             } else if(key == "delete") {
                 if(currentNode.data.isFolder)
                     delete_directory(currentNode.data.key);
@@ -134,6 +136,13 @@ function bind_context_menu_for_file_system_entries() {
                 icon: "add",
                 disabled: function() {
                     return !currentNode.data.isFolder;
+                }
+            },
+            "download": {
+                name: "Pobierz",
+                icon: "download",
+                disabled: function() {
+                    return currentNode.data.isFolder;
                 }
             },
             "rename": {
@@ -275,6 +284,10 @@ function rename_directory(id, name) {
             clear_and_close_rename_div();
         }
     });
+}
+
+function download_document(documentId) {
+    window.location = rest('/documents/download/' + documentId);
 }
 
 function rename_document(id, name) {

@@ -1,17 +1,22 @@
 package pl.edu.pw.elka.pfus.eds.logic.document.impl;
 
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.logic.document.DocumentDownloader;
 import pl.edu.pw.elka.pfus.eds.logic.document.DocumentFinder;
 import pl.edu.pw.elka.pfus.eds.logic.document.DocumentModifier;
 import pl.edu.pw.elka.pfus.eds.logic.document.DocumentService;
+import pl.edu.pw.elka.pfus.eds.logic.document.dto.DocumentNameBytesDto;
 
 public class DocumentServiceImpl implements DocumentService {
     private DocumentFinder documentFinder;
     private DocumentModifier documentModifier;
+    private DocumentDownloader documentDownloader;
 
-    public DocumentServiceImpl(DocumentFinder documentFinder, DocumentModifier documentModifier) {
+    public DocumentServiceImpl(DocumentFinder documentFinder, DocumentModifier documentModifier,
+                               DocumentDownloader documentDownloader) {
         this.documentFinder = documentFinder;
         this.documentModifier = documentModifier;
+        this.documentDownloader = documentDownloader;
     }
 
     @Override
@@ -42,5 +47,10 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public void cleanSessionDocuments() {
         documentModifier.cleanSessionDocuments();
+    }
+
+    @Override
+    public DocumentNameBytesDto getDocumentNameAndBytesById(int documentId) {
+        return documentDownloader.getDocumentNameAndBytesById(documentId);
     }
 }

@@ -2,6 +2,7 @@ package pl.edu.pw.elka.pfus.eds.util.file.system.impl;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Joiner;
+import com.google.common.io.Files;
 import org.apache.log4j.Logger;
 import pl.edu.pw.elka.pfus.eds.util.StringHelper;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
@@ -54,6 +55,19 @@ public class FileManagerImpl implements FileManager {
             }
         } else {
             logger.warn("file not exists or isn't a file: " + fullPath);
+        }
+    }
+
+    @Override
+    public byte[] getAsByteArray(String fileName, String hash) {
+        String fullPath = getFullPath(hash, fileName);
+        logger.info("attempting to open file: " + fullPath);
+        File file = new File(fullPath);
+        try {
+            return Files.toByteArray(file);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 

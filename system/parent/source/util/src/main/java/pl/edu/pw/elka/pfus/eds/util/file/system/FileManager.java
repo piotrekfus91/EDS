@@ -19,6 +19,15 @@ public interface FileManager {
     File create(byte[] input, String fileName);
 
     /**
+     * Zwraca plik w postaci tablicy bajtów.
+     *
+     * @param fileName nazwa pliku.
+     * @param hash hash pliku.
+     * @return tablicaa bajtów zawartości pliku.
+     */
+    byte[] getAsByteArray(String fileName, String hash);
+
+    /**
      * Usuwa plik o podanej nazwie z podanej za pomocą skrótu ścieżĸi.
      *
      * @param name nazwa pliku.

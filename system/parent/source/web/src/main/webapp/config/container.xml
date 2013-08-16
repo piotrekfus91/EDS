@@ -50,6 +50,8 @@
                class="pl.edu.pw.elka.pfus.eds.logic.document.impl.DocumentFinderImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.document.DocumentModifier"
                class="pl.edu.pw.elka.pfus.eds.logic.document.impl.DocumentModifierImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.document.DocumentDownloader"
+               class="pl.edu.pw.elka.pfus.eds.logic.document.impl.DocumentDownloaderImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.document.DocumentService"
                class="pl.edu.pw.elka.pfus.eds.logic.document.impl.DocumentServiceImpl" />
 
