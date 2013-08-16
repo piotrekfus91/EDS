@@ -17,4 +17,9 @@ public class TagServiceImpl implements TagService {
     public List<Tag> getAll() {
         return tagFinder.getAll();
     }
+
+    @Override
+    public List<Tag> getSimilars(String value) {
+        return tagFinder.getSimilars(value);
+    }
 }

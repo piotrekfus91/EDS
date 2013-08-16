@@ -7,7 +7,7 @@ function autocomplete_set(elem) {
     })
     .autocomplete({
         source: function( request, response ) {
-            $.getJSON( rest('/tags/all/autocomplete'), {
+            $.getJSON( rest('/tags/autocomplete'), {
                 term: autocomplete_extract_last( request.term )
             }, response );
         },
