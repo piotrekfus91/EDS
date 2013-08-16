@@ -58,6 +58,8 @@
                class="pl.edu.pw.elka.pfus.eds.logic.document.impl.DocumentServiceImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.tag.TagFinder"
                class="pl.edu.pw.elka.pfus.eds.logic.tag.impl.TagFinderImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.tag.TagModifier"
+               class="pl.edu.pw.elka.pfus.eds.logic.tag.impl.TagModifierImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.tag.TagService"
                class="pl.edu.pw.elka.pfus.eds.logic.tag.impl.TagServiceImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.tag.cache.TagCache"

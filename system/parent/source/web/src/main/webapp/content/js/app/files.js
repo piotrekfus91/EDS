@@ -401,6 +401,25 @@ function update_tags(tags) {
     tags_div.html(tagHtml);
 }
 
+function update_tags_of_document(id, tagList) {
+    $.ajax({
+        type: "PUT",
+        url: rest('/tags/tagsToDocument/' + id + '/' + tagList),
+        success: function(result) {
+            if(is_success(result)) {
+                post_message_now('success', 'Lista tagów zaktualizowana');
+                currentNode.reloadChildren();
+                update_document_info(id);
+            } else {
+                post_error_from_result(result);
+            }
+        },
+        error: function() {
+            post_message_now('error', 'Błąd przy aktualizacji listy tagów');
+        }
+    });
+}
+
 $('#add_directory').dialog({
     autoOpen: false,
     height: 150,
@@ -445,7 +464,10 @@ $('#tag_list_div').dialog({
     modal: true,
     buttons: {
         "Aktualizuj listę tagów": function() {
-
+            var id = currentNode.data.key;
+            var tagList = $('#tag_list_input').val();
+            update_tags_of_document(id, tagList);
+            clear_and_close_tag_list_div();
         },
         "Anuluj": function() {
             clear_and_close_tag_list_div();

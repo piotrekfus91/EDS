@@ -91,6 +91,10 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
         comments.remove(this);
     }
 
+    public void clearTags() {
+        tags.clear();
+    }
+
     public void setVersion(Integer version) {
         this.version = version;
     }

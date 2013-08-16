@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import pl.edu.pw.elka.pfus.eds.util.ValueNormalizer;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class Tag extends IdentifableEntity {
     }
 
     public List<Document> getDocuments() {
+        documents.removeAll(Collections.singleton(null));
         return ImmutableList.copyOf(documents);
     }
 
