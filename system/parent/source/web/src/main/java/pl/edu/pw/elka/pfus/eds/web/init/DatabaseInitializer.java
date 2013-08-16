@@ -7,6 +7,7 @@ import org.picocontainer.Startable;
 import pl.edu.pw.elka.pfus.eds.domain.dao.*;
 import pl.edu.pw.elka.pfus.eds.domain.entity.*;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.logic.tag.cache.TagCache;
 import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
 import pl.edu.pw.elka.pfus.eds.util.file.system.PathCreator;
 import pl.edu.pw.elka.pfus.eds.web.init.impl.SqlScriptLoader;
@@ -26,6 +27,7 @@ public class DatabaseInitializer implements Startable {
     private TagDao tagDao;
     private FileManager fileManager;
     private PathCreator pathCreator;
+    private TagCache tagCache;
 
     private MimeType jpegMimeType;
 
@@ -34,7 +36,7 @@ public class DatabaseInitializer implements Startable {
 
     public DatabaseInitializer(SessionFactory sessionFactory, UserDao userDao, DirectoryDao directoryDao,
                                MimeTypeDao mimeTypeDao, CommentDao commentDao, TagDao tagDao, FileManager fileManager,
-                               PathCreator pathCreator) {
+                               PathCreator pathCreator, TagCache tagCache) {
         this.sessionFactory = sessionFactory;
         this.userDao = userDao;
         this.directoryDao = directoryDao;
@@ -43,6 +45,8 @@ public class DatabaseInitializer implements Startable {
         this.tagDao = tagDao;
         this.fileManager = fileManager;
         this.pathCreator = pathCreator;
+        this.tagCache = tagCache;
+        tagCache.setSession(userDao.getSession());
     }
 
     @Override
@@ -162,6 +166,8 @@ public class DatabaseInitializer implements Startable {
         directoryDao.persist(documentsDirectory);
         directoryDao.persist(filesDirectory);
         directoryDao.commitTransaction();
+
+        tagCache.rebuild();
     }
 
     @Override

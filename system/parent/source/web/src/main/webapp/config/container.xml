@@ -54,6 +54,13 @@
                class="pl.edu.pw.elka.pfus.eds.logic.document.impl.DocumentDownloaderImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.document.DocumentService"
                class="pl.edu.pw.elka.pfus.eds.logic.document.impl.DocumentServiceImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.tag.TagFinder"
+               class="pl.edu.pw.elka.pfus.eds.logic.tag.impl.TagFinderImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.tag.TagService"
+               class="pl.edu.pw.elka.pfus.eds.logic.tag.impl.TagServiceImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.tag.cache.TagCache"
+               class="pl.edu.pw.elka.pfus.eds.logic.tag.cache.impl.TagCacheImpl" />
+    <component class="pl.edu.pw.elka.pfus.eds.logic.tag.cache.impl.TagCacheLoader" />
 
     <!-- web -->
     <component class="pl.edu.pw.elka.pfus.eds.web.init.DatabaseInitializer" />
@@ -67,6 +74,8 @@
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonDocumentExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResultExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResultExporterImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonTagListExporter"
+               class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonTagListExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonPluploadExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonPluploadExporterImpl" />
 
