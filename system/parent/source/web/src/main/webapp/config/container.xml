@@ -12,6 +12,8 @@
                class="pl.edu.pw.elka.pfus.eds.util.file.system.impl.PathCreatorImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.util.file.system.FileManager"
                class="pl.edu.pw.elka.pfus.eds.util.file.system.impl.FileManagerImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.util.word.distance.WordDistance"
+               class="pl.edu.pw.elka.pfus.eds.util.word.distance.LevenshteinDistance" />
 
     <!-- domain -->
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory"
