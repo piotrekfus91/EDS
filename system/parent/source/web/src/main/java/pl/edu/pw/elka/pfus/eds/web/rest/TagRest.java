@@ -36,6 +36,15 @@ public class TagRest {
         return Response.status(Response.Status.OK).entity(exported).build();
     }
 
+    @GET
+    @Path("/tagCloud")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllForTagCloud() {
+        List<Tag> tags = tagService.getAllWithLoadedDocuments();
+        String exported = tagListExporter.export(tags);
+        return Response.status(Response.Status.OK).entity(exported).build();
+    }
+
     @PUT
     @Path("/tagsToDocument/{documentId: \\d+}/{commaSeparatedTagList}")
     @Produces(MediaType.APPLICATION_JSON)

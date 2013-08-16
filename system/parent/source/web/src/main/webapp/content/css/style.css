@@ -83,3 +83,16 @@ html, body {
 .files_comment_date {
 
 }
+
+.search {
+    width: 80%;
+}
+
+.tag_cloud {
+    float: right;
+    border: 1px solid black;
+}
+
+.tag_cloud a {
+    text-decoration: none;
+}

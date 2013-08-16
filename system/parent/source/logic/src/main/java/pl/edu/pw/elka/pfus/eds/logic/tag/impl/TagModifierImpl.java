@@ -11,6 +11,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.tag.TagModifier;
+import pl.edu.pw.elka.pfus.eds.logic.tag.cache.TagCache;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
@@ -23,12 +24,15 @@ public class TagModifierImpl implements TagModifier {
     private SecurityFacade securityFacade;
     private DocumentDao documentDao;
     private TagDao tagDao;
+    private TagCache tagCache;
 
-    public TagModifierImpl(Context context, SecurityFacade securityFacade, DocumentDao documentDao, TagDao tagDao) {
+    public TagModifierImpl(Context context, SecurityFacade securityFacade, DocumentDao documentDao, TagDao tagDao,
+                           TagCache tagCache) {
         this.context = context;
         this.securityFacade = securityFacade;
         this.documentDao = documentDao;
         this.tagDao = tagDao;
+        this.tagCache = tagCache;
     }
 
     @Override
@@ -63,6 +67,7 @@ public class TagModifierImpl implements TagModifier {
             }
             documentDao.persist(document);
             documentDao.commitTransaction();
+            tagCache.rebuild();
         } catch (Exception e) {
             documentDao.rollbackTransaction();
             logger.error(e.getMessage(), e);

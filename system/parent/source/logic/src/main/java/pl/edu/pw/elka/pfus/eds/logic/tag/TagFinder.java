@@ -16,6 +16,13 @@ public interface TagFinder {
     List<Tag> getAll();
 
     /**
+     * Zwraca listę wszystkich tagów, wraz z przyporządkowanymi im dokumentami.
+     *
+     * @return lista wszystkich tagów.
+     */
+    List<Tag> getAllWithLoadedDocuments();
+
+    /**
      * Zwraca listę tagów o podobnej wartości znormalizowanej.
      * Podobność jest ustalana na podstawie dystansu edycyjnego.
      *

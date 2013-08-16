@@ -31,6 +31,15 @@ public class TagFinderImpl implements TagFinder {
     }
 
     @Override
+    public List<Tag> getAllWithLoadedDocuments() {
+        List<Tag> tags = tagCache.getAll();
+        for(Tag tag : tags) {
+            tag.getDocuments();
+        }
+        return tags;
+    }
+
+    @Override
     public List<Tag> getSimilars(String value) {
         String normalizedValue = ValueNormalizer.normalizeValue(value);
 

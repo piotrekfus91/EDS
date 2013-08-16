@@ -34,7 +34,7 @@ public class TagModifierImplTest {
         tagDao = mock(TagDao.class);
         context = mock(Context.class);
         securityFacade = mock(SecurityFacade.class);
-        tagModifier = new TagModifierImpl(context, securityFacade, documentDao, tagDao);
+        tagModifier = new TagModifierImpl(context, securityFacade, documentDao, tagDao, null);
     }
 
     @Test
