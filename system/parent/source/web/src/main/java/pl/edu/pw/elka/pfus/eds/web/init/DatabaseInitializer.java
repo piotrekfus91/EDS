@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.web.init;
 
+import com.google.common.io.ByteStreams;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.picocontainer.Startable;
@@ -9,8 +10,12 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.MimeTypeDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.*;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
+import pl.edu.pw.elka.pfus.eds.util.file.system.PathCreator;
 import pl.edu.pw.elka.pfus.eds.web.init.impl.SqlScriptLoader;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
 public class DatabaseInitializer implements Startable {
@@ -21,16 +26,21 @@ public class DatabaseInitializer implements Startable {
     private DirectoryDao directoryDao;
     private MimeTypeDao mimeTypeDao;
     private CommentDao commentDao;
+    private FileManager fileManager;
+    private PathCreator pathCreator;
 
     private MimeType jpegMimeType;
 
     public DatabaseInitializer(SessionFactory sessionFactory, UserDao userDao, DirectoryDao directoryDao,
-                               MimeTypeDao mimeTypeDao, CommentDao commentDao) {
+                               MimeTypeDao mimeTypeDao, CommentDao commentDao, FileManager fileManager,
+                               PathCreator pathCreator) {
         this.sessionFactory = sessionFactory;
         this.userDao = userDao;
         this.directoryDao = directoryDao;
         this.mimeTypeDao = mimeTypeDao;
         this.commentDao = commentDao;
+        this.fileManager = fileManager;
+        this.pathCreator = pathCreator;
     }
 
     @Override
@@ -39,6 +49,8 @@ public class DatabaseInitializer implements Startable {
         initFromScripts();
 
         initMimeTypes();
+
+        pathCreator.createFileSystemRoot();
 
         userDao.beginTransaction();
         User rootUser = new User();
@@ -87,6 +99,13 @@ public class DatabaseInitializer implements Startable {
                 jpegMimeType.addDocument(gerrard20);
                 gerrard20.setDirectory(lfcPicturesDirectory);
                 lfcPicturesDirectory.addDocument(gerrard20);
+                InputStream gerrard20IS = DatabaseInitializer.class.getClassLoader().getResourceAsStream("documents/Gerrard20.jpeg");
+                try {
+                    byte[] gerrard20Bytes = ByteStreams.toByteArray(gerrard20IS);
+                    fileManager.create(gerrard20Bytes, gerrard20.getFileSystemName());
+                } catch (IOException e) {
+                    throw new ExceptionInInitializerError(e);
+                }
                 Document lfc_226410 = new Document();
                 lfc_226410.setName("lfc_226410.jpg");
                 lfc_226410.setCreated(new Date());
@@ -95,6 +114,13 @@ public class DatabaseInitializer implements Startable {
                 jpegMimeType.addDocument(lfc_226410);
                 lfc_226410.setDirectory(lfcPicturesDirectory);
                 lfcPicturesDirectory.addDocument(lfc_226410);
+                InputStream lfc_226410IS = DatabaseInitializer.class.getClassLoader().getResourceAsStream("documents/lfc_226410.jpg");
+                try {
+                    byte[] lfc_22610Bytes = ByteStreams.toByteArray(lfc_226410IS);
+                    fileManager.create(lfc_22610Bytes, lfc_226410.getFileSystemName());
+                } catch (IOException e) {
+                    throw new ExceptionInInitializerError(e);
+                }
                 String[] commentsContent = new String[]{
                         "Bardzo ładny obrazek.",
                         "You'll never walk alone!",

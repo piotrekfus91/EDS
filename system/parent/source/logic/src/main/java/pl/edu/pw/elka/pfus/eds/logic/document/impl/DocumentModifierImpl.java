@@ -158,6 +158,7 @@ public class DocumentModifierImpl implements DocumentModifier {
         try {
             documentDao.beginTransaction();
             documentDao.delete(document);
+            fileManager.delete(document.getFileSystemName(), document.getContentMd5());
             documentDao.commitTransaction();
         } catch (Exception e) {
             documentDao.rollbackTransaction();

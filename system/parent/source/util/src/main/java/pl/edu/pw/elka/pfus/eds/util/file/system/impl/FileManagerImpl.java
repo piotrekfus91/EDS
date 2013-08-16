@@ -38,6 +38,7 @@ public class FileManagerImpl implements FileManager {
     @Override
     public File create(byte[] input, String fileName) {
         String hash = hasher.getString(input);
+        logger.info("trying to create file: " + fileName + ", with hash: " + hash);
         pathCreator.createPath(getFileSystemRoot(), splitHash(hash));
         return createFileFromByteArray(input, getFullPath(hash, fileName));
     }
@@ -45,11 +46,14 @@ public class FileManagerImpl implements FileManager {
     @Override
     public void delete(String name, String hash) {
         String fullPath = getFullPath(hash, name);
+        logger.info("attempting to delete file: " + fullPath);
         File file = new File(fullPath);
         if(file.exists() && file.isFile()) {
             if (!file.delete()) {
                 logger.warn("file hasn't been deleted, hash: " + hash + ", name: " + name);
             }
+        } else {
+            logger.warn("file not exists or isn't a file: " + fullPath);
         }
     }
 
