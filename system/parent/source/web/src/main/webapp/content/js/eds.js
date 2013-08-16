@@ -24,6 +24,11 @@ function make_tabs() {
     tabs.find('#logout_link').unbind('click');
 }
 
+function activate_tab(href) {
+    var index = $('#tabs a[href="' + href + '"]').parent().index();
+    $('#tabs').tabs('option', 'active', index-1);
+}
+
 function current_time() {
     var current_date = new Date();
     return current_date.getHours() + ":" + current_date.getMinutes() + ":" + current_date.getSeconds();

@@ -4,7 +4,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Comment;
 
 import java.text.SimpleDateFormat;
 
-public class CommentDto {
+public class CommentJsonDto {
     private static final String DATE_FORMAT = "dd-MM-yyyy";
 
     private int id;
@@ -12,22 +12,22 @@ public class CommentDto {
     private String created;
     private String user;
 
-    public CommentDto() {
+    public CommentJsonDto() {
 
     }
 
-    public CommentDto(int id, String content, String created, String user) {
+    public CommentJsonDto(int id, String content, String created, String user) {
         this.id = id;
         this.content = content;
         this.created = created;
         this.user = user;
     }
 
-    public static CommentDto from(Comment comment) {
+    public static CommentJsonDto from(Comment comment) {
         if(comment == null)
-            return new CommentDto();
+            return new CommentJsonDto();
         SimpleDateFormat dateFormatter = new SimpleDateFormat();
-        return new CommentDto(comment.getId(), comment.getContent(), dateFormatter.format(comment.getCreated()),
+        return new CommentJsonDto(comment.getId(), comment.getContent(), dateFormatter.format(comment.getCreated()),
                 comment.getUser().getFriendlyName());
     }
 

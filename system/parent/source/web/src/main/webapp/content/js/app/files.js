@@ -189,6 +189,7 @@ function update_directory_info(directoryId) {
                 $('#files_path').text(info.stringPath);
                 $('#files_created').text('n/d');
                 $('#files_mime').text('n/d');
+                $('#files_tags').text('n/d');
                 clear_comments();
             } else {
                 post_error_from_result(result);
@@ -213,6 +214,7 @@ function update_document_info(documentId) {
                 $('#files_path').text(info.stringPath);
                 $('#files_created').text(info.created);
                 $('#files_mime').text(info.mime);
+                update_tags(info.tags);
                 clear_comments();
                 add_comments(info.comments);
             } else {
@@ -369,6 +371,20 @@ function add_comments(comments) {
 
 function clear_comments() {
     $('#files_comments').html('');
+}
+
+function update_tags(tags) {
+    var tags_div = $('#files_tags');
+    tags_div.html('');
+    var tagHtml = "";
+    $.each(tags, function(index) {
+        if(index > 0)
+            tagHtml += ", ";
+        tagHtml += "<a href=\"javascript:activate_tab('eds/v/app.Search')\">";
+            tagHtml += this.value;
+        tagHtml += "</a>"
+    });
+    tags_div.html(tagHtml);
 }
 
 $('#add_directory').dialog({

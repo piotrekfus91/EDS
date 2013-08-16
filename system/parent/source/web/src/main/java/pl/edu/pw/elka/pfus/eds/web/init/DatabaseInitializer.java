@@ -4,10 +4,7 @@ import com.google.common.io.ByteStreams;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.picocontainer.Startable;
-import pl.edu.pw.elka.pfus.eds.domain.dao.CommentDao;
-import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
-import pl.edu.pw.elka.pfus.eds.domain.dao.MimeTypeDao;
-import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
+import pl.edu.pw.elka.pfus.eds.domain.dao.*;
 import pl.edu.pw.elka.pfus.eds.domain.entity.*;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
@@ -26,19 +23,24 @@ public class DatabaseInitializer implements Startable {
     private DirectoryDao directoryDao;
     private MimeTypeDao mimeTypeDao;
     private CommentDao commentDao;
+    private TagDao tagDao;
     private FileManager fileManager;
     private PathCreator pathCreator;
 
     private MimeType jpegMimeType;
 
+    private Tag wallpaperTag;
+    private Tag lfcTag;
+
     public DatabaseInitializer(SessionFactory sessionFactory, UserDao userDao, DirectoryDao directoryDao,
-                               MimeTypeDao mimeTypeDao, CommentDao commentDao, FileManager fileManager,
+                               MimeTypeDao mimeTypeDao, CommentDao commentDao, TagDao tagDao, FileManager fileManager,
                                PathCreator pathCreator) {
         this.sessionFactory = sessionFactory;
         this.userDao = userDao;
         this.directoryDao = directoryDao;
         this.mimeTypeDao = mimeTypeDao;
         this.commentDao = commentDao;
+        this.tagDao = tagDao;
         this.fileManager = fileManager;
         this.pathCreator = pathCreator;
     }
@@ -49,6 +51,7 @@ public class DatabaseInitializer implements Startable {
         initFromScripts();
 
         initMimeTypes();
+        initTags();
 
         pathCreator.createFileSystemRoot();
 
@@ -65,8 +68,11 @@ public class DatabaseInitializer implements Startable {
         directoryDao.setSession(userDao.getSession());
         mimeTypeDao.setSession(userDao.getSession());
         commentDao.setSession(userDao.getSession());
+        tagDao.setSession(userDao.getSession());
 
         jpegMimeType = mimeTypeDao.findById(jpegMimeType.getId());
+        lfcTag = tagDao.findById(lfcTag.getId());
+        wallpaperTag = tagDao.findById(wallpaperTag.getId());
 
         Directory rootDirectory = directoryDao.getRootDirectory(rootUser);
 
@@ -106,6 +112,10 @@ public class DatabaseInitializer implements Startable {
                 } catch (IOException e) {
                     throw new ExceptionInInitializerError(e);
                 }
+                gerrard20.addTag(lfcTag);
+                lfcTag.addDocument(gerrard20);
+                gerrard20.addTag(wallpaperTag);
+                wallpaperTag.addDocument(gerrard20);
                 Document lfc_226410 = new Document();
                 lfc_226410.setName("lfc_226410.jpg");
                 lfc_226410.setCreated(new Date());
@@ -136,6 +146,8 @@ public class DatabaseInitializer implements Startable {
                     comment.setUser(rootUser);
                     commentDao.persist(comment);
                 }
+                lfc_226410.addTag(lfcTag);
+                lfcTag.addDocument(lfc_226410);
 
         Directory filesDirectory = new Directory();
         filesDirectory.setName("pliki");
@@ -174,5 +186,18 @@ public class DatabaseInitializer implements Startable {
         mimeTypeDao.beginTransaction();
         mimeTypeDao.persist(jpegMimeType);
         mimeTypeDao.commitTransaction();
+    }
+
+    private void initTags() {
+        wallpaperTag = new Tag();
+        wallpaperTag.setValue("tapety");
+
+        lfcTag = new Tag();
+        lfcTag.setValue("LFC");
+
+        tagDao.beginTransaction();
+        tagDao.persist(wallpaperTag);
+        tagDao.persist(lfcTag);
+        tagDao.commitTransaction();
     }
 }
