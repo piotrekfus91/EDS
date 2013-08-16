@@ -1,5 +1,6 @@
 $viewEnclosureTool.top()
 <script src="$link.content('/js/app/files.js')"></script>
+<script src="$link.content('/js/app/tags.js')"></script>
 <table class="files_main_table">
     <tr>
         <td>

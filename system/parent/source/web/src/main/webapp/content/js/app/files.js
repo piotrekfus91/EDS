@@ -111,7 +111,9 @@ function bind_context_menu_for_file_system_entries() {
                 download_document(currentNode.data.key);
             } else if(key == "tag") {
                 var current_tag_list = $('#files_tags').text();
-                $('#tag_list_input').val(current_tag_list);
+                var tag_list_input = $('#tag_list_input');
+                tag_list_input.val(current_tag_list);
+                autocomplete_set(tag_list_input);
                 $('#tag_list_div').dialog("open");
             } else if(key == "delete") {
                 if(currentNode.data.isFolder)
