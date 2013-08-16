@@ -88,3 +88,14 @@ $viewEnclosureTool.top()
         </table>
     </form>
 </div>
+
+<div id="tag_list_div" title="Lista tagów" style="display: none">
+    <form onsubmit="return false">
+        <table>
+            <tr>
+                <td>Lista tagów:</td>
+                <td><input id="tag_list_input" type="text" /></td>
+            </tr>
+        </table>
+    </form>
+</div>

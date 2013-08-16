@@ -109,6 +109,10 @@ function bind_context_menu_for_file_system_entries() {
                 $('#add_directory').dialog("open");
             } else if(key == "download") {
                 download_document(currentNode.data.key);
+            } else if(key == "tag") {
+                var current_tag_list = $('#files_tags').text();
+                $('#tag_list_input').val(current_tag_list);
+                $('#tag_list_div').dialog("open");
             } else if(key == "delete") {
                 if(currentNode.data.isFolder)
                     delete_directory(currentNode.data.key);
@@ -141,6 +145,13 @@ function bind_context_menu_for_file_system_entries() {
             "download": {
                 name: "Pobierz",
                 icon: "download",
+                disabled: function() {
+                    return currentNode.data.isFolder;
+                }
+            },
+            "tag": {
+                "name" : "Edytuj tagi",
+                icon: "edit",
                 disabled: function() {
                     return currentNode.data.isFolder;
                 }
@@ -204,6 +215,7 @@ function update_directory_info(directoryId) {
 function update_document_info(documentId) {
     $.ajax({
         type: "GET",
+        async: false,
         url: rest("/documents/single/" + documentId),
         success: function(result) {
             if(is_success(result)) {
@@ -424,6 +436,21 @@ $('#rename_div').dialog({
     }
 });
 
+$('#tag_list_div').dialog({
+    autoOpen: false,
+    height: 200,
+    width: 400,
+    modal: true,
+    buttons: {
+        "Aktualizuj listę tagów": function() {
+
+        },
+        "Anuluj": function() {
+            clear_and_close_tag_list_div();
+        }
+    }
+});
+
 function clear_and_close_add_directory_div() {
     var add_directory_div = $('#add_directory');
     add_directory_div.find('#add_directory_value').val('');
@@ -436,6 +463,12 @@ function clear_and_close_rename_div() {
     rename_directory_div.find('#rename_old_name').text("");
     rename_directory_div.find('#rename_new_name').val('');
     rename_directory_div.dialog("close");
+}
+
+function clear_and_close_tag_list_div() {
+    var tag_list_div = $('#tag_list_div');
+    tag_list_div.find('#tag_list_input').val('');
+    tag_list_div.dialog("close");
 }
 
 function compare_nodes_by_title(node1, node2) {
