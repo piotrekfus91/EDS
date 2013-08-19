@@ -17,6 +17,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public Tag getTagWithLoadedDocuments(String value) {
+        return tagFinder.getTagWithLoadedDocuments(value);
+    }
+
+    @Override
     public List<Tag> getAll() {
         return tagFinder.getAll();
     }

@@ -5,6 +5,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.logic.tag.TagService;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResultExporter;
+import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonTagExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonTagListExporter;
 
 import javax.inject.Inject;
@@ -17,14 +18,26 @@ import java.util.List;
 public class TagRest {
     private static final Logger logger = Logger.getLogger(TagRest.class);
     private TagService tagService;
+    private JsonTagExporter tagExporter;
     private JsonTagListExporter tagListExporter;
     private JsonResultExporter resultExporter;
 
     @Inject
-    public TagRest(TagService tagService, JsonTagListExporter tagListExporter, JsonResultExporter resultExporter) {
+    public TagRest(TagService tagService, JsonTagExporter tagExporter, JsonTagListExporter tagListExporter,
+                   JsonResultExporter resultExporter) {
         this.tagService = tagService;
+        this.tagExporter = tagExporter;
         this.tagListExporter = tagListExporter;
         this.resultExporter = resultExporter;
+    }
+
+    @GET
+    @Path("/name/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getByName(@PathParam("name") String name) {
+        Tag tag = tagService.getTagWithLoadedDocuments(name);
+        String exported = tagExporter.export(tag);
+        return Response.status(Response.Status.OK).entity(exported).build();
     }
 
     @GET

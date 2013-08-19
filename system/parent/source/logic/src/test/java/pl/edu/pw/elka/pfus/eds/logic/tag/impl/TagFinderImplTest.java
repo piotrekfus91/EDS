@@ -37,7 +37,7 @@ public class TagFinderImplTest {
     private void setUp() {
         distance = new LevenshteinDistance();
         tagCache = mock(TagCache.class);
-        tagFinder = new TagFinderImpl(config, tagCache, distance);
+        tagFinder = new TagFinderImpl(config, tagCache, distance, null);
     }
 
     @Test(dataProvider = "similars")

@@ -33,6 +33,8 @@ public class DatabaseInitializer implements Startable {
 
     private Tag wallpaperTag;
     private Tag lfcTag;
+    private Tag scholarTag;
+    private Tag polishTag;
 
     public DatabaseInitializer(SessionFactory sessionFactory, UserDao userDao, DirectoryDao directoryDao,
                                MimeTypeDao mimeTypeDao, CommentDao commentDao, TagDao tagDao, FileManager fileManager,
@@ -120,6 +122,8 @@ public class DatabaseInitializer implements Startable {
                 lfcTag.addDocument(gerrard20);
                 gerrard20.addTag(wallpaperTag);
                 wallpaperTag.addDocument(gerrard20);
+                gerrard20.addTag(polishTag);
+                polishTag.addDocument(gerrard20);
                 Document lfc_226410 = new Document();
                 lfc_226410.setName("lfc_226410.jpg");
                 lfc_226410.setCreated(new Date());
@@ -201,9 +205,17 @@ public class DatabaseInitializer implements Startable {
         lfcTag = new Tag();
         lfcTag.setValue("LFC");
 
+        scholarTag = new Tag();
+        scholarTag.setValue("szkolne");
+
+        polishTag = new Tag();
+        polishTag.setValue("zażółć GĘŚLĄ jaźń");
+
         tagDao.beginTransaction();
         tagDao.persist(wallpaperTag);
         tagDao.persist(lfcTag);
+        tagDao.persist(scholarTag);
+        tagDao.persist(polishTag);
         tagDao.commitTransaction();
     }
 }

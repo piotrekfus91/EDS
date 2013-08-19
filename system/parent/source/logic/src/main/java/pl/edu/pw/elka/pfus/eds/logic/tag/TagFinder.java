@@ -9,6 +9,14 @@ import java.util.List;
  */
 public interface TagFinder {
     /**
+     * Zwraca tag z załadowaną listą dokumentów.
+     *
+     * @param value wartość tagu.
+     * @return tag z dokumentami.
+     */
+    Tag getTagWithLoadedDocuments(String value);
+
+    /**
      * Zwraca listę wszystkich tagów.
      *
      * @return lista wszystkich tagów.

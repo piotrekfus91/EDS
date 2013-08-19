@@ -37,3 +37,7 @@ function current_time() {
 function rest(suffix) {
     return '/rest' + suffix;
 }
+
+function is_success(result) {
+    return result.result == "SUCCESS";
+}

@@ -503,7 +503,3 @@ function compare_nodes_by_title(node1, node2) {
     else
         return title1 > title2 ? 1 : -1;
 }
-
-function is_success(result) {
-    return result.result == "SUCCESS";
-}

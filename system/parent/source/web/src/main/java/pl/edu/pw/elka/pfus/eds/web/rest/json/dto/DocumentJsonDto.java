@@ -1,38 +1,23 @@
 package pl.edu.pw.elka.pfus.eds.web.rest.json.dto;
 
-import pl.edu.pw.elka.pfus.eds.domain.entity.Comment;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
-import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 
 import java.text.SimpleDateFormat;
-import java.util.LinkedList;
-import java.util.List;
 
 public class DocumentJsonDto extends FileSystemEntryJsonDto {
     private static final String DATE_FORMAT = "dd-MM-yyyy";
 
-    private String created;
-    private String mime;
-    private List<CommentJsonDto> comments = new LinkedList<>();
-    private List<TagJsonDto> tags = new LinkedList<>();
+    protected String created;
+    protected String mime;
 
     public DocumentJsonDto() {
 
     }
 
-    public DocumentJsonDto(int id, String name, String stringPath, String created, String mime, List<Comment> comments,
-                           List<Tag> tags) {
+    public DocumentJsonDto(int id, String name, String stringPath, String created, String mime) {
         super(id, name, false, stringPath);
         this.created = created;
         this.mime = mime;
-        for(Comment comment : comments) {
-            CommentJsonDto commentDto = CommentJsonDto.from(comment);
-            this.comments.add(commentDto);
-        }
-        for(Tag tag : tags) {
-            TagJsonDto tagDto = TagJsonDto.from(tag);
-            this.tags.add(tagDto);
-        }
     }
 
     public static DocumentJsonDto from(Document document) {
@@ -40,8 +25,7 @@ public class DocumentJsonDto extends FileSystemEntryJsonDto {
             return new DocumentJsonDto();
         SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
         return new DocumentJsonDto(document.getId(), document.getName(), document.getStringPath(),
-                dateFormatter.format(document.getCreated()), document.getMimeType().getType(), document.getComments(),
-                document.getTags());
+                dateFormatter.format(document.getCreated()), document.getMimeType().getType());
     }
 
     @Override

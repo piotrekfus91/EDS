@@ -2,18 +2,28 @@ $viewEnclosureTool.top()
 <script src="$link.content('js/tagcloud/jquery.tagcloud.js')"></script>
 <script src="$link.content('js/app/search.js')"></script>
 
-<div id="search" class="search">
-    <form>
-        <input type="text" id="search_value_input" size="30" />
-        <div id="radio_button_set">
-            <input type="radio" name="where" value="tags" id="radio_tags" checked="checked" /><label for="radio_tags">Tagi</label>
-            <input type="radio" name="where" value="names" id="radio_names" /><label for="radio_names">Nazwy dokumentów</label>
-        </div>
-        <input type="submit" name="submit" value="Wyszukaj" />
-    </form>
-</div>
+<table>
+    <tr>
+        <td width="80%" style="vertical-align: top">
+            <div id="search" class="search" style="display: none">
+                <form onsubmit="return false;">
+                    <input type="text" id="search_value_input" size="30" />
+                    <div id="radio_button_set">
+                        <input type="radio" name="where" value="tags" id="radio_tags" checked="checked" /><label for="radio_tags">Tagi</label>
+                        <input type="radio" name="where" value="names" id="radio_names" /><label for="radio_names">Nazwy dokumentów</label>
+                    </div>
+                    <input type="submit" name="submit" id="searcher" value="Wyszukaj" />
+                </form>
+            </div>
+            <div id="search_results">
 
-<div id="tag_cloud" class="tag_cloud">
+            </div>
+        </td>
+        <td style="vertical-align: top">
+            <div id="tag_cloud" class="tag_cloud">
 
-</div>
+            </div>
+        </td>
+    </tr>
+</table>
 

@@ -2,6 +2,7 @@ package pl.edu.pw.elka.pfus.eds.logic.tag.impl;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.primitives.Ints;
+import pl.edu.pw.elka.pfus.eds.domain.dao.TagDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 import pl.edu.pw.elka.pfus.eds.logic.tag.TagFinder;
 import pl.edu.pw.elka.pfus.eds.logic.tag.cache.TagCache;
@@ -16,13 +17,22 @@ public class TagFinderImpl implements TagFinder {
     private Config config;
     private TagCache tagCache;
     private WordDistance distance;
+    private TagDao tagDao;
     private final int MAX_DISTANCE;
 
-    public TagFinderImpl(Config config, TagCache tagCache, WordDistance distance) {
+    public TagFinderImpl(Config config, TagCache tagCache, WordDistance distance, TagDao tagDao) {
         this.config = config;
         this.tagCache = tagCache;
         this.distance = distance;
+        this.tagDao = tagDao;
         MAX_DISTANCE = this.config.getInt("max_distance");
+    }
+
+    @Override
+    public Tag getTagWithLoadedDocuments(String value) {
+        Tag tag = tagDao.findByValue(value);
+        tag.getDocuments();
+        return tag;
     }
 
     @Override
