@@ -120,6 +120,7 @@ public class DirectoryDaoTest extends IdentifableDaoTest<Directory, DirectoryDao
         document.setCreated(new Date());
         document.setMimeType(mimeType);
         document.setContentMd5("md5:)");
+        document.setOwner(user);
         parentDir.addDocument(document);
         Directory firstSubdir = new Directory();
         firstSubdir.setName("firstSubdir");

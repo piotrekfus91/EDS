@@ -20,6 +20,8 @@ import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
 import pl.edu.pw.elka.pfus.eds.util.hash.ByteArrayHasher;
 
+import java.util.Date;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -161,8 +163,11 @@ public class DocumentModifierImplTest {
         when(directoryDao.findById(anyInt())).thenReturn(directory);
         document.setDirectory(directory);
         directory.setId(1);
+        document.setOwner(user);
 
         documentModifier.move(1, 1);
+
+        assertThat(true).isTrue();
     }
 
     @Test
@@ -170,6 +175,8 @@ public class DocumentModifierImplTest {
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
         when(documentDao.findById(anyInt())).thenReturn(document);
         when(directoryDao.findById(anyInt())).thenReturn(directory);
+        when(directoryDao.merge(directory)).thenReturn(directory);
+        when(directoryDao.merge(directory2)).thenReturn(directory2);
         document.setDirectory(directory);
         document.setOwner(user);
         directory.setOwner(user);
@@ -202,6 +209,7 @@ public class DocumentModifierImplTest {
     public void testDeleting() throws Exception {
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
         when(documentDao.findById(anyInt())).thenReturn(document);
+        document.setCreated(new Date());
         document.setOwner(user);
 
         documentModifier.delete(1);
