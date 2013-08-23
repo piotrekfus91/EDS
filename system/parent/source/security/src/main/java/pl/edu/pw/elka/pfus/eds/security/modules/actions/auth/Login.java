@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pfus.eds.security.modules.actions.auth;
 import org.apache.log4j.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
+import pl.edu.pw.elka.pfus.eds.security.exception.SecurityException;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.security.ledge.SecurityAction;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
@@ -30,7 +31,7 @@ public class Login extends SecurityAction {
             postMessage(context, MessageType.SUCCESS, "Logowanie udane.");
             logger.info("login succeeded: " + login);
             redirect(context, config.getString("root_url"));
-        } catch (pl.edu.pw.elka.pfus.eds.security.exception.SecurityException e) {
+        } catch (SecurityException e) {
             postMessage(context, MessageType.ERROR, "Logowanie nie powiodło się.");
             logger.warn("login failed: " + e.getMessage(), e);
         }

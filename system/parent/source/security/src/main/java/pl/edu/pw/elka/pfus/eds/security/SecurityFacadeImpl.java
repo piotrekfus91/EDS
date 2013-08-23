@@ -2,29 +2,36 @@ package pl.edu.pw.elka.pfus.eds.security;
 
 import org.apache.log4j.Logger;
 import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.PasswordDigester;
 import org.objectledge.context.Context;
 import org.objectledge.hibernate.HibernateSessionFactory;
 import org.objectledge.security.DataBackend;
+import org.objectledge.security.exception.DataBackendException;
+import org.objectledge.security.object.SecurityUser;
 import org.objectledge.security.object.hibernate.HibernateDataBackend;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.security.exception.InvalidLoginOrPasswordException;
+import pl.edu.pw.elka.pfus.eds.security.exception.SecurityException;
 import pl.edu.pw.elka.pfus.eds.security.exception.SecurityInitializationException;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
 import pl.edu.pw.elka.pfus.eds.util.ledge.LedgeHelper;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 
 public class SecurityFacadeImpl implements SecurityFacade {
     private static final Logger logger = Logger.getLogger(SecurityFacadeImpl.class);
+
     private Config config;
     private LedgeHelper ledgeHelper = new LedgeHelper();
+    private PasswordDigester passwordDigester;
     private DataBackend dataBackend;
     private UserDao userDao;
 
     public SecurityFacadeImpl(Context context, HibernateSessionFactory hibernateSessionFactory, Config config,
-                              UserDao userDao) {
+                              PasswordDigester passwordDigester, UserDao userDao) {
         this.config = config;
+        this.passwordDigester = passwordDigester;
         this.userDao = userDao;
         try {
             dataBackend = new HibernateDataBackend(context, hibernateSessionFactory);
@@ -45,8 +52,9 @@ public class SecurityFacadeImpl implements SecurityFacade {
     @Override
     public User logIn(Context context, String login, String password) {
         try {
-            Principal principal = getPrincipalByLogin(login);
-            verifyPassword(principal, password);
+            SecurityUser user = dataBackend.getUserByName(login);
+            logger.info("found user: " + user.getName());
+            verifyPassword(user, password);
 
             User candidate = userDao.findByName(login);
             if(candidate != null) {
@@ -54,7 +62,7 @@ public class SecurityFacadeImpl implements SecurityFacade {
             } else {
                 throw new SecurityException("user exists in security but not in application");
             }
-        } catch (AuthenticationException e) {
+        } catch (AuthenticationException | DataBackendException e) {
             throw new SecurityException(e);
         }
     }
@@ -74,14 +82,10 @@ public class SecurityFacadeImpl implements SecurityFacade {
         return getCurrentUser(context) != null;
     }
 
-    private Principal getPrincipalByLogin(String login) throws AuthenticationException {
-        return null;
-//        return userManager.getUserByLogin(login);
-    }
-
-    private void verifyPassword(Principal principal, String password) throws AuthenticationException {
-//        if(!userManager.checkUserPassword(principal, password))
-//            throw new InvalidLoginOrPasswordException();
+    private void verifyPassword(SecurityUser user, String password) throws AuthenticationException {
+        String passwordDigest = passwordDigester.digestPassword(password);
+        if(user.getPassword().equals(passwordDigest))
+            throw new InvalidLoginOrPasswordException();
     }
 
     private User preLogInUser(Context context, User candidate) {
