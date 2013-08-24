@@ -39,6 +39,7 @@ $pageTool.insertTitlePrefix('EDS')
         <li><a href="$link.view('app.Upload')">Upload</a></li>
         <li><a href="$link.view('app.Files')">Pliki</a></li>
         <li><a href="$link.view('app.Search')">Wyszukiwarka</a></li>
+        <li><a href="$link.view('app.ResourceGroups')">Grupy zasobów</a></li>
         <li>
             <a id="logout_link" href="$link.view('auth.Form').action('auth.Logout')">
                 <img src="$link.content('images/logout.png')" style="height: 16px" />

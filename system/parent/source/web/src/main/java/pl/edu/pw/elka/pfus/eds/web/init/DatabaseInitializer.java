@@ -25,6 +25,7 @@ public class DatabaseInitializer implements Startable {
     private MimeTypeDao mimeTypeDao;
     private CommentDao commentDao;
     private TagDao tagDao;
+    private ResourceGroupDao resourceGroupDao;
     private FileManager fileManager;
     private PathCreator pathCreator;
     private TagCache tagCache;
@@ -37,14 +38,16 @@ public class DatabaseInitializer implements Startable {
     private Tag polishTag;
 
     public DatabaseInitializer(SessionFactory sessionFactory, UserDao userDao, DirectoryDao directoryDao,
-                               MimeTypeDao mimeTypeDao, CommentDao commentDao, TagDao tagDao, FileManager fileManager,
-                               PathCreator pathCreator, TagCache tagCache) {
+                               MimeTypeDao mimeTypeDao, CommentDao commentDao, TagDao tagDao,
+                               ResourceGroupDao resourceGroupDao, FileManager fileManager, PathCreator pathCreator,
+                               TagCache tagCache) {
         this.sessionFactory = sessionFactory;
         this.userDao = userDao;
         this.directoryDao = directoryDao;
         this.mimeTypeDao = mimeTypeDao;
         this.commentDao = commentDao;
         this.tagDao = tagDao;
+        this.resourceGroupDao = resourceGroupDao;
         this.fileManager = fileManager;
         this.pathCreator = pathCreator;
         this.tagCache = tagCache;
@@ -75,6 +78,7 @@ public class DatabaseInitializer implements Startable {
         mimeTypeDao.setSession(userDao.getSession());
         commentDao.setSession(userDao.getSession());
         tagDao.setSession(userDao.getSession());
+        resourceGroupDao.setSession(userDao.getSession());
 
         jpegMimeType = mimeTypeDao.findById(jpegMimeType.getId());
         lfcTag = tagDao.findById(lfcTag.getId());
@@ -163,6 +167,12 @@ public class DatabaseInitializer implements Startable {
             Directory binariesDirectory = new Directory();
             binariesDirectory.setName("binarki");
             binariesDirectory.setParentDirectory(filesDirectory);
+
+        ResourceGroup lfcFansRG = new ResourceGroup();
+        lfcFansRG.setFounder(rootUser);
+        lfcFansRG.setName("LFC fans");
+        lfcFansRG.addDirectory(lfcPicturesDirectory);
+        resourceGroupDao.persist(lfcFansRG);
 
         mimeTypeDao.setSession(directoryDao.getSession());
         mimeTypeDao.persist(jpegMimeType);

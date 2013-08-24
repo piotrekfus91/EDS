@@ -1,0 +1,6 @@
+$viewEnclosureTool.top()
+<script src="$link.content('/js/app/resource_groups.js')"></script>
+
+<div id="resource_groups" class="resource_groups">
+
+</div>

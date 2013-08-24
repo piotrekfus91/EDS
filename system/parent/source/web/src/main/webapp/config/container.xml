@@ -56,6 +56,12 @@
                class="pl.edu.pw.elka.pfus.eds.logic.document.impl.DocumentDownloaderImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.document.DocumentService"
                class="pl.edu.pw.elka.pfus.eds.logic.document.impl.DocumentServiceImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupFinder"
+               class="pl.edu.pw.elka.pfus.eds.logic.resource.group.impl.ResourceGroupFinderImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupModifier"
+               class="pl.edu.pw.elka.pfus.eds.logic.resource.group.impl.ResourceGroupModifierImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupService"
+               class="pl.edu.pw.elka.pfus.eds.logic.resource.group.impl.ResourceGroupServiceImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.tag.TagFinder"
                class="pl.edu.pw.elka.pfus.eds.logic.tag.impl.TagFinderImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.tag.TagModifier"
@@ -80,6 +86,8 @@
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonDocumentExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResultExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResultExporterImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupListExporter"
+               class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResourceGroupListExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonTagExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonTagExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonTagListExporter"
