@@ -1,96 +1,66 @@
 package pl.edu.pw.elka.pfus.eds.security;
 
-import org.apache.log4j.Logger;
-import org.objectledge.authentication.AuthenticationException;
-import org.objectledge.authentication.PasswordDigester;
 import org.objectledge.context.Context;
-import org.objectledge.hibernate.HibernateSessionFactory;
-import org.objectledge.security.DataBackend;
-import org.objectledge.security.exception.DataBackendException;
-import org.objectledge.security.object.SecurityUser;
-import org.objectledge.security.object.hibernate.HibernateDataBackend;
-import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
+import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
-import pl.edu.pw.elka.pfus.eds.security.exception.InvalidLoginOrPasswordException;
-import pl.edu.pw.elka.pfus.eds.security.exception.SecurityException;
-import pl.edu.pw.elka.pfus.eds.security.exception.SecurityInitializationException;
-import pl.edu.pw.elka.pfus.eds.util.config.Config;
-import pl.edu.pw.elka.pfus.eds.util.ledge.LedgeHelper;
+import pl.edu.pw.elka.pfus.eds.security.resource.group.ResourceGroupManager;
+import pl.edu.pw.elka.pfus.eds.security.user.UserManager;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public class SecurityFacadeImpl implements SecurityFacade {
-    private static final Logger logger = Logger.getLogger(SecurityFacadeImpl.class);
+    private UserManager userManager;
+    private ResourceGroupManager resourceGroupManager;
 
-    private Config config;
-    private LedgeHelper ledgeHelper = new LedgeHelper();
-    private PasswordDigester passwordDigester;
-    private DataBackend dataBackend;
-    private UserDao userDao;
-
-    public SecurityFacadeImpl(Context context, HibernateSessionFactory hibernateSessionFactory, Config config,
-                              PasswordDigester passwordDigester, UserDao userDao) {
-        this.config = config;
-        this.passwordDigester = passwordDigester;
-        this.userDao = userDao;
-        try {
-            dataBackend = new HibernateDataBackend(context, hibernateSessionFactory);
-        } catch (Exception e) {
-            throw new SecurityInitializationException(e);
-        }
+    public SecurityFacadeImpl(UserManager userManager, ResourceGroupManager resourceGroupManager) {
+        this.userManager = userManager;
+        this.resourceGroupManager = resourceGroupManager;
     }
 
     @Override
     public void createUser(String login, String firstName, String lastName, String password) {
-        try {
-            dataBackend.createAccount(login, firstName, lastName, password);
-        } catch (Exception e) {
-            throw new SecurityException(e);
-        }
+        userManager.createUser(login, firstName, lastName, password);
     }
 
     @Override
     public User logIn(Context context, String login, String password) {
-        try {
-            SecurityUser user = dataBackend.getUserByName(login);
-            logger.info("found user: " + user.getName());
-            verifyPassword(user, password);
-
-            User candidate = userDao.findByName(login);
-            if(candidate != null) {
-                return preLogInUser(context, candidate);
-            } else {
-                throw new SecurityException("user exists in security but not in application");
-            }
-        } catch (AuthenticationException | DataBackendException e) {
-            throw new SecurityException(e);
-        }
+        return userManager.logIn(context, login, password);
     }
 
     @Override
     public User getCurrentUser(Context context) {
-        return (User) ledgeHelper.getFromSession(context, config.getString("logged_user"));
+        return userManager.getCurrentUser(context);
     }
 
     @Override
     public User getCurrentUser(HttpServletRequest request) {
-        return (User) request.getSession().getAttribute(config.getString("logged_user"));
+        return userManager.getCurrentUser(request);
     }
 
     @Override
     public boolean isLogged(Context context) {
-        return getCurrentUser(context) != null;
+        return userManager.isLogged(context);
     }
 
-    private void verifyPassword(SecurityUser user, String password) throws AuthenticationException {
-        String passwordDigest = passwordDigester.digestPassword(password);
-        if(user.getPassword().equals(passwordDigest))
-            throw new InvalidLoginOrPasswordException();
+    @Override
+    public void createResourceGroup(String name) {
+        resourceGroupManager.createResourceGroup(name);
+        return null;
     }
 
-    private User preLogInUser(Context context, User candidate) {
-        ledgeHelper.invalidateSession(context);
-        ledgeHelper.putInSession(context, config.getString("logged_user"), candidate);
-        return candidate;
+    @Override
+    public List<ResourceGroup> getGroupsFoundedByCurrentUser() {
+        return resourceGroupManager.getGroupsFoundedByCurrentUser();
+    }
+
+    @Override
+    public List<ResourceGroup> getGroupsFoundedByUser(User user) {
+        return resourceGroupManager.getGroupsFoundedByUser(user);
+    }
+
+    @Override
+    public List<ResourceGroup> getGroupsFoundedByUser(String login) {
+        return resourceGroupManager.getGroupsFoundedByUser(login);
     }
 }
