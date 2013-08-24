@@ -9,15 +9,17 @@ public class DocumentJsonDto extends FileSystemEntryJsonDto {
 
     protected String created;
     protected String mime;
+    protected String owner;
 
     public DocumentJsonDto() {
 
     }
 
-    public DocumentJsonDto(int id, String name, String stringPath, String created, String mime) {
+    public DocumentJsonDto(int id, String name, String stringPath, String created, String mime, String owner) {
         super(id, name, false, stringPath);
         this.created = created;
         this.mime = mime;
+        this.owner = owner;
     }
 
     public static DocumentJsonDto from(Document document) {
@@ -25,7 +27,8 @@ public class DocumentJsonDto extends FileSystemEntryJsonDto {
             return new DocumentJsonDto();
         SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
         return new DocumentJsonDto(document.getId(), document.getName(), document.getStringPath(),
-                dateFormatter.format(document.getCreated()), document.getMimeType().getType());
+                dateFormatter.format(document.getCreated()), document.getMimeType().getType(),
+                document.getOwner().getFriendlyName());
     }
 
     @Override
@@ -51,5 +54,13 @@ public class DocumentJsonDto extends FileSystemEntryJsonDto {
 
     public void setMime(String mime) {
         this.mime = mime;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

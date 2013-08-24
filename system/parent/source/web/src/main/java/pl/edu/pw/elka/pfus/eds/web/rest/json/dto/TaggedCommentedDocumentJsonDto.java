@@ -19,8 +19,8 @@ public class TaggedCommentedDocumentJsonDto extends DocumentJsonDto {
     }
 
     public TaggedCommentedDocumentJsonDto(int id, String name, String stringPath, String created, String mime,
-                                          List<Comment> comments, List<Tag> tags) {
-        super(id, name, stringPath, created, mime);
+                                          List<Comment> comments, List<Tag> tags, String owner) {
+        super(id, name, stringPath, created, mime, owner);
         this.created = created;
         this.mime = mime;
         for(Comment comment : comments) {
@@ -39,7 +39,7 @@ public class TaggedCommentedDocumentJsonDto extends DocumentJsonDto {
         SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
         return new TaggedCommentedDocumentJsonDto(document.getId(), document.getName(), document.getStringPath(),
                 dateFormatter.format(document.getCreated()), document.getMimeType().getType(), document.getComments(),
-                document.getTags());
+                document.getTags(), document.getOwner().getFriendlyName());
     }
 
     @Override

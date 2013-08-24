@@ -96,3 +96,8 @@ html, body {
 .tag_cloud a {
     text-decoration: none;
 }
+
+.resource_group_documents_table tr td  {
+    padding-left: 10px;
+    padding-right: 10px;
+}
