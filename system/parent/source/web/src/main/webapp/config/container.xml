@@ -86,6 +86,8 @@
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonDocumentExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResultExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResultExporterImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupExporter"
+               class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResourceGroupExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupListExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResourceGroupListExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonTagExporter"

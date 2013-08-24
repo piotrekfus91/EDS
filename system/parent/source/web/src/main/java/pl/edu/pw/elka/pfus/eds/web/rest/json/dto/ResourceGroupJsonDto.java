@@ -1,24 +1,36 @@
 package pl.edu.pw.elka.pfus.eds.web.rest.json.dto;
 
+import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class ResourceGroupJsonDto {
     private String name;
     private String founder;
+    private List<DocumentJsonDto> documents;
 
     public ResourceGroupJsonDto() {
 
     }
 
-    public ResourceGroupJsonDto(String name, String founder) {
+    public ResourceGroupJsonDto(String name, String founder, List<DocumentJsonDto> documents) {
         this.name = name;
         this.founder = founder;
+        this.documents = documents;
     }
 
     public static ResourceGroupJsonDto from(ResourceGroup resourceGroup) {
         if(resourceGroup == null)
             return new ResourceGroupJsonDto();
-        return new ResourceGroupJsonDto(resourceGroup.getName(), resourceGroup.getFounder().getFriendlyName());
+        List<DocumentJsonDto> documents = new LinkedList<>();
+        for(Document document : resourceGroup.getAllDocuments()) {
+            documents.add(DocumentJsonDto.from(document));
+        }
+        return new ResourceGroupJsonDto(resourceGroup.getName(), resourceGroup.getFounder().getFriendlyName(),
+                documents);
+
     }
 
     public String getName() {
@@ -35,5 +47,13 @@ public class ResourceGroupJsonDto {
 
     public void setFounder(String founder) {
         this.founder = founder;
+    }
+
+    public List<DocumentJsonDto> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<DocumentJsonDto> documents) {
+        this.documents = documents;
     }
 }

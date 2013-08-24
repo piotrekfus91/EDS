@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * DAO dla obiektów {@link ResourceGroup}.
  */
-public interface ResourceGroupDao extends IdentifableDao<ResourceGroup> {
+public interface ResourceGroupDao extends NamedDao<ResourceGroup>, IdentifableDao<ResourceGroup> {
     /**
      * Zwraca listę grup zasobów, których założycielem
      * jest podany użytkownik.

@@ -3,8 +3,10 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Klasa reprezentuje grupę zasobów.
@@ -52,6 +54,22 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
     public void removeFromAssociations() {
         directories.remove(this);
         documents.remove(this);
+    }
+
+    public Set<Document> getAllDocuments() {
+        Set<Document> allDocuments = new HashSet<>();
+        allDocuments.addAll(documents);
+        for(Directory directory : directories) {
+            addDocumentsFromDirectory(allDocuments, directory);
+        }
+        return allDocuments;
+    }
+
+    private void addDocumentsFromDirectory(Set<Document> allDocuments, Directory directory) {
+        allDocuments.addAll(directory.getDocuments());
+        for(Directory subdirectory : directory.getSubdirectories()) {
+            addDocumentsFromDirectory(allDocuments, subdirectory);
+        }
     }
 
     public void setVersion(Integer version) {

@@ -31,4 +31,12 @@ public interface ResourceGroupFinder {
      * @return lista grup zasobów użytkownika.
      */
     List<ResourceGroup> getUserResourceGroup(int userId);
+
+    /**
+     * Zwraca grupę zasobów o podanej nazwie.
+     *
+     * @param name nazwa grupy zasobów.
+     * @return grupa zasobów o podanej nazwie.
+     */
+    ResourceGroup getByNameWithDocuments(String name);
 }

@@ -28,4 +28,9 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     public List<ResourceGroup> getUserResourceGroup(int userId) {
         return resourceGroupFinder.getUserResourceGroup(userId);
     }
+
+    @Override
+    public ResourceGroup getByNameWithDocuments(String name) {
+        return resourceGroupFinder.getByNameWithDocuments(name);
+    }
 }

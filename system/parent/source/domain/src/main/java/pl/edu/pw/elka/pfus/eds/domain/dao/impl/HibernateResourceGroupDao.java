@@ -16,8 +16,11 @@ public class HibernateResourceGroupDao extends IdentifableGenericDao<ResourceGro
             "FROM ResourceGroup rg " +
             "WHERE rg.founder.id = :userId";
 
+    private HibernateNamedDao<ResourceGroup> namedDao;
+
     public HibernateResourceGroupDao(Context context, SessionFactory sessionFactory) {
         super(context, sessionFactory);
+        namedDao = new HibernateNamedDao<>(session, ResourceGroup.class);
     }
 
     @Override
@@ -30,6 +33,11 @@ public class HibernateResourceGroupDao extends IdentifableGenericDao<ResourceGro
         Query query = session.createQuery(ALL_OF_FOUNDER_QUERY);
         query.setInteger("userId", userId);
         return query.list();
+    }
+
+    @Override
+    public ResourceGroup findByName(String name) {
+        return namedDao.findByName(name);
     }
 
     @Override
