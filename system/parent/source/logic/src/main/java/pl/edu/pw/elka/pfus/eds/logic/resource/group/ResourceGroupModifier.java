@@ -24,4 +24,11 @@ public interface ResourceGroupModifier {
      * @return zaktualizowana grupa zasobów.
      */
     ResourceGroup updateNameAndDescription(String oldName, String newName, String description);
+
+    /**
+     * Usuwa grupę zasobów.
+     *
+     * @param name nazwa grupy zasobów do usunięcia.
+     */
+    void delete(String name);
 }

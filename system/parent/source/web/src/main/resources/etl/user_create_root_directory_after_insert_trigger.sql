@@ -9,3 +9,4 @@ CREATE TRIGGER user_create_root_directory_after_insert_trigger
 -- z ktora nie radzi sobie dynatree
 ALTER SEQUENCE directory_seq RESTART WITH 1;
 ALTER SEQUENCE document_seq RESTART WITH 1;
+ALTER SEQUENCE resource_group_seq RESTART WITH 1;

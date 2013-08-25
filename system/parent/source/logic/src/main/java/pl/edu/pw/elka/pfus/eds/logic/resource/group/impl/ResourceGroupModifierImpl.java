@@ -70,4 +70,24 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
             throw new InternalException();
         }
     }
+
+    @Override
+    public void delete(String name) {
+        ResourceGroup resourceGroup = resourceGroupDao.findByName(name);
+        LogicValidator.validateExistence(resourceGroup);
+
+        User currentUser = securityFacade.getCurrentUser(context);
+        LogicValidator.validateOwnershipOverResourceGroup(currentUser, resourceGroup);
+
+        try {
+            resourceGroupDao.beginTransaction();
+            resourceGroup = resourceGroupDao.merge(resourceGroup);
+            resourceGroupDao.delete(resourceGroup);
+            resourceGroupDao.commitTransaction();
+        } catch (Exception e) {
+            resourceGroupDao.rollbackTransaction();
+            logger.error(e.getMessage(), e);
+            throw new InternalException();
+        }
+    }
 }

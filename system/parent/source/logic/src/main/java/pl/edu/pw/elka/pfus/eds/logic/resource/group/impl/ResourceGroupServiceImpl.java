@@ -47,4 +47,9 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     public ResourceGroup updateNameAndDescription(String oldName, String newName, String description) {
         return resourceGroupModifier.updateNameAndDescription(oldName, newName, description);
     }
+
+    @Override
+    public void delete(String name) {
+        resourceGroupModifier.delete(name);
+    }
 }

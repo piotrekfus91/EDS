@@ -91,4 +91,18 @@ public class ResourceGroupRest {
         }
         return Response.status(Response.Status.OK).entity(exported).build();
     }
+
+    @DELETE
+    @Path("/delete/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteResourceGroup(@PathParam("name") String name) {
+        String exported;
+        try {
+            resourceGroupService.delete(name);
+            exported = resourceGroupExporter.exportSuccess(null);
+        } catch (LogicException e) {
+            exported = resourceGroupExporter.exportFailure(e.getMessage(), null);
+        }
+        return Response.status(Response.Status.OK).entity(exported).build();
+    }
 }

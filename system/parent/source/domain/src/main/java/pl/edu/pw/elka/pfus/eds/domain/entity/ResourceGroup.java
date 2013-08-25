@@ -52,8 +52,16 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
 
     @Override
     public void removeFromAssociations() {
-        directories.remove(this);
-        documents.remove(this);
+        for(Directory directory : directories) {
+            if(directory.getResourceGroups().contains(this))
+                directory.removeResourceGroup(this);
+        }
+        directories.clear();
+        for(Document document : documents) {
+            if(document.getResourceGroups().contains(this))
+                document.removeResourceGroup(this);
+        }
+        documents.clear();
     }
 
     public Set<Document> getAllDocuments() {

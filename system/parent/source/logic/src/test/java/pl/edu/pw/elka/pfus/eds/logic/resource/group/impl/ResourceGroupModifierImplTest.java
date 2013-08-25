@@ -103,4 +103,40 @@ public class ResourceGroupModifierImplTest {
 
         modifier.updateNameAndDescription("starting name", "ending name", "ending description");
     }
+
+    @Test(expectedExceptions = ObjectNotFoundException.class)
+    public void testDeletingForNotFound() throws Exception {
+        when(resourceGroupDao.findByName(anyString())).thenReturn(null);
+
+        modifier.delete("");
+    }
+
+    @Test(expectedExceptions = InvalidPrivilegesException.class)
+    public void testDeletingForNotOwner() throws Exception {
+        when(resourceGroupDao.findByName(anyString())).thenReturn(resourceGroup);
+        when(securityFacade.getCurrentUser(context)).thenReturn(user);
+
+        modifier.delete("");
+    }
+
+    @Test
+    public void testDeletingForSuccess() throws Exception {
+        when(resourceGroupDao.findByName(anyString())).thenReturn(resourceGroup);
+        when(securityFacade.getCurrentUser(context)).thenReturn(user);
+        resourceGroup.setFounder(user);
+
+        modifier.delete("");
+
+        verify(resourceGroupDao, times(1)).commitTransaction();
+    }
+
+    @Test(expectedExceptions = InternalException.class)
+    public void testDeletingForRollback() throws Exception {
+        when(resourceGroupDao.findByName(anyString())).thenReturn(resourceGroup);
+        when(securityFacade.getCurrentUser(context)).thenReturn(user);
+        resourceGroup.setFounder(user);
+        doThrow(new InternalException()).when(resourceGroupDao).commitTransaction();
+
+        modifier.delete("");
+    }
 }

@@ -89,9 +89,14 @@ function post_resource_group_info(div, resource_group) {
     content += "<div id=\"resource_group_description\">";
         content += resource_group.description;
     content += "</div>";
-    content += "<button onclick=\"javascript:edit_resource_group_button_click('" + resource_group.name + "')\">";
-        content += "Edytuj informacje o grupie";
-    content += "</button>";
+    content += "<div id=\"resource_group_buttons\">";
+        content += "<button onclick=\"javascript:edit_resource_group_button_click('" + resource_group.name + "')\">";
+            content += "Edytuj informacje o grupie";
+        content += "</button>";
+        content += "<button onclick=\"javascript:delete_resource_group('" + resource_group.name + "')\">";
+            content += "Usuń grupę zasobów";
+        content += "</button>";
+    content += "</div>";
     content += "<br />";
     content += "<table class=\"resource_group_documents_table\">";
         content += "<tr>";
@@ -134,6 +139,7 @@ function post_resource_group_info(div, resource_group) {
     });
     content += "</table>";
     div.html(content);
+    div.find('#resource_group_buttons').buttonset();
     div.find('a, button').button();
 }
 
@@ -150,6 +156,25 @@ function edit_resource_group_button_click(name) {
     resource_group_div.find('#resource_group_name_input').val(name);
     resource_group_div.find('#resource_group_description_textarea').val(description);
     resource_group_div.dialog("open");
+}
+
+function delete_resource_group(name) {
+    $.ajax({
+        type: "DELETE",
+        async: false,
+        url: rest('/resourceGroups/delete/' + name),
+        success: function(result) {
+            if(is_success(result)) {
+                post_message_now('success', 'Grupa została usunięta');
+            } else {
+                post_error_from_result(result);
+            }
+        },
+        error: function() {
+            post_message_now('error', 'Błąd podczas usuwania grupy');
+        }
+    });
+    reload_resource_groups();
 }
 
 $('#resource_group_div').dialog({
