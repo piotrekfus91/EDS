@@ -76,6 +76,7 @@ public class ResourceGroupModifierImplTest {
         when(resourceGroupDao.findByName("starting name")).thenReturn(resourceGroup);
         when(userDao.findById(anyInt())).thenReturn(user);
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
+        when(resourceGroupDao.merge(resourceGroup)).thenReturn(resourceGroup);
         resourceGroup.setFounder(user);
 
         resourceGroup.setName("starting name");

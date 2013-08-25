@@ -33,4 +33,19 @@ public class UserTest {
 
         assertThat(user.getFriendlyName()).isEqualTo("first last");
     }
+
+    @Test
+    public void testIsOwnerForNotOwner() throws Exception {
+        Directory directory = new Directory();
+
+        assertThat(user.isOwnerOfDirectory(directory)).isFalse();
+    }
+
+    @Test
+    public void testIsOwnerForOwner() throws Exception {
+        Directory directory = new Directory();
+        directory.setOwner(user);
+
+        assertThat(user.isOwnerOfDirectory(directory)).isTrue();
+    }
 }
