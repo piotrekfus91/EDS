@@ -13,7 +13,7 @@ License Type: Evaluation
 			</generator>
 		</id>
 
-		<property name="type" column="type" unique="true" type="string" length="20" not-null="true" lazy="false"/>
+		<property name="type" column="type" unique="true" type="string" length="30" not-null="true" lazy="false"/>
 		<property name="enabled" column="enabled" type="boolean" not-null="true" lazy="false"/>
 		<property name="defaultExtension" column="default_extension" type="string" length="6" not-null="false" lazy="false"/>
 		<property name="description" column="description" type="text" not-null="false" lazy="false"/>

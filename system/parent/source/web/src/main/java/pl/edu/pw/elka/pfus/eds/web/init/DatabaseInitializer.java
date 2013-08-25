@@ -33,7 +33,7 @@ public class DatabaseInitializer implements Startable {
     private MimeType jpegMimeType;
     private MimeType pdfMimeType;
     private MimeType docMimeType;
-    private MimeType texMimeType;
+    private MimeType plainTextMimeType;
 
     private Tag wallpaperTag;
     private Tag lfcTag;
@@ -108,7 +108,7 @@ public class DatabaseInitializer implements Startable {
         jpegMimeType = mimeTypeDao.findById(jpegMimeType.getId());
         pdfMimeType = mimeTypeDao.findById(pdfMimeType.getId());
         docMimeType = mimeTypeDao.findById(docMimeType.getId());
-        texMimeType = mimeTypeDao.findById(texMimeType.getId());
+        plainTextMimeType = mimeTypeDao.findById(plainTextMimeType.getId());
         lfcTag = tagDao.findById(lfcTag.getId());
         wallpaperTag = tagDao.findById(wallpaperTag.getId());
         thesisTag = tagDao.findById(thesisTag.getId());
@@ -152,7 +152,7 @@ public class DatabaseInitializer implements Startable {
                     technologiesDocument.setCreated(new Date());
                     technologiesDocument.setOwner(rootUser);
                     technologiesDocument.setContentMd5("693324fdccbb70a358591f764cbf3400");
-                    technologiesDocument.setMimeType(texMimeType);
+                    technologiesDocument.setMimeType(plainTextMimeType);
                     technologiesDocument.setOwner(rootUser);
                     technologiesDocument.addTag(thesisTag);
                     thesisTag.addDocument(technologiesDocument);
@@ -246,7 +246,7 @@ public class DatabaseInitializer implements Startable {
 
         mimeTypeDao.setSession(directoryDao.getSession());
         mimeTypeDao.persist(jpegMimeType);
-        mimeTypeDao.persist(texMimeType);
+        mimeTypeDao.persist(plainTextMimeType);
         mimeTypeDao.persist(docMimeType);
         mimeTypeDao.persist(pdfMimeType);
         directoryDao.persist(picturesDirectory);
@@ -283,17 +283,17 @@ public class DatabaseInitializer implements Startable {
 
         docMimeType = new MimeType();
         docMimeType.setDefaultExtension(".doc");
-        docMimeType.setType("application/msword");
+        docMimeType.setType("application/x-tika-msoffice");
 
-        texMimeType = new MimeType();
-        texMimeType.setDefaultExtension(".tex");
-        texMimeType.setType("application/x-tex");
+        plainTextMimeType = new MimeType();
+        plainTextMimeType.setDefaultExtension(".txt");
+        plainTextMimeType.setType("text/plain");
 
         mimeTypeDao.beginTransaction();
         mimeTypeDao.persist(jpegMimeType);
         mimeTypeDao.persist(pdfMimeType);
         mimeTypeDao.persist(docMimeType);
-        mimeTypeDao.persist(texMimeType);
+        mimeTypeDao.persist(plainTextMimeType);
         mimeTypeDao.commitTransaction();
     }
 

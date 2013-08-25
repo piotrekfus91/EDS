@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import pl.edu.pw.elka.pfus.eds.logic.document.DocumentService;
+import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonPluploadExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.dto.plupload.PluploadJsonDto;
 
@@ -29,16 +30,16 @@ public class UploadRest {
 
     @POST
     public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
-                               @FormDataParam("file")FormDataContentDisposition uploadedFileInfo) {
+                               @FormDataParam("file") FormDataContentDisposition uploadedFileInfo) {
         logger.info("loading: " + uploadedFileInfo.getFileName());
         String exported;
         try {
             byte[] bytes = ByteStreams.toByteArray(uploadedInputStream);
             documentService.create(uploadedFileInfo.getFileName(), bytes);
             exported = pluploadExporter.export(new PluploadJsonDto());
-        } catch (IOException e) {
-            exported = pluploadExporter.export(new PluploadJsonDto(e.getMessage()));
+        } catch (IOException | LogicException e) {
             logger.error(e.getMessage(), e);
+            exported = pluploadExporter.export(new PluploadJsonDto(e.getMessage()));
         }
         return Response.status(Response.Status.OK).entity(exported).build();
     }

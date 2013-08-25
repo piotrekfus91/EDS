@@ -64,7 +64,7 @@ public class TikaMimeTypeDetector implements MimeTypeDetector {
     MimeType findMimeTypeOrThrowException(String mimeTypeAsString) {
         MimeType mimeType = mimeTypeDao.findByType(mimeTypeAsString);
         if(mimeType == null)
-            throw new InvalidMimeTypeException();
+            throw new InvalidMimeTypeException(mimeTypeAsString);
         return mimeType;
     }
 }

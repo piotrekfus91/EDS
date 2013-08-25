@@ -1,14 +1,14 @@
 package pl.edu.pw.elka.pfus.eds.logic.exception;
 
 public class InvalidMimeTypeException extends LogicException {
-    private static final String DEFAULT_MESSAGE = "Niedozwolony typ MIME";
+    private static final String DEFAULT_MESSAGE = "Niedozwolony typ MIME ";
 
     public InvalidMimeTypeException() {
         super(DEFAULT_MESSAGE);
     }
 
     public InvalidMimeTypeException(String message) {
-        super(message);
+        super(DEFAULT_MESSAGE + message);
     }
 
     public InvalidMimeTypeException(String message, Throwable cause) {

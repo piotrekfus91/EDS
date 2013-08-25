@@ -35,7 +35,7 @@ public class TikaMimeTypeDetectorTest {
 
     @Test(expectedExceptions = InvalidMimeTypeException.class)
     public void testFindMimeTypeForException() throws Exception {
-        when(mimeTypeDao.findByType(anyString())).thenThrow(new InvalidMimeTypeException());
+        when(mimeTypeDao.findByType(anyString())).thenThrow(new InvalidMimeTypeException(""));
 
         detector.findMimeTypeOrThrowException("sdjfj");
     }
