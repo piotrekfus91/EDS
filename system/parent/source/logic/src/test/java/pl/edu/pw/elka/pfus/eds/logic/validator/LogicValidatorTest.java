@@ -2,10 +2,7 @@ package pl.edu.pw.elka.pfus.eds.logic.validator;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
-import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
-import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
-import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.domain.entity.*;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidMimeTypeException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
@@ -15,12 +12,14 @@ import static org.fest.assertions.Assertions.assertThat;
 public class LogicValidatorTest {
     private Directory directory;
     private Document document;
+    private ResourceGroup resourceGroup;
     private User user;
     
     @BeforeMethod
     private void setUp() {
         directory = new Directory();
         document = new Document();
+        resourceGroup = new ResourceGroup();
         user = new User();
     }
     
@@ -64,6 +63,20 @@ public class LogicValidatorTest {
     @Test(expectedExceptions = InvalidPrivilegesException.class)
     public void testValidateOwnershipOverDirectoryEx() throws Exception {
         LogicValidator.validateOwnershipOverDirectory(user, directory);
+    }
+
+    @Test
+    public void testValidateOwnershipOverResourceGroupNoEx() throws Exception {
+        resourceGroup.setFounder(user);
+
+        LogicValidator.validateOwnershipOverResourceGroup(user, resourceGroup);
+
+        assertThat(true).isTrue();
+    }
+
+    @Test(expectedExceptions = InvalidPrivilegesException.class)
+    public void testValidateOwnershipOverResourceGroupEx() throws Exception {
+        LogicValidator.validateOwnershipOverResourceGroup(user, resourceGroup);
     }
 
     @Test

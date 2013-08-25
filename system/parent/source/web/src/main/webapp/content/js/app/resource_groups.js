@@ -1,3 +1,6 @@
+var saveMode = ""; // add lub edit
+var editModeResourceGroupName = "";
+
 $(document).ready(function() {
     $('#resource_groups').accordion();
     $('#create_new_resource_group_button').button();
@@ -83,10 +86,13 @@ function post_resource_group_info(div, resource_group) {
         content += "Założyciel: ";
         content += resource_group.founder;
     content += "</div>";
-    content += "<div>";
+    content += "<div id=\"resource_group_description\">";
         content += resource_group.description;
     content += "</div>";
-    content += "Dostępne dokumenty";
+    content += "<button onclick=\"javascript:edit_resource_group_button_click('" + resource_group.name + "')\">";
+        content += "Edytuj informacje o grupie";
+    content += "</button>";
+    content += "<br />";
     content += "<table class=\"resource_group_documents_table\">";
         content += "<tr>";
             content += "<th>";
@@ -128,10 +134,22 @@ function post_resource_group_info(div, resource_group) {
     });
     content += "</table>";
     div.html(content);
+    div.find('a, button').button();
 }
 
 function create_new_resource_group_button_click() {
+    saveMode = "add";
     $('#resource_group_div').dialog("open");
+}
+
+function edit_resource_group_button_click(name) {
+    saveMode = "edit";
+    editModeResourceGroupName = name;
+    var description = $('#resource_group_description').html();
+    var resource_group_div = $('#resource_group_div');
+    resource_group_div.find('#resource_group_name_input').val(name);
+    resource_group_div.find('#resource_group_description_textarea').val(description);
+    resource_group_div.dialog("open");
 }
 
 $('#resource_group_div').dialog({
@@ -140,23 +158,32 @@ $('#resource_group_div').dialog({
     height: 'auto',
     modal: true,
     buttons: {
-        "Utwórz": function() {
+        "Zapisz": function() {
             var resource_group_div = $('#resource_group_div');
             var name = resource_group_div.find('#resource_group_name_input').val();
             var description = resource_group_div.find('#resource_group_description_textarea').val();
+            var restUrl = "";
+            var method = "";
+            if(saveMode == "add") {
+                method = "POST";
+                restUrl = rest("/resourceGroups/create");
+            } else if(saveMode == "edit") {
+                method = "PUT";
+                restUrl = rest("/resourceGroups/update/" + editModeResourceGroupName);
+            }
             var data = create_resource_group(name, description);
             console.log(name);
             console.log(description);
             console.log(data);
             $.ajax({
-                type: "POST",
-                url: rest('/resourceGroups/create'),
+                type: method,
+                url: restUrl,
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 data: data,
                 success: function(result) {
                     if(is_success(result)) {
-                        post_message_now('success', 'Utworzono grupę ' + name);
+                        post_message_now('success', 'Zapisano grupę ' + name);
                         reload_resource_groups();
                         clear_and_close_resource_group_div();
                     } else {
@@ -164,7 +191,7 @@ $('#resource_group_div').dialog({
                     }
                 },
                 error: function() {
-                    post_message_now('error', 'Błąd podczas tworzenia grupy ' + name);
+                    post_message_now('error', 'Błąd podczas zapisywania grupy ' + name);
                 }
             })
         },

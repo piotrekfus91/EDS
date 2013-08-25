@@ -42,4 +42,9 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     public ResourceGroup create(String name, String description) {
         return resourceGroupModifier.create(name, description);
     }
+
+    @Override
+    public ResourceGroup updateNameAndDescription(String oldName, String newName, String description) {
+        return resourceGroupModifier.updateNameAndDescription(oldName, newName, description);
+    }
 }

@@ -1,9 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.logic.validator;
 
-import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
-import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
-import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
-import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.domain.entity.*;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidMimeTypeException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
@@ -22,8 +19,13 @@ public class LogicValidator {
             throw new InvalidPrivilegesException();
     }
 
-    public static void validateOwnershipOverDirectory(User currentUser, Directory sourceDirectory) {
-        if(!currentUser.isOwnerOfDirectory(sourceDirectory))
+    public static void validateOwnershipOverDirectory(User currentUser, Directory directory) {
+        if(!currentUser.isOwnerOfDirectory(directory))
+            throw new InvalidPrivilegesException();
+    }
+
+    public static void validateOwnershipOverResourceGroup(User currentUser, ResourceGroup resourceGroup) {
+        if(!currentUser.equals(resourceGroup.getFounder()))
             throw new InvalidPrivilegesException();
     }
 

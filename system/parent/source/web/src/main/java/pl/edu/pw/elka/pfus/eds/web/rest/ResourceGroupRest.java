@@ -72,4 +72,23 @@ public class ResourceGroupRest {
         }
         return Response.status(Response.Status.OK).entity(exported).build();
     }
+
+    @PUT
+    @Path("/update/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateResourceGroup(@PathParam("name") String name,
+                                        SimpleResourceGroupJsonDto resourceGroupJsonDto) {
+        logger.info("updating group " + name + " to " + resourceGroupJsonDto.getName());
+        String exported;
+        try {
+            ResourceGroup resourceGroup = resourceGroupService.updateNameAndDescription(name,
+                    resourceGroupJsonDto.getName(), resourceGroupJsonDto.getDescription());
+            exported = resourceGroupExporter.exportSuccess(resourceGroup);
+        } catch (LogicException e) {
+            logger.error(e.getMessage(), e);
+            exported = resourceGroupExporter.exportFailure(e.getMessage(), null);
+        }
+        return Response.status(Response.Status.OK).entity(exported).build();
+    }
 }

@@ -14,4 +14,14 @@ public interface ResourceGroupModifier {
      * @return utworzona grupa.
      */
     ResourceGroup create(String name, String description);
+
+    /**
+     * Aktualizuje nazwę i opis grupy zasobów.
+     *
+     * @param oldName stara nazwa.
+     * @param newName nowa nazwa.
+     * @param description nowy opis.
+     * @return zaktualizowana grupa zasobów.
+     */
+    ResourceGroup updateNameAndDescription(String oldName, String newName, String description);
 }

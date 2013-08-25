@@ -8,6 +8,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupModifier;
+import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 public class ResourceGroupModifierImpl implements ResourceGroupModifier {
@@ -37,6 +38,30 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
         try {
             resourceGroupDao.beginTransaction();
             resourceGroupDao.persist(resourceGroup);
+            resourceGroupDao.commitTransaction();
+            return resourceGroup;
+        } catch (Exception e) {
+            resourceGroupDao.rollbackTransaction();
+            logger.error(e.getMessage(), e);
+            throw new InternalException();
+        }
+    }
+
+    @Override
+    public ResourceGroup updateNameAndDescription(String oldName, String newName, String description) {
+        userDao.setSession(resourceGroupDao.getSession());
+        ResourceGroup resourceGroup = resourceGroupDao.findByName(oldName);
+        LogicValidator.validateExistence(resourceGroup);
+
+        User currentUser = securityFacade.getCurrentUser(context);
+        LogicValidator.validateOwnershipOverResourceGroup(currentUser, resourceGroup);
+
+        try {
+            resourceGroupDao.beginTransaction();
+            resourceGroup.setName(newName);
+            resourceGroup.setDescription(description);
+            resourceGroup.setFounder(userDao.findById(currentUser.getId()));
+            resourceGroup = resourceGroupDao.merge(resourceGroup);
             resourceGroupDao.commitTransaction();
             return resourceGroup;
         } catch (Exception e) {
