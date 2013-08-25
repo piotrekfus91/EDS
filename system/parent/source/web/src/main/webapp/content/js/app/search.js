@@ -2,7 +2,6 @@ $(document).ready(function() {
     $('input').button();
     $('#radio_button_set').buttonset();
     $('#search').css('display', 'block');
-    $('#search_results').accordion();
 
     $('#searcher').click(function() {
         var content_to_search = $('#search_value_input').val();
@@ -29,6 +28,7 @@ $(document).ready(function() {
 });
 
 function search_tags_by_name(name) {
+    $('#search_results').accordion();
     $('#search_value_input').val(name);
     $.ajax({
         type: "GET",

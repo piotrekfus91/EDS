@@ -31,11 +31,14 @@ public class DatabaseInitializer implements Startable {
     private TagCache tagCache;
 
     private MimeType jpegMimeType;
+    private MimeType pdfMimeType;
+    private MimeType docMimeType;
+    private MimeType texMimeType;
 
     private Tag wallpaperTag;
     private Tag lfcTag;
     private Tag scholarTag;
-    private Tag polishTag;
+    private Tag thesisTag;
 
     public DatabaseInitializer(SessionFactory sessionFactory, UserDao userDao, DirectoryDao directoryDao,
                                MimeTypeDao mimeTypeDao, CommentDao commentDao, TagDao tagDao,
@@ -69,10 +72,32 @@ public class DatabaseInitializer implements Startable {
         rootUser.setName("root");
         rootUser.setPasswordValue("asdf");
         rootUser.setEmail("root@localhost");
-        rootUser.setFirstName("root");
-        rootUser.setLastName("root");
+        rootUser.setFirstName("Piotrek");
+        rootUser.setLastName("Fus");
         rootUser.setCreated(new Date());
+
+        User johnnyUser = new User();
+        johnnyUser.setName("johnny");
+        johnnyUser.setPasswordValue("asdf");
+        johnnyUser.setEmail("johnny@localhost");
+        johnnyUser.setFirstName("Johnny");
+        johnnyUser.setLastName("Opalony");
+        johnnyUser.setCreated(new Date());
+
+        User jerryUser = new User();
+        jerryUser.setName("jerry");
+        jerryUser.setPasswordValue("asdf");
+        jerryUser.setEmail("jerry@localhost");
+        jerryUser.setFirstName("Jurek");
+        jerryUser.setLastName("Ogórek");
+        jerryUser.setCreated(new Date());
+
         userDao.persist(rootUser);
+        userDao.persist(johnnyUser);
+        userDao.persist(jerryUser);
+        userDao.commitTransaction();
+
+        userDao.beginTransaction();
 
         directoryDao.setSession(userDao.getSession());
         mimeTypeDao.setSession(userDao.getSession());
@@ -81,20 +106,61 @@ public class DatabaseInitializer implements Startable {
         resourceGroupDao.setSession(userDao.getSession());
 
         jpegMimeType = mimeTypeDao.findById(jpegMimeType.getId());
+        pdfMimeType = mimeTypeDao.findById(pdfMimeType.getId());
+        docMimeType = mimeTypeDao.findById(docMimeType.getId());
+        texMimeType = mimeTypeDao.findById(texMimeType.getId());
         lfcTag = tagDao.findById(lfcTag.getId());
         wallpaperTag = tagDao.findById(wallpaperTag.getId());
+        thesisTag = tagDao.findById(thesisTag.getId());
 
         Directory rootDirectory = directoryDao.getRootDirectory(rootUser);
 
         Directory documentsDirectory = new Directory();
         documentsDirectory.setName("dokumenty");
         documentsDirectory.setParentDirectory(rootDirectory);
+            Document polishDocument = new Document();
+            polishDocument.setName("Plan-polski.doc");
+            polishDocument.setCreated(new Date());
+            polishDocument.setContentMd5("3779b2ec5fddd49aefb6fdf18b394bc8");
+            polishDocument.setMimeType(docMimeType);
+            polishDocument.setOwner(rootUser);
+            polishDocument.setDirectory(documentsDirectory);
+            documentsDirectory.addDocument(polishDocument);
+            saveDocumentToRepository(polishDocument);
             Directory schoolDocumentsDirectory = new Directory();
             schoolDocumentsDirectory.setName("szkolne");
             schoolDocumentsDirectory.setParentDirectory(documentsDirectory);
                 Directory pdiDirectory = new Directory();
                 pdiDirectory.setName("PDI");
                 pdiDirectory.setParentDirectory(schoolDocumentsDirectory);
+                    Document thesisDocument = new Document();
+                    thesisDocument.setName("Praca.pdf");
+                    thesisDocument.setOwner(rootUser);
+                    thesisDocument.setCreated(new Date());
+                    thesisDocument.setContentMd5("e78b47846e48ed63ca58794b65701c53");
+                    thesisDocument.setMimeType(pdfMimeType);
+                    thesisDocument.addTag(thesisTag);
+                    thesisDocument.setOwner(rootUser);
+                    thesisTag.addDocument(thesisDocument);
+                    thesisDocument.addTag(scholarTag);
+                    scholarTag.addDocument(thesisDocument);
+                    pdiDirectory.addDocument(thesisDocument);
+                    thesisDocument.setDirectory(pdiDirectory);
+                    saveDocumentToRepository(thesisDocument);
+                    Document technologiesDocument = new Document();
+                    technologiesDocument.setName("technologie.tex");
+                    technologiesDocument.setCreated(new Date());
+                    technologiesDocument.setOwner(rootUser);
+                    technologiesDocument.setContentMd5("693324fdccbb70a358591f764cbf3400");
+                    technologiesDocument.setMimeType(texMimeType);
+                    technologiesDocument.setOwner(rootUser);
+                    technologiesDocument.addTag(thesisTag);
+                    thesisTag.addDocument(technologiesDocument);
+                    technologiesDocument.addTag(scholarTag);
+                    scholarTag.addDocument(technologiesDocument);
+                    technologiesDocument.setDirectory(pdiDirectory);
+                    pdiDirectory.addDocument(technologiesDocument);
+                    saveDocumentToRepository(thesisDocument);
                 for(int i = 0; i < 7; i++) {
                     Directory semDirectory = new Directory();
                     semDirectory.setName("Semestr " + (i+1));
@@ -115,19 +181,11 @@ public class DatabaseInitializer implements Startable {
                 jpegMimeType.addDocument(gerrard20);
                 gerrard20.setDirectory(lfcPicturesDirectory);
                 lfcPicturesDirectory.addDocument(gerrard20);
-                InputStream gerrard20IS = DatabaseInitializer.class.getClassLoader().getResourceAsStream("documents/Gerrard20.jpeg");
-                try {
-                    byte[] gerrard20Bytes = ByteStreams.toByteArray(gerrard20IS);
-                    fileManager.create(gerrard20Bytes, gerrard20.getFileSystemName());
-                } catch (IOException e) {
-                    throw new ExceptionInInitializerError(e);
-                }
+                saveDocumentToRepository(gerrard20);
                 gerrard20.addTag(lfcTag);
                 lfcTag.addDocument(gerrard20);
                 gerrard20.addTag(wallpaperTag);
                 wallpaperTag.addDocument(gerrard20);
-                gerrard20.addTag(polishTag);
-                polishTag.addDocument(gerrard20);
                 Document lfc_226410 = new Document();
                 lfc_226410.setName("lfc_226410.jpg");
                 lfc_226410.setCreated(new Date());
@@ -136,13 +194,7 @@ public class DatabaseInitializer implements Startable {
                 jpegMimeType.addDocument(lfc_226410);
                 lfc_226410.setDirectory(lfcPicturesDirectory);
                 lfcPicturesDirectory.addDocument(lfc_226410);
-                InputStream lfc_226410IS = DatabaseInitializer.class.getClassLoader().getResourceAsStream("documents/lfc_226410.jpg");
-                try {
-                    byte[] lfc_22610Bytes = ByteStreams.toByteArray(lfc_226410IS);
-                    fileManager.create(lfc_22610Bytes, lfc_226410.getFileSystemName());
-                } catch (IOException e) {
-                    throw new ExceptionInInitializerError(e);
-                }
+                saveDocumentToRepository(lfc_226410);
                 String[] commentsContent = new String[]{
                         "Bardzo ładny obrazek.",
                         "You'll never walk alone!",
@@ -155,7 +207,7 @@ public class DatabaseInitializer implements Startable {
                     comment.setCreated(new Date());
                     comment.setContent(commentsContent[i]);
                     comment.setDocument(lfc_226410);
-                    comment.setUser(rootUser);
+                    comment.setUser(i % 2 == 0 ? jerryUser : johnnyUser);
                     commentDao.persist(comment);
                 }
                 lfc_226410.addTag(lfcTag);
@@ -168,17 +220,39 @@ public class DatabaseInitializer implements Startable {
             binariesDirectory.setName("binarki");
             binariesDirectory.setParentDirectory(filesDirectory);
 
+        Directory johnnyRootDirectory = directoryDao.getRootDirectory(johnnyUser);
+
+        Directory lfcDirectory = new Directory();
+        lfcDirectory.setName("LFC");
+        lfcDirectory.setParentDirectory(johnnyRootDirectory);
+            Document liverpoolWallpaperDocument = new Document();
+            liverpoolWallpaperDocument.setName("liverpool-wallpapers_1.jpg");
+            liverpoolWallpaperDocument.setCreated(new Date());
+            liverpoolWallpaperDocument.setContentMd5("81810819ba7a6e3718e0c87d5103eaf1");
+            liverpoolWallpaperDocument.setMimeType(jpegMimeType);
+            liverpoolWallpaperDocument.addTag(lfcTag);
+            lfcTag.addDocument(liverpoolWallpaperDocument);
+            saveDocumentToRepository(liverpoolWallpaperDocument);
+            liverpoolWallpaperDocument.setDirectory(lfcDirectory);
+            lfcDirectory.addDocument(liverpoolWallpaperDocument);
+            liverpoolWallpaperDocument.setOwner(johnnyUser);
+
         ResourceGroup lfcFansRG = new ResourceGroup();
         lfcFansRG.setFounder(rootUser);
         lfcFansRG.setName("LFC fans");
         lfcFansRG.addDirectory(lfcPicturesDirectory);
+        lfcFansRG.addDocument(liverpoolWallpaperDocument);
         resourceGroupDao.persist(lfcFansRG);
 
         mimeTypeDao.setSession(directoryDao.getSession());
         mimeTypeDao.persist(jpegMimeType);
+        mimeTypeDao.persist(texMimeType);
+        mimeTypeDao.persist(docMimeType);
+        mimeTypeDao.persist(pdfMimeType);
         directoryDao.persist(picturesDirectory);
         directoryDao.persist(documentsDirectory);
         directoryDao.persist(filesDirectory);
+        directoryDao.persist(lfcDirectory);
         directoryDao.commitTransaction();
 
         tagCache.rebuild();
@@ -203,8 +277,23 @@ public class DatabaseInitializer implements Startable {
         jpegMimeType.setDefaultExtension(".jpg");
         jpegMimeType.setType("image/jpeg");
 
+        pdfMimeType = new MimeType();
+        pdfMimeType.setDefaultExtension(".pdf");
+        pdfMimeType.setType("application/pdf");
+
+        docMimeType = new MimeType();
+        docMimeType.setDefaultExtension(".doc");
+        docMimeType.setType("application/msword");
+
+        texMimeType = new MimeType();
+        texMimeType.setDefaultExtension(".tex");
+        texMimeType.setType("application/x-tex");
+
         mimeTypeDao.beginTransaction();
         mimeTypeDao.persist(jpegMimeType);
+        mimeTypeDao.persist(pdfMimeType);
+        mimeTypeDao.persist(docMimeType);
+        mimeTypeDao.persist(texMimeType);
         mimeTypeDao.commitTransaction();
     }
 
@@ -218,14 +307,25 @@ public class DatabaseInitializer implements Startable {
         scholarTag = new Tag();
         scholarTag.setValue("szkolne");
 
-        polishTag = new Tag();
-        polishTag.setValue("zażółć GĘŚLĄ jaźń");
+        thesisTag = new Tag();
+        thesisTag.setValue("Inżynierka");
 
         tagDao.beginTransaction();
         tagDao.persist(wallpaperTag);
         tagDao.persist(lfcTag);
         tagDao.persist(scholarTag);
-        tagDao.persist(polishTag);
+        tagDao.persist(thesisTag);
         tagDao.commitTransaction();
+    }
+
+    private void saveDocumentToRepository(Document document) {
+        InputStream documentIS = DatabaseInitializer.class.getClassLoader().getResourceAsStream(
+                "documents/" + document.getName());
+        try {
+            byte[] gerrard20Bytes = ByteStreams.toByteArray(documentIS);
+            fileManager.create(gerrard20Bytes, document.getFileSystemName());
+        } catch (IOException e) {
+            throw new ExceptionInInitializerError(e);
+        }
     }
 }

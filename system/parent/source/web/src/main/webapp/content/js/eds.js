@@ -24,9 +24,8 @@ function make_tabs() {
     tabs.find('#logout_link').unbind('click');
 }
 
-function activate_tab(href) {
-    var index = $('#tabs a[href="' + href + '"]').parent().index();
-    $('#tabs').tabs('option', 'active', index-1);
+function activate_tab(index) {
+    $('#tabs').tabs('option', 'active', index);
 }
 
 function current_time() {

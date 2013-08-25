@@ -394,7 +394,7 @@ function update_tags(tags) {
     $.each(tags, function(index) {
         if(index > 0)
             tagHtml += ", ";
-        tagHtml += "<a href=\"javascript:activate_tab('eds/v/app.Search')\">";
+        tagHtml += "<a href=\"javascript:activate_tab(3);javascript:search_tags_by_name('" + this.value + "')\">";
             tagHtml += this.value;
         tagHtml += "</a>"
     });
