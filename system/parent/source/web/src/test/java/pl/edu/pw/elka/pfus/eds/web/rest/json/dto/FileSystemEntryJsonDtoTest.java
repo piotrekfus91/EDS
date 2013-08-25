@@ -17,13 +17,13 @@ public class FileSystemEntryJsonDtoTest {
 
     @Test
     public void testIsFolderForDirectory() {
-        dto.setFolder(Directory.class);
+        dto.setFolder(Directory.class.getSimpleName());
         assertThat(dto.getFolder()).isTrue();
     }
 
     @Test
     public void testIsFolderForDocument() {
-        dto.setFolder(Document.class);
+        dto.setFolder(Document.class.getSimpleName());
         assertThat(dto.getFolder()).isFalse();
     }
 }

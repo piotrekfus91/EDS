@@ -1,5 +1,7 @@
 $(document).ready(function() {
     $('#resource_groups').accordion();
+    $('#create_new_resource_group_button').button();
+    $('#create_new_resource_group_button').click(create_new_resource_group_button_click);
 
     reload_resource_groups();
 });
@@ -123,4 +125,63 @@ function post_resource_group_info(div, resource_group) {
     });
     content += "</table>";
     div.html(content);
+}
+
+function create_new_resource_group_button_click() {
+    $('#resource_group_div').dialog("open");
+}
+
+$('#resource_group_div').dialog({
+    autoOpen: false,
+    width: 'auto',
+    height: 'auto',
+    modal: true,
+    buttons: {
+        "Utwórz": function() {
+            var resource_group_div = $('#resource_group_div');
+            var name = resource_group_div.find('#resource_group_name_input').val();
+            var description = resource_group_div.find('#resource_group_description_textarea').val();
+            var data = create_resource_group(name, description);
+            console.log(name);
+            console.log(description);
+            console.log(data);
+            $.ajax({
+                type: "POST",
+                url: rest('/resourceGroups/create'),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: data,
+                success: function(result) {
+                    if(is_success(result)) {
+                        post_message_now('success', 'Utworzono grupę ' + name);
+                        reload_resource_groups();
+                        clear_and_close_resource_group_div();
+                    } else {
+                        post_error_from_result(result);
+                    }
+                },
+                error: function() {
+                    post_message_now('error', 'Błąd podczas tworzenia grupy ' + name);
+                }
+            })
+        },
+        "Anuluj": function() {
+            clear_and_close_resource_group_div();
+        }
+    }
+});
+
+function clear_and_close_resource_group_div() {
+    var resource_group_div = $('#resource_group_div');
+    resource_group_div.find('#resource_group_name_input').val('');
+    resource_group_div.find('#resource_group_description_textarea').val('');
+    resource_group_div.dialog("close");
+}
+
+function create_resource_group(name, description) {
+    var resource_group = {
+        name: name,
+        description: description
+    };
+    return JSON.stringify(resource_group);
 }

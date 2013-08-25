@@ -101,3 +101,12 @@ html, body {
     padding-left: 10px;
     padding-right: 10px;
 }
+
+#resource_group_name_input {
+    width: 200px;
+}
+
+#resource_group_description_textarea {
+    width: 200px;
+    height: 100px;
+}

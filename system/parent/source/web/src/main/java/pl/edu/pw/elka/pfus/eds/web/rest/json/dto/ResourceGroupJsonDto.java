@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ResourceGroupJsonDto {
     private String name;
+    private String description;
     private String founder;
     private List<DocumentJsonDto> documents;
 
@@ -15,8 +16,9 @@ public class ResourceGroupJsonDto {
 
     }
 
-    public ResourceGroupJsonDto(String name, String founder, List<DocumentJsonDto> documents) {
+    public ResourceGroupJsonDto(String name, String description, String founder, List<DocumentJsonDto> documents) {
         this.name = name;
+        this.description = description;
         this.founder = founder;
         this.documents = documents;
     }
@@ -28,8 +30,8 @@ public class ResourceGroupJsonDto {
         for(Document document : resourceGroup.getAllDocuments()) {
             documents.add(DocumentJsonDto.from(document));
         }
-        return new ResourceGroupJsonDto(resourceGroup.getName(), resourceGroup.getFounder().getFriendlyName(),
-                documents);
+        return new ResourceGroupJsonDto(resourceGroup.getName(), resourceGroup.getDescription(),
+                resourceGroup.getFounder().getFriendlyName(), documents);
 
     }
 
@@ -39,6 +41,14 @@ public class ResourceGroupJsonDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getFounder() {
