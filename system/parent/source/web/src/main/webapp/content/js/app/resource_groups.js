@@ -83,6 +83,9 @@ function post_resource_group_info(div, resource_group) {
         content += "Założyciel: ";
         content += resource_group.founder;
     content += "</div>";
+    content += "<div>";
+        content += resource_group.description;
+    content += "</div>";
     content += "Dostępne dokumenty";
     content += "<table class=\"resource_group_documents_table\">";
         content += "<tr>";
