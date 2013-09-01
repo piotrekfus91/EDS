@@ -15,6 +15,15 @@ public interface ResourceGroupManager {
      */
     void createResourceGroup(String name);
 
+    void renameResourceGroup(String oldName, String newName);
+
+    /**
+     * Usuwa grupę zasobów.
+     *
+     * @param name nazwa grupy.
+     */
+    void deleteResourceGroup(String name);
+
     /**
      * Zwraca listę użytkowników, którzy mają jakiekolwiek uprawnienia
      * w grupie zasobów o zadanej nazwie.

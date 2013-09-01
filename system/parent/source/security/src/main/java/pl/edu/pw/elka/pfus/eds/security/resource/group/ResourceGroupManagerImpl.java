@@ -8,6 +8,7 @@ import org.objectledge.security.object.Group;
 import org.objectledge.security.object.Role;
 import org.objectledge.security.object.SecurityUser;
 import org.objectledge.security.util.RoleSet;
+import pl.edu.pw.elka.pfus.eds.security.exception.SecurityException;
 import pl.edu.pw.elka.pfus.eds.security.user.UserManager;
 import pl.edu.pw.elka.pfus.eds.security.user.UserValidator;
 
@@ -35,9 +36,32 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
         userValidator.enforceLogin(context);
         try {
             Group group = dataBackend.createGroup(name);
+            dataBackend.saveGroup(group);
+            group = dataBackend.getGroupByName(name);
             SecurityUser securityUser = userManager.getCurrentSecurityUser(context);
             Role adminRole = dataBackend.getRoleByName("Admin");
             dataBackend.grant(securityUser, group, adminRole);
+        } catch (Exception e) {
+            throw new SecurityException(e);
+        }
+    }
+
+    @Override
+    public void renameResourceGroup(String oldName, String newName) {
+        try {
+            Group group = dataBackend.getGroupByName(oldName);
+            group.setName(newName);
+            dataBackend.saveGroup(group);
+        } catch (Exception e) {
+            throw new SecurityException(e);
+        }
+    }
+
+    @Override
+    public void deleteResourceGroup(String name) {
+        try {
+            Group group = dataBackend.getGroupByName(name);
+            dataBackend.removeGroup(group);
         } catch (Exception e) {
             throw new SecurityException(e);
         }

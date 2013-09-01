@@ -54,6 +54,16 @@ public class SecurityFacadeImpl implements SecurityFacade {
     }
 
     @Override
+    public void renameResourceGroup(String oldName, String newName) {
+        resourceGroupManager.renameResourceGroup(oldName, newName);
+    }
+
+    @Override
+    public void deleteResourceGroup(String name) {
+        resourceGroupManager.deleteResourceGroup(name);
+    }
+
+    @Override
     public List<SecurityUser> getAllUsersWithAnyPrivilegeOnResourceGroup(String resourceGroupName) {
         return resourceGroupManager.getAllUsersWithAnyPrivilegeOnResourceGroup(resourceGroupName);
     }

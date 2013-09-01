@@ -123,8 +123,8 @@ drop sequence if exists security_resource_group_sequence;
 create sequence security_resource_group_sequence;
 
 --drop sequence ;
---create sequence ;
+--createResourceGroup sequence ;
 
 --drop sequence ;
---create sequence ;
+--createResourceGroup sequence ;
                         

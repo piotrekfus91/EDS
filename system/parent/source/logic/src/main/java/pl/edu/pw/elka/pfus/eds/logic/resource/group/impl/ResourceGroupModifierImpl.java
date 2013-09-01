@@ -59,6 +59,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
 
         try {
             resourceGroupDao.beginTransaction();
+            securityFacade.renameResourceGroup(oldName, newName);
             resourceGroup.setName(newName);
             resourceGroup.setDescription(description);
             resourceGroup.setFounder(userDao.findById(currentUser.getId()));
@@ -82,7 +83,8 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
 
         try {
             resourceGroupDao.beginTransaction();
-            resourceGroup = resourceGroupDao.merge(resourceGroup);
+            securityFacade.deleteResourceGroup(name);
+            resourceGroup = resourceGroupDao.findById(resourceGroup.getId());
             resourceGroupDao.delete(resourceGroup);
             resourceGroupDao.commitTransaction();
         } catch (Exception e) {
