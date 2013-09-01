@@ -38,6 +38,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
         try {
             resourceGroupDao.beginTransaction();
             resourceGroupDao.persist(resourceGroup);
+            securityFacade.createResourceGroup(name);
             resourceGroupDao.commitTransaction();
             return resourceGroup;
         } catch (Exception e) {

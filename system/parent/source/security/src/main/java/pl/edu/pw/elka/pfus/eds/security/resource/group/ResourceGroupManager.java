@@ -1,7 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.security.resource.group;
 
-import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
-import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import org.objectledge.security.object.SecurityUser;
 
 import java.util.List;
 
@@ -17,25 +16,11 @@ public interface ResourceGroupManager {
     void createResourceGroup(String name);
 
     /**
-     * Zwraca listę grup, których założycielem jest zalogowany użytkownik.
+     * Zwraca listę użytkowników, którzy mają jakiekolwiek uprawnienia
+     * w grupie zasobów o zadanej nazwie.
      *
-     * @return lista grup użytkownika.
+     * @param resourceGroupName nazwa grupy zasobów.
+     * @return użytkownicy.
      */
-    List<ResourceGroup> getGroupsFoundedByCurrentUser();
-
-    /**
-     * Zwraca listę grup, których założycielem jest użytkownik.
-     *
-     * @param user właściciel grup.
-     * @return lista grup użytkownika.
-     */
-    List<ResourceGroup> getGroupsFoundedByUser(User user);
-
-    /**
-     * Zwraca listę grup, których założycielem jest użytkownik.
-     *
-     * @param login właściciel grup.
-     * @return lista grup użytkownika.
-     */
-    List<ResourceGroup> getGroupsFoundedByUser(String login);
+    List<SecurityUser> getAllUsersWithAnyPrivilegeOnResourceGroup(String resourceGroupName);
 }

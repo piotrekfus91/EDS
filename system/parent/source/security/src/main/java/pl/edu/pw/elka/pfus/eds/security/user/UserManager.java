@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.security.user;
 
 import org.objectledge.context.Context;
+import org.objectledge.security.object.SecurityUser;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +43,14 @@ public interface UserManager {
      * @return bieżący użytkownik, jeśli istnieje, w przeciwnym wypadku null.
      */
     User getCurrentUser(HttpServletRequest request);
+
+    /**
+     * Zwraca aktualnego użytkownika systemu bezpieczeństwa.
+     *
+     * @param context bieżący context.
+     * @return użytkownik systemu bezpieczeńśtwa jeśli istnieje, w przeciwnym wypadku null.
+     */
+    SecurityUser getCurrentSecurityUser(Context context);
 
     /**
      * Zwraca informację, czy jest zalogowanu użytkownik w bieżącej sesji.

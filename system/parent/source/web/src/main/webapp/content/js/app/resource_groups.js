@@ -78,7 +78,9 @@ function load_resource_group_info(div, resourceGroupName) {
     });
 }
 
-function post_resource_group_info(div, resource_group) {
+function post_resource_group_info(div, data) {
+    var resource_group = data.resourceGroup;
+    var users = data.users;
     div.removeAttr('height');
     var content = "";
     div.html('');
@@ -98,8 +100,22 @@ function post_resource_group_info(div, resource_group) {
         content += "</button>";
     content += "</div>";
     content += "<br />";
-    content += "<table class=\"resource_group_documents_table\">";
+    content += "<table class=\"resource_group_table resource_group_users_table\">";
+    $.each(users, function() {
         content += "<tr>";
+            content += "<td>";
+                content += this.name;
+            content += "</td>";
+            content += "<td>";
+                content += "<a href=\"\">";
+                    content += "Edytuj role";
+                content += "</a>";
+            content += "</td>";
+        content += "</tr>";
+    });
+    content += "</table>";
+    content += "<table class=\"resource_group_table resource_group_documents_table\">";
+    content += "<tr>";
             content += "<th>";
                 content += "Nazwa";
             content += "</th>";

@@ -1,7 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.security;
 
 import org.objectledge.context.Context;
-import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
+import org.objectledge.security.object.SecurityUser;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.security.resource.group.ResourceGroupManager;
 import pl.edu.pw.elka.pfus.eds.security.user.UserManager;
@@ -39,6 +39,11 @@ public class SecurityFacadeImpl implements SecurityFacade {
     }
 
     @Override
+    public SecurityUser getCurrentSecurityUser(Context context) {
+        return userManager.getCurrentSecurityUser(context);
+    }
+
+    @Override
     public boolean isLogged(Context context) {
         return userManager.isLogged(context);
     }
@@ -46,21 +51,10 @@ public class SecurityFacadeImpl implements SecurityFacade {
     @Override
     public void createResourceGroup(String name) {
         resourceGroupManager.createResourceGroup(name);
-        return null;
     }
 
     @Override
-    public List<ResourceGroup> getGroupsFoundedByCurrentUser() {
-        return resourceGroupManager.getGroupsFoundedByCurrentUser();
-    }
-
-    @Override
-    public List<ResourceGroup> getGroupsFoundedByUser(User user) {
-        return resourceGroupManager.getGroupsFoundedByUser(user);
-    }
-
-    @Override
-    public List<ResourceGroup> getGroupsFoundedByUser(String login) {
-        return resourceGroupManager.getGroupsFoundedByUser(login);
+    public List<SecurityUser> getAllUsersWithAnyPrivilegeOnResourceGroup(String resourceGroupName) {
+        return resourceGroupManager.getAllUsersWithAnyPrivilegeOnResourceGroup(resourceGroupName);
     }
 }

@@ -4,9 +4,11 @@ import org.objectledge.context.Context;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pl.edu.pw.elka.pfus.eds.domain.dao.ResourceGroupDao;
+import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
+import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -18,6 +20,7 @@ public class ResourceGroupFinderImplTest {
     private ResourceGroupFinderImpl finder;
     private Context context;
     private ResourceGroupDao resourceGroupDao;
+    private UserDao userDao;
     private SecurityFacade securityFacade;
     private User user;
     private ResourceGroup resourceGroup;
@@ -27,7 +30,8 @@ public class ResourceGroupFinderImplTest {
         resourceGroupDao = mock(ResourceGroupDao.class);
         context = mock(Context.class);
         securityFacade = mock(SecurityFacade.class);
-        finder = new ResourceGroupFinderImpl(context, securityFacade, resourceGroupDao);
+        userDao = mock(UserDao.class);
+        finder = new ResourceGroupFinderImpl(context, securityFacade, resourceGroupDao, userDao);
 
         user = new User();
         resourceGroup = new ResourceGroup();
@@ -37,15 +41,15 @@ public class ResourceGroupFinderImplTest {
     public void testGetByNameWithDocumentsForNotFound() throws Exception {
         when(resourceGroupDao.findByName(anyString())).thenReturn(null);
 
-        finder.getByNameWithDocuments("");
+        finder.getByNameWithUsers("");
     }
 
     @Test
     public void testGetByNameWithDocumentsForSuccess() throws Exception {
         when(resourceGroupDao.findByName(anyString())).thenReturn(resourceGroup);
 
-        ResourceGroup found = finder.getByNameWithDocuments("");
+        ResourceGroupWithAssignedUsers found = finder.getByNameWithUsers("");
 
-        assertThat(found).isEqualTo(resourceGroup);
+        assertThat(found.getResourceGroup()).isEqualTo(resourceGroup);
     }
 }

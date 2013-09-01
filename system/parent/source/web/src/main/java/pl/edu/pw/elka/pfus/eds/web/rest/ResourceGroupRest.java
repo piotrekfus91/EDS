@@ -4,8 +4,10 @@ import org.apache.log4j.Logger;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupService;
+import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupListExporter;
+import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupWithAssignedUsersExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.dto.SimpleResourceGroupJsonDto;
 
 import javax.inject.Inject;
@@ -21,14 +23,17 @@ public class ResourceGroupRest {
     private ResourceGroupService resourceGroupService;
     private JsonResourceGroupExporter resourceGroupExporter;
     private JsonResourceGroupListExporter resourceGroupListExporter;
+    private JsonResourceGroupWithAssignedUsersExporter resourceGroupWithAssignedUsersExporter;
 
     @Inject
     public ResourceGroupRest(ResourceGroupService resourceGroupService,
                              JsonResourceGroupExporter resourceGroupExporter,
-                             JsonResourceGroupListExporter resourceGroupListExporter) {
+                             JsonResourceGroupListExporter resourceGroupListExporter,
+                             JsonResourceGroupWithAssignedUsersExporter resourceGroupWithAssignedUsersExporter) {
         this.resourceGroupService = resourceGroupService;
         this.resourceGroupExporter = resourceGroupExporter;
         this.resourceGroupListExporter = resourceGroupListExporter;
+        this.resourceGroupWithAssignedUsersExporter = resourceGroupWithAssignedUsersExporter;
     }
 
     @GET
@@ -46,8 +51,8 @@ public class ResourceGroupRest {
     public Response getResourceGroupByName(@PathParam("name") String name) {
         String exported;
         try {
-            ResourceGroup resourceGroup = resourceGroupService.getByNameWithDocuments(name);
-            exported = resourceGroupExporter.exportSuccess(resourceGroup);
+            ResourceGroupWithAssignedUsers resourceGroupDto = resourceGroupService.getByNameWithUsers(name);
+            exported = resourceGroupWithAssignedUsersExporter.exportSuccess(resourceGroupDto);
         } catch (LogicException e) {
             logger.error(e.getMessage(), e);
             exported = resourceGroupExporter.exportFailure(e.getMessage(), null);

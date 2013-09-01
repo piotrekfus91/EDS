@@ -39,6 +39,7 @@
                class="pl.edu.pw.elka.pfus.eds.security.SecurityFacadeImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.security.user.UserManager"
                class="pl.edu.pw.elka.pfus.eds.security.user.UserManagerImpl" />
+    <component class="pl.edu.pw.elka.pfus.eds.security.user.UserValidator" />
     <component class-key="pl.edu.pw.elka.pfus.eds.security.resource.group.ResourceGroupManager"
                class="pl.edu.pw.elka.pfus.eds.security.resource.group.ResourceGroupManagerImpl" />
     <component class="pl.edu.pw.elka.pfus.eds.security.valve.CheckLoginValve" />
@@ -94,6 +95,8 @@
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResourceGroupExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupListExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResourceGroupListExporterImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupWithAssignedUsersExporter"
+               class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResourceGroupWithAssignedUsersExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonTagExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonTagExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonTagListExporter"
@@ -183,7 +186,8 @@
                class="org.objectledge.security.PasswordVerifierImpl"/>
     <component class-key="org.objectledge.security.SecurityTokenModificationPolicy"
                class="org.objectledge.security.SecurityTokenModificationPolicyImpl"/>
-    <component class="org.objectledge.security.object.hibernate.HibernateDataBackend"/>
+    <component class-key="org.objectledge.security.DataBackend"
+               class="org.objectledge.security.object.hibernate.HibernateDataBackend"/>
     <component class-key="org.objectledge.security.GroupNamingPolicy"
                class="pl.edu.pw.elka.pfus.eds.security.DummyGroupNamingPolicy" />
     <!--<component class="org.objectledge.example.security.DummyGroupNamingPolicy"/>-->

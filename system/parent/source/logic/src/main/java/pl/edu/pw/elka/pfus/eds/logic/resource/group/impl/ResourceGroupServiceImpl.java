@@ -5,6 +5,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupFinder;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupModifier;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupService;
+import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
 
 import java.util.List;
 
@@ -34,8 +35,8 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     }
 
     @Override
-    public ResourceGroup getByNameWithDocuments(String name) {
-        return resourceGroupFinder.getByNameWithDocuments(name);
+    public ResourceGroupWithAssignedUsers getByNameWithUsers(String name) {
+        return resourceGroupFinder.getByNameWithUsers(name);
     }
 
     @Override

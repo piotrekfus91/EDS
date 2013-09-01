@@ -2,6 +2,7 @@ package pl.edu.pw.elka.pfus.eds.logic.resource.group;
 
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
 
 import java.util.List;
 
@@ -33,10 +34,11 @@ public interface ResourceGroupFinder {
     List<ResourceGroup> getUserResourceGroup(int userId);
 
     /**
-     * Zwraca grupę zasobów o podanej nazwie.
+     * Zwraca grupę zasobów o podanej nazwie
+     * oraz listę użytkowników, którzy mają jakiekolwiek uprawnienia.
      *
      * @param name nazwa grupy zasobów.
      * @return grupa zasobów o podanej nazwie.
      */
-    ResourceGroup getByNameWithDocuments(String name);
+    ResourceGroupWithAssignedUsers getByNameWithUsers(String name);
 }

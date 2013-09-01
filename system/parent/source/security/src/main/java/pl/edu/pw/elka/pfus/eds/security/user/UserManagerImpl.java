@@ -78,6 +78,18 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
+    public SecurityUser getCurrentSecurityUser(Context context) {
+        User currentUser = getCurrentUser(context);
+        if(currentUser == null)
+            return null;
+        try {
+            return dataBackend.getUserByName(currentUser.getName());
+        } catch (DataBackendException e) {
+            throw new SecurityException(e);
+        }
+    }
+
+    @Override
     public boolean isLogged(Context context) {
         return getCurrentUser(context) != null;
     }
