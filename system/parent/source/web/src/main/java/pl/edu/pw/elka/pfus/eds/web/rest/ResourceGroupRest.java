@@ -5,9 +5,11 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupService;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
+import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupListExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupWithAssignedUsersExporter;
+import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonRolesGrantedListExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.dto.SimpleResourceGroupJsonDto;
 
 import javax.inject.Inject;
@@ -24,16 +26,19 @@ public class ResourceGroupRest {
     private JsonResourceGroupExporter resourceGroupExporter;
     private JsonResourceGroupListExporter resourceGroupListExporter;
     private JsonResourceGroupWithAssignedUsersExporter resourceGroupWithAssignedUsersExporter;
+    private JsonRolesGrantedListExporter rolesGrantedExporter;
 
     @Inject
     public ResourceGroupRest(ResourceGroupService resourceGroupService,
                              JsonResourceGroupExporter resourceGroupExporter,
                              JsonResourceGroupListExporter resourceGroupListExporter,
-                             JsonResourceGroupWithAssignedUsersExporter resourceGroupWithAssignedUsersExporter) {
+                             JsonResourceGroupWithAssignedUsersExporter resourceGroupWithAssignedUsersExporter,
+                             JsonRolesGrantedListExporter rolesGrantedExporter) {
         this.resourceGroupService = resourceGroupService;
         this.resourceGroupExporter = resourceGroupExporter;
         this.resourceGroupListExporter = resourceGroupListExporter;
         this.resourceGroupWithAssignedUsersExporter = resourceGroupWithAssignedUsersExporter;
+        this.rolesGrantedExporter = rolesGrantedExporter;
     }
 
     @GET
@@ -57,6 +62,15 @@ public class ResourceGroupRest {
             logger.error(e.getMessage(), e);
             exported = resourceGroupExporter.exportFailure(e.getMessage(), null);
         }
+        return Response.status(Response.Status.OK).entity(exported).build();
+    }
+
+    @GET
+    @Path("/roles/group/{groupName}/user/{userName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserRoles(@PathParam("groupName") String groupName, @PathParam("userName") String userName) {
+        List<RolesGrantedDto> grantedRoles = resourceGroupService.getUserRolesOverResourceGroups(userName, groupName);
+        String exported = rolesGrantedExporter.export(grantedRoles);
         return Response.status(Response.Status.OK).entity(exported).build();
     }
 

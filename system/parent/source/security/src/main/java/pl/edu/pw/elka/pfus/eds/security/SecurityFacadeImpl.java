@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pfus.eds.security;
 import org.objectledge.context.Context;
 import org.objectledge.security.object.SecurityUser;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 import pl.edu.pw.elka.pfus.eds.security.resource.group.ResourceGroupManager;
 import pl.edu.pw.elka.pfus.eds.security.user.UserManager;
 
@@ -46,6 +47,21 @@ public class SecurityFacadeImpl implements SecurityFacade {
     @Override
     public boolean isLogged(Context context) {
         return userManager.isLogged(context);
+    }
+
+    @Override
+    public List<RolesGrantedDto> getUserRolesOverResourceGroup(String userName, String resourceGroupName) {
+        return resourceGroupManager.getUserRolesOverResourceGroup(userName, resourceGroupName);
+    }
+
+    @Override
+    public void grantRoleToUserOverResourceGroup(String userName, String roleName, String resourceGroupName) {
+        resourceGroupManager.grantRoleToUserOverResourceGroup(userName, roleName, resourceGroupName);
+    }
+
+    @Override
+    public void revokeRoleFromUserOverResourceGroup(String userName, String roleName, String resourceGroupName) {
+        resourceGroupManager.revokeRoleFromUserOverResourceGroup(userName, roleName, resourceGroupName);
     }
 
     @Override

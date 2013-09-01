@@ -8,6 +8,7 @@ import org.objectledge.security.object.Group;
 import org.objectledge.security.object.Role;
 import org.objectledge.security.object.SecurityUser;
 import org.objectledge.security.util.RoleSet;
+import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 import pl.edu.pw.elka.pfus.eds.security.exception.SecurityException;
 import pl.edu.pw.elka.pfus.eds.security.user.UserManager;
 import pl.edu.pw.elka.pfus.eds.security.user.UserValidator;
@@ -65,6 +66,50 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
         try {
             Group group = dataBackend.getGroupByName(name);
             dataBackend.removeGroup(group);
+        } catch (Exception e) {
+            throw new SecurityException(e);
+        }
+    }
+
+    @Override
+    public List<RolesGrantedDto> getUserRolesOverResourceGroup(String userName, String resourceGroupName) {
+        try {
+            SecurityUser user = dataBackend.getUserByName(userName);
+            Group group = dataBackend.getGroupByName(resourceGroupName);
+            RoleSet roles = dataBackend.getUserRoles(user, group);
+            List<Role> allRoles = dataBackend.getAllRoles().getSortedList();
+            List<RolesGrantedDto> grantedRoles = new LinkedList<>();
+            for(Role role : allRoles) {
+                if(roles.contains(role))
+                    grantedRoles.add(new RolesGrantedDto(role.getName(), true));
+                else
+                    grantedRoles.add(new RolesGrantedDto(role.getName(), false));
+            }
+            return grantedRoles;
+        } catch (Exception e) {
+            throw new SecurityException(e);
+        }
+    }
+
+    @Override
+    public void grantRoleToUserOverResourceGroup(String userName, String roleName, String resourceGroupName) {
+        try {
+            SecurityUser user = dataBackend.getUserByName(userName);
+            Role role = dataBackend.getRoleByName(roleName);
+            Group group = dataBackend.getGroupByName(resourceGroupName);
+            dataBackend.grant(user, group, role);
+        } catch (Exception e) {
+            throw new SecurityException(e);
+        }
+    }
+
+    @Override
+    public void revokeRoleFromUserOverResourceGroup(String userName, String roleName, String resourceGroupName) {
+        try {
+            SecurityUser user = dataBackend.getUserByName(userName);
+            Role role = dataBackend.getRoleByName(roleName);
+            Group group = dataBackend.getGroupByName(resourceGroupName);
+            dataBackend.revoke(user, group, role);
         } catch (Exception e) {
             throw new SecurityException(e);
         }

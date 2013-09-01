@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.security.resource.group;
 
 import org.objectledge.security.object.SecurityUser;
+import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 
 import java.util.List;
 
@@ -15,6 +16,12 @@ public interface ResourceGroupManager {
      */
     void createResourceGroup(String name);
 
+    /**
+     * Zmienia nazwę grupy zasobów.
+     *
+     * @param oldName stara nazwa.
+     * @param newName nowa nazwa.
+     */
     void renameResourceGroup(String oldName, String newName);
 
     /**
@@ -23,6 +30,33 @@ public interface ResourceGroupManager {
      * @param name nazwa grupy.
      */
     void deleteResourceGroup(String name);
+
+    /**
+     * Zwraca listę posiadanych rol przez danego użytkownika na danej grupie zasobów.
+     *
+     * @param userName nazwa użytkownika.
+     * @param resourceGroupName nazwa grupy zasobów.
+     * @return
+     */
+    List<RolesGrantedDto> getUserRolesOverResourceGroup(String userName, String resourceGroupName);
+
+    /**
+     * Dodaje podanego użytkownika do danej roli na danej grupie zasobów.
+     *
+     * @param userName nazwa użytkownika.
+     * @param roleName nazwa roli.
+     * @param resourceGroupName nazwa grupy zasobów.
+     */
+    void grantRoleToUserOverResourceGroup(String userName, String roleName, String resourceGroupName);
+
+    /**
+     * Odbiera rolę podanemu użytkownikowi na podanej grupie zasobów.
+     *
+     * @param userName nazwa użytkownika.
+     * @param roleName nazwa roli.
+     * @param resourceGroupName nazwa grupy zasobów.
+     */
+    void revokeRoleFromUserOverResourceGroup(String userName, String roleName, String resourceGroupName);
 
     /**
      * Zwraca listę użytkowników, którzy mają jakiekolwiek uprawnienia

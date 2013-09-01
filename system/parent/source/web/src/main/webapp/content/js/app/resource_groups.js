@@ -1,5 +1,7 @@
 var saveMode = ""; // add lub edit
 var editModeResourceGroupName = "";
+var userFriendlyName = "";
+var groupName = "";
 
 $(document).ready(function() {
     $('#resource_groups').accordion();
@@ -81,6 +83,7 @@ function load_resource_group_info(div, resourceGroupName) {
 function post_resource_group_info(div, data) {
     var resource_group = data.resourceGroup;
     var users = data.users;
+    groupName = resource_group.name;
     div.removeAttr('height');
     var content = "";
     div.html('');
@@ -104,12 +107,12 @@ function post_resource_group_info(div, data) {
     $.each(users, function() {
         content += "<tr>";
             content += "<td>";
-                content += this.name;
+                content += this.friendlyName;
             content += "</td>";
             content += "<td>";
-                content += "<a href=\"\">";
+                content += "<button onclick=\"javascript:show_user_roles_dialog('" + this.name + "', '" + this.friendlyName + "')\">";
                     content += "Edytuj role";
-                content += "</a>";
+                content += "</button>";
             content += "</td>";
         content += "</tr>";
     });
@@ -193,6 +196,38 @@ function delete_resource_group(name) {
     reload_resource_groups();
 }
 
+function show_user_roles_dialog(userName, friendlyName) {
+    userFriendlyName = friendlyName;
+    var user_roles_div = $('#user_roles_div');
+    user_roles_div.find('#user_roles_user_span').html(userFriendlyName);
+    user_roles_div.find('#user_roles_group_span').html(groupName);
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: rest('/resourceGroups/roles/group/' + groupName + '/user/' + userName),
+        success: function(result) {
+            show_roles(result);
+            user_roles_div.dialog("open");
+        },
+        error: function() {
+            post_message_now('error', 'Błąd przy ładowaniu listy ról dla użytkownika ' + friendlyName);
+        }
+    });
+}
+
+function show_roles(roles) {
+    var content = "";
+    $.each(roles, function() {
+        content += "<input type=\"checkbox\" id=\"" + this.roleName + "\"";
+            if(this.has) content += " checked=\"checked\"";
+        content += " />";
+        content += "<label for=\"" + this.roleName + "\">" + this.roleName + "</label>";
+    });
+    var user_roles_roles_div = $('#user_roles_roles_div');
+    user_roles_roles_div.html(content);
+    user_roles_roles_div.buttonset();
+}
+
 $('#resource_group_div').dialog({
     autoOpen: false,
     width: 'auto',
@@ -212,10 +247,7 @@ $('#resource_group_div').dialog({
                 method = "PUT";
                 restUrl = rest("/resourceGroups/update/" + editModeResourceGroupName);
             }
-            var data = create_resource_group(name, description);
-            console.log(name);
-            console.log(description);
-            console.log(data);
+            var data = get_resource_group_string(name, description);
             $.ajax({
                 type: method,
                 url: restUrl,
@@ -242,6 +274,21 @@ $('#resource_group_div').dialog({
     }
 });
 
+$('#user_roles_div').dialog({
+    autoOpen: false,
+    modal: true,
+    width: 'auto',
+    height: 'auto',
+    buttons: {
+        "Zapisz": function() {
+
+        },
+        "Anuluj": function() {
+            clear_and_close_user_roles_div();
+        }
+    }
+});
+
 function clear_and_close_resource_group_div() {
     var resource_group_div = $('#resource_group_div');
     resource_group_div.find('#resource_group_name_input').val('');
@@ -249,7 +296,15 @@ function clear_and_close_resource_group_div() {
     resource_group_div.dialog("close");
 }
 
-function create_resource_group(name, description) {
+function clear_and_close_user_roles_div() {
+    var user_roles_div = $('#user_roles_div');
+    user_roles_div.find('#user_roles_user_span').html('');
+    user_roles_div.find('#user_roles_group_span').html('');
+    user_roles_div.find('#user_roles_roles_span').html('');
+    user_roles_div.dialog("close");
+}
+
+function get_resource_group_string(name, description) {
     var resource_group = {
         name: name,
         description: description

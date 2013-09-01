@@ -10,6 +10,7 @@ import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupFinder;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
+import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -59,5 +60,10 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
         }
 
         return new ResourceGroupWithAssignedUsers(resourceGroup, users);
+    }
+
+    @Override
+    public List<RolesGrantedDto> getUserRolesOverResourceGroups(String userName, String resourceGroupName) {
+        return securityFacade.getUserRolesOverResourceGroup(userName, resourceGroupName);
     }
 }

@@ -97,6 +97,8 @@
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResourceGroupListExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupWithAssignedUsersExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonResourceGroupWithAssignedUsersExporterImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonRolesGrantedListExporter"
+               class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonRolesGrantedListExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonTagExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonTagExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonTagListExporter"

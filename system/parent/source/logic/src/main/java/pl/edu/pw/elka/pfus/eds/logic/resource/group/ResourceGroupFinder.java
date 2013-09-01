@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pfus.eds.logic.resource.group;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
+import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 
 import java.util.List;
 
@@ -41,4 +42,13 @@ public interface ResourceGroupFinder {
      * @return grupa zasobów o podanej nazwie.
      */
     ResourceGroupWithAssignedUsers getByNameWithUsers(String name);
+
+    /**
+     * Zwraca listę posiadanych rol przez danego użytkownika na danej grupie zasobów.
+     *
+     * @param userName nazwa użytkownika.
+     * @param resourceGroupName nazwa grupy zasobów.
+     * @return
+     */
+    List<RolesGrantedDto> getUserRolesOverResourceGroups(String userName, String resourceGroupName);
 }
