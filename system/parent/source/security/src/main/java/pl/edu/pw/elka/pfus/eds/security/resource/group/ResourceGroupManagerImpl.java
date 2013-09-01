@@ -11,6 +11,7 @@ import org.objectledge.security.util.RoleSet;
 import pl.edu.pw.elka.pfus.eds.security.exception.SecurityException;
 import pl.edu.pw.elka.pfus.eds.security.user.UserManager;
 import pl.edu.pw.elka.pfus.eds.security.user.UserValidator;
+import pl.edu.pw.elka.pfus.eds.util.config.Config;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,13 +23,15 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
     private DataBackend dataBackend;
     private UserManager userManager;
     private UserValidator userValidator;
+    private Config config;
 
     public ResourceGroupManagerImpl(Context context, DataBackend dataBackend, UserManager userManager,
-                                    UserValidator userValidator) {
+                                    UserValidator userValidator, Config config) {
         this.context = context;
         this.dataBackend = dataBackend;
         this.userManager = userManager;
         this.userValidator = userValidator;
+        this.config = config;
     }
 
     @Override
@@ -39,7 +42,7 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
             dataBackend.saveGroup(group);
             group = dataBackend.getGroupByName(name);
             SecurityUser securityUser = userManager.getCurrentSecurityUser(context);
-            Role adminRole = dataBackend.getRoleByName("Admin");
+            Role adminRole = dataBackend.getRoleByName(config.getString("admin_role"));
             dataBackend.grant(securityUser, group, adminRole);
         } catch (Exception e) {
             throw new SecurityException(e);
