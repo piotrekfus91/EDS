@@ -37,6 +37,10 @@
     <!-- security -->
     <component class-key="pl.edu.pw.elka.pfus.eds.security.SecurityFacade"
                class="pl.edu.pw.elka.pfus.eds.security.SecurityFacadeImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.security.user.UserManager"
+               class="pl.edu.pw.elka.pfus.eds.security.user.UserManagerImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.security.resource.group.ResourceGroupManager"
+               class="pl.edu.pw.elka.pfus.eds.security.resource.group.ResourceGroupManagerImpl" />
     <component class="pl.edu.pw.elka.pfus.eds.security.valve.CheckLoginValve" />
 
     <!-- logic -->
