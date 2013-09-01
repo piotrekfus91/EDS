@@ -78,9 +78,11 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
 
     @Override
     public void removeFromAssociations() {
-        resourceGroups.remove(this);
-        subdirectories.remove(this);
-        documents.remove(this);
+        for(ResourceGroup resourceGroup : resourceGroups) {
+            if(resourceGroup.getDocuments().contains(this))
+                resourceGroup.removeDirectory(this);
+        }
+        resourceGroups.clear();
     }
 
     public boolean isRootDirectory() {

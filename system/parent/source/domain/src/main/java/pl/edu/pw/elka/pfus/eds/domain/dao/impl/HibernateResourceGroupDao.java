@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.domain.dao.impl;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.IdentifableGenericDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.ResourceGroupDao;
@@ -21,6 +22,11 @@ public class HibernateResourceGroupDao extends IdentifableGenericDao<ResourceGro
     public HibernateResourceGroupDao(Context context, SessionFactory sessionFactory) {
         super(context, sessionFactory);
         namedDao = new HibernateNamedDao<>(session, ResourceGroup.class);
+    }
+
+    public HibernateResourceGroupDao(Session session) {
+        super(session);
+        namedDao = new HibernateNamedDao<ResourceGroup>(session, ResourceGroup.class);
     }
 
     @Override

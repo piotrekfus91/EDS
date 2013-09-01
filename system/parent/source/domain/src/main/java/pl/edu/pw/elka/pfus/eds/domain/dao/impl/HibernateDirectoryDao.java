@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.domain.dao.impl;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.IdentifableGenericDao;
@@ -44,6 +45,10 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
 
     public HibernateDirectoryDao(Context context, SessionFactory sessionFactory) {
         super(context, sessionFactory);
+    }
+
+    public HibernateDirectoryDao(Session session) {
+        super(session);
     }
 
     @Override

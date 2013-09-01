@@ -5,25 +5,27 @@ import org.objectledge.context.Context;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
+import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryModifier;
 import pl.edu.pw.elka.pfus.eds.logic.exception.*;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
+import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class DirectoryModifierImplTest {
     private DirectoryModifier modifier;
     private Directory directory;
+    private DocumentDao documentDao;
+    private FileManager fileManager;
     private User user;
     private Context context;
     private SecurityFacade securityFacade;
@@ -37,9 +39,11 @@ public class DirectoryModifierImplTest {
         context = mock(Context.class);
         securityFacade = mock(SecurityFacade.class);
         userDao = mock(UserDao.class);
+        documentDao = mock(DocumentDao.class);
         directoryDao = mock(DirectoryDao.class);
+        fileManager = mock(FileManager.class);
 
-        modifier = new DirectoryModifierImpl(directoryDao, userDao, securityFacade, context);
+        modifier = new DirectoryModifierImpl(directoryDao, null, userDao, securityFacade, context);
     }
 
     @Test(expectedExceptions = AlreadyExistsException.class)
@@ -86,13 +90,13 @@ public class DirectoryModifierImplTest {
         modifier.delete(1);
     }
 
-    @Test
+    @Test(expectedExceptions = LogicException.class)
     public void testDeletingRoot() throws Exception {
         when(directoryDao.findById(anyInt())).thenReturn(directory);
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
         directory.setOwner(user);
 
-        assertThat(modifier.delete(1)).isNull();
+        modifier.delete(1);
     }
 
     @Test
@@ -112,6 +116,7 @@ public class DirectoryModifierImplTest {
     @Test(expectedExceptions = InternalException.class)
     public void testDeletingForRollback() throws Exception {
         when(directoryDao.findById(anyInt())).thenReturn(directory);
+        directory.setParentDirectory(new Directory());
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
         doThrow(new InternalException()).when(directoryDao).commitTransaction();
         directory.setOwner(user);

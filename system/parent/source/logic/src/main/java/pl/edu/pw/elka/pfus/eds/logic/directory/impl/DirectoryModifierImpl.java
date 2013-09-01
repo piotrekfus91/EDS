@@ -5,9 +5,13 @@ import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
+import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryModifier;
-import pl.edu.pw.elka.pfus.eds.logic.exception.*;
+import pl.edu.pw.elka.pfus.eds.logic.document.DocumentModifier;
+import pl.edu.pw.elka.pfus.eds.logic.exception.AlreadyExistsException;
+import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
+import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
@@ -16,13 +20,15 @@ import java.util.List;
 public class DirectoryModifierImpl implements DirectoryModifier {
     private static final Logger logger = Logger.getLogger(DirectoryModifierImpl.class);
     private DirectoryDao directoryDao;
+    private DocumentModifier documentModifier;
     private UserDao userDao;
     private SecurityFacade securityFacade;
     private Context context;
 
-    public DirectoryModifierImpl(DirectoryDao directoryDao, UserDao userDao, SecurityFacade securityFacade,
-                                 Context context) {
+    public DirectoryModifierImpl(DirectoryDao directoryDao, DocumentModifier documentModifier, UserDao userDao,
+                                 SecurityFacade securityFacade, Context context) {
         this.directoryDao = directoryDao;
+        this.documentModifier = documentModifier;
         this.userDao = userDao;
         this.securityFacade = securityFacade;
         this.context = context;
@@ -68,26 +74,35 @@ public class DirectoryModifierImpl implements DirectoryModifier {
         LogicValidator.validateExistence(directory);
         LogicValidator.validateOwnershipOverDirectory(currentUser, directory);
 
+        if(directory.isRootDirectory())
+            throw new LogicException("Nie można usunąć katalogu głównego");
+
         try {
             directoryDao.beginTransaction();
-            Directory toReturn;
-            if(directory.isRootDirectory()) {
-                directoryDao.delete(directory);
-                toReturn = null;
-            } else {
-                int parentDirectoryId = directory.getParentDirectory().getId();
-                toReturn = directoryDao.findById(parentDirectoryId);
-                toReturn.removeSubdirectory(directory);
-                directoryDao.delete(directory);
-            }
-            logger.info("removed directory with id " + id + " and name " + directory.getName());
+            int parentDirectoryId = directory.getParentDirectory().getId();
+            Directory parentDirectory = directoryDao.findById(parentDirectoryId);
+            recursiveRemoveDirectory(directory);
+            parentDirectory.removeSubdirectory(directory);
+            directoryDao.delete(directory);
             directoryDao.commitTransaction();
-            return toReturn;
+            logger.info("removed directory with id " + id + " and name " + directory.getName());
+            return parentDirectory;
         } catch (Exception e) {
             directoryDao.rollbackTransaction();
             logger.error(e.getMessage(), e);
             throw new InternalException();
         }
+    }
+
+    private void recursiveRemoveDirectory(Directory directory) {
+        Directory dir = directoryDao.findById(directory.getId());
+        for(Directory subdir : directory.getSubdirectories()) {
+            recursiveRemoveDirectory(subdir);
+        }
+        for(Document document : directory.getDocuments()) {
+            documentModifier.delete(document.getId());
+        }
+        directoryDao.delete(dir);
     }
 
     @Override

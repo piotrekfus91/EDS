@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.domain.dao;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.entity.IdentifableEntity;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
@@ -8,6 +9,10 @@ import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 public abstract class IdentifableGenericDao<T extends IdentifableEntity> extends GenericDao<T> implements IdentifableDao<T> {
     public IdentifableGenericDao(Context context, SessionFactory sessionFactory) {
         super(context, sessionFactory);
+    }
+
+    protected IdentifableGenericDao(Session session) {
+        super(session);
     }
 
     @Override

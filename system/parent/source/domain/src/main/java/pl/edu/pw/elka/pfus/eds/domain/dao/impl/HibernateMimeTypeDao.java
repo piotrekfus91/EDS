@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.domain.dao.impl;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.IdentifableGenericDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.MimeTypeDao;
@@ -15,6 +16,10 @@ public class HibernateMimeTypeDao extends IdentifableGenericDao<MimeType> implem
 
     public HibernateMimeTypeDao(Context context, SessionFactory sessionFactory) {
         super(context, sessionFactory);
+    }
+
+    public HibernateMimeTypeDao(Session session) {
+        super(session);
     }
 
     @Override

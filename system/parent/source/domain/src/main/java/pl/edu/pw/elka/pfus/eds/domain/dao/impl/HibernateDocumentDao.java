@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.domain.dao.impl;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.IdentifableGenericDao;
@@ -26,6 +27,10 @@ public class HibernateDocumentDao extends IdentifableGenericDao<Document> implem
 
     public HibernateDocumentDao(Context context, SessionFactory sessionFactory) {
         super(context, sessionFactory);
+    }
+
+    public HibernateDocumentDao(Session session) {
+        super(session);
     }
 
     @Override

@@ -86,9 +86,18 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
 
     @Override
     public void removeFromAssociations() {
-        resourceGroups.remove(this);
-        tags.remove(this);
-        comments.remove(this);
+        for(ResourceGroup resourceGroup : resourceGroups) {
+            if(resourceGroup.getDocuments().contains(this))
+                resourceGroup.removeDocument(this);
+        }
+        resourceGroups.clear();
+        for(Tag tag : tags) {
+            if(tag.getDocuments().contains(this))
+                tag.removeDocument(this);
+        }
+        tags.clear();
+        mimeType.removeDocument(this);
+        owner.removeDocument(this);
     }
 
     public void clearTags() {
