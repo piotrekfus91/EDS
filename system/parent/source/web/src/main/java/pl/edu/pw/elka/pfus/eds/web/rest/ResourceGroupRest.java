@@ -111,6 +111,18 @@ public class ResourceGroupRest {
         return Response.status(Response.Status.OK).entity(exported).build();
     }
 
+    @PUT
+    @Path("/roles/group/{groupName}/user/{userName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateRoles(@PathParam("groupName") String groupName, @PathParam("userName") String userName,
+                                List<RolesGrantedDto> rolesGranted) {
+        logger.info("updating roles for user " + userName + " over group " + groupName);
+        logger.info("new roles: " + rolesGranted);
+        resourceGroupService.updateRoles(groupName, userName, rolesGranted);
+        return getResourceGroupByName(groupName);
+    }
+
     @DELETE
     @Path("/delete/{name}")
     @Produces(MediaType.APPLICATION_JSON)

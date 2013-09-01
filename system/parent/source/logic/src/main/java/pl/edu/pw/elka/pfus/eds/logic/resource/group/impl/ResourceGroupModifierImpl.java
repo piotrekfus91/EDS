@@ -10,6 +10,9 @@ import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupModifier;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
+import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
+
+import java.util.List;
 
 public class ResourceGroupModifierImpl implements ResourceGroupModifier {
     private static final Logger logger = Logger.getLogger(ResourceGroupModifierImpl.class);
@@ -70,6 +73,17 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
             resourceGroupDao.rollbackTransaction();
             logger.error(e.getMessage(), e);
             throw new InternalException();
+        }
+    }
+
+    @Override
+    public void updateRoles(String groupName, String userName, List<RolesGrantedDto> rolesGranted) {
+        for(RolesGrantedDto roleGranted : rolesGranted) {
+            if(roleGranted.isHas()) {
+                securityFacade.grantRoleToUserOverResourceGroup(userName, roleGranted.getRoleName(), groupName);
+            } else {
+                securityFacade.revokeRoleFromUserOverResourceGroup(userName, roleGranted.getRoleName(), groupName);
+            }
         }
     }
 

@@ -56,6 +56,11 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     }
 
     @Override
+    public void updateRoles(String groupName, String userName, List<RolesGrantedDto> rolesGranted) {
+        resourceGroupModifier.updateRoles(groupName, userName, rolesGranted);
+    }
+
+    @Override
     public void delete(String name) {
         resourceGroupModifier.delete(name);
     }

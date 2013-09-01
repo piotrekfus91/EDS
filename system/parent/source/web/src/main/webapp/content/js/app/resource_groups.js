@@ -1,7 +1,9 @@
 var saveMode = ""; // add lub edit
 var editModeResourceGroupName = "";
 var userFriendlyName = "";
+var userName;
 var groupName = "";
+var activeDiv;
 
 $(document).ready(function() {
     $('#resource_groups').accordion();
@@ -42,9 +44,9 @@ function post_resource_groups(resource_groups) {
         active: false
     });
     $("h3", "#resource_groups").click(function() {
-        var active_div = $(this).next('div');
+        activeDiv = $(this).next('div');
         var active_resource_group = $(this).find("a").attr("title");
-        load_resource_group_info(active_div, active_resource_group);
+        load_resource_group_info(activeDiv, active_resource_group);
     });
     resource_groups_div.css('display', 'block');
 }
@@ -196,7 +198,8 @@ function delete_resource_group(name) {
     reload_resource_groups();
 }
 
-function show_user_roles_dialog(userName, friendlyName) {
+function show_user_roles_dialog(name, friendlyName) {
+    userName = name;
     userFriendlyName = friendlyName;
     var user_roles_div = $('#user_roles_div');
     user_roles_div.find('#user_roles_user_span').html(userFriendlyName);
@@ -218,7 +221,7 @@ function show_user_roles_dialog(userName, friendlyName) {
 function show_roles(roles) {
     var content = "";
     $.each(roles, function() {
-        content += "<input type=\"checkbox\" id=\"" + this.roleName + "\"";
+        content += "<input type=\"checkbox\" id=\"" + this.roleName + "\" name=\"" + this.roleName + "\"";
             if(this.has) content += " checked=\"checked\"";
         content += " />";
         content += "<label for=\"" + this.roleName + "\">" + this.roleName + "</label>";
@@ -281,7 +284,26 @@ $('#user_roles_div').dialog({
     height: 'auto',
     buttons: {
         "Zapisz": function() {
-
+            var data = serialize_form('user_roles_form');
+            $.ajax({
+                type: "PUT",
+                url: rest('/resourceGroups/roles/group/' + groupName + '/user/' + userName),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: data,
+                success: function(result) {
+                    if(is_success(result)) {
+                        post_message_now('success', 'Role zostały zaktualizowane');
+                        clear_and_close_user_roles_div();
+                        load_resource_group_info(activeDiv, groupName);
+                    } else {
+                        post_error_from_result(result);
+                    }
+                },
+                error: function() {
+                    post_message_now('error', 'Błąd przy aktualizacji ról');
+                }
+            });
         },
         "Anuluj": function() {
             clear_and_close_user_roles_div();
@@ -310,4 +332,20 @@ function get_resource_group_string(name, description) {
         description: description
     };
     return JSON.stringify(resource_group);
+}
+
+function serialize_form(formId) {
+    var result = [];
+    $('#' + formId + ' :input').each(function() {
+        var checkbox = $(this);
+        var label = $('label[for='+checkbox.attr('id')+']');
+        var entry = {};
+        entry['roleName'] = label.text();
+        if(checkbox.is(':checked'))
+            entry['has'] = true;
+        else
+            entry['has'] = false;
+        result.push(entry);
+    });
+    return JSON.stringify(result);
 }

@@ -109,7 +109,7 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
             SecurityUser user = dataBackend.getUserByName(userName);
             Role role = dataBackend.getRoleByName(roleName);
             Group group = dataBackend.getGroupByName(resourceGroupName);
-            dataBackend.revoke(user, group, role);
+//            dataBackend.revoke(user, group, role);
         } catch (Exception e) {
             throw new SecurityException(e);
         }

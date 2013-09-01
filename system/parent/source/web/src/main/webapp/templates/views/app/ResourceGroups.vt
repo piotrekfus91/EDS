@@ -24,7 +24,7 @@ $viewEnclosureTool.top()
 
 <div id="user_roles_div" title="Uprawnienia" style="display: none">
     Role użytkownika <span id="user_roles_user_span"></span> w grupie zasobów <span id="user_roles_group_span"></span>.
-    <form onsubmit="return false;">
+    <form id="user_roles_form" onsubmit="return false;">
         <div id="user_roles_roles_div">
 
         </div>
