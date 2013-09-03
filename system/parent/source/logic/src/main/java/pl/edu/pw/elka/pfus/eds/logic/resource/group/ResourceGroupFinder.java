@@ -51,4 +51,11 @@ public interface ResourceGroupFinder {
      * @return
      */
     List<RolesGrantedDto> getUserRolesOverResourceGroups(String userName, String resourceGroupName);
+
+    /**
+     * Zwraca listę grup, gdzie użytkownik ma jakieś uprawnienia.
+     *
+     * @return lista grup użytkownika.
+     */
+    List<ResourceGroup> getGroupsWhereCurrentUserHasAnyPrivilege();
 }

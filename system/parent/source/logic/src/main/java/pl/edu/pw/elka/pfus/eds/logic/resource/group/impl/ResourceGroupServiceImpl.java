@@ -46,6 +46,11 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     }
 
     @Override
+    public List<ResourceGroup> getGroupsWhereCurrentUserHasAnyPrivilege() {
+        return resourceGroupFinder.getGroupsWhereCurrentUserHasAnyPrivilege();
+    }
+
+    @Override
     public ResourceGroup create(String name, String description) {
         return resourceGroupModifier.create(name, description);
     }

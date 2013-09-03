@@ -4,6 +4,7 @@ var userFriendlyName = "";
 var userName;
 var groupName = "";
 var activeDiv;
+var privilegesStatus = {};
 
 $(document).ready(function() {
     $('#resource_groups').accordion();
@@ -16,7 +17,7 @@ $(document).ready(function() {
 function reload_resource_groups() {
     $.ajax({
         type: "GET",
-        url: rest("/resourceGroups/founded"),
+        url: rest("/resourceGroups/my"),
         success: function(result) {
             if(is_success(result)) {
                 post_resource_groups(result.data);
@@ -86,6 +87,7 @@ function post_resource_group_info(div, data) {
     var resource_group = data.resourceGroup;
     var users = data.users;
     groupName = resource_group.name;
+    privilegesStatus = data.privilegesStatus;
     div.removeAttr('height');
     var content = "";
     div.html('');
@@ -97,10 +99,14 @@ function post_resource_group_info(div, data) {
         content += resource_group.description;
     content += "</div>";
     content += "<div id=\"resource_group_buttons\">";
-        content += "<button onclick=\"javascript:edit_resource_group_button_click('" + resource_group.name + "')\">";
+        content += "<button onclick=\"javascript:edit_resource_group_button_click('" + resource_group.name + "')\"";
+                if(!has_privilege(privilegesStatus, 'update_info')) content += " disabled=\"disabled\""
+                content += ">";
             content += "Edytuj informacje o grupie";
         content += "</button>";
-        content += "<button onclick=\"javascript:delete_resource_group('" + resource_group.name + "')\">";
+        content += "<button onclick=\"javascript:delete_resource_group('" + resource_group.name + "')\"";
+                if(!has_privilege(privilegesStatus, 'delete')) content += " disabled=\"disabled\"";
+                content += ">";
             content += "Usuń grupę zasobów";
         content += "</button>";
     content += "</div>";
@@ -112,7 +118,9 @@ function post_resource_group_info(div, data) {
                 content += this.friendlyName;
             content += "</td>";
             content += "<td>";
-                content += "<button onclick=\"javascript:show_user_roles_dialog('" + this.name + "', '" + this.friendlyName + "')\">";
+                content += "<button onclick=\"javascript:show_user_roles_dialog('" + this.name + "', '" + this.friendlyName + "')\"";
+                        if(!has_privilege(privilegesStatus, 'manage_roles')) content += " disabled=\"disabled\"";
+                        content += ">";
                     content += "Edytuj role";
                 content += "</button>";
             content += "</td>";
@@ -137,27 +145,31 @@ function post_resource_group_info(div, data) {
                 content += "";
             content += "</th>";
         content += "</tr>"
-    $.each(resource_group.documents, function() {
-        content += "<tr>";
-            content += "<td>";
-                content += this.title;
-            content += "</td>";
-            content += "<td>";
-                content += this.owner;
-            content += "</td>";
-            content += "<td>";
-                content += this.mime;
-            content += "</td>";
-            content += "<td>";
-                content += this.created;
-            content += "</td>";
-            content += "<td>";
-                content += "<a href=\"#\">";
-                    content += "Pobierz";
-                content += "</a>";
-            content += "</td>";
-        content += "</tr>";
-    });
+    if(has_privilege(privilegesStatus, 'list_files')) {
+        $.each(resource_group.documents, function() {
+            content += "<tr>";
+                content += "<td>";
+                    content += this.title;
+                content += "</td>";
+                content += "<td>";
+                    content += this.owner;
+                content += "</td>";
+                content += "<td>";
+                    content += this.mime;
+                content += "</td>";
+                content += "<td>";
+                    content += this.created;
+                content += "</td>";
+                content += "<td>";
+                    if(has_privilege(privilegesStatus, 'download_files')) {
+                        content += "<a href=\"#\">";
+                            content += "Pobierz";
+                        content += "</a>";
+                    }
+                content += "</td>";
+            content += "</tr>";
+        });
+    }
     content += "</table>";
     div.html(content);
     div.find('#resource_group_buttons').buttonset();

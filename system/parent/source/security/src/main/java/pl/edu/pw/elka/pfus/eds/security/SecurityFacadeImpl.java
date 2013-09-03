@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.security;
 
 import org.objectledge.context.Context;
+import org.objectledge.security.object.Group;
 import org.objectledge.security.object.SecurityUser;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
@@ -52,6 +53,11 @@ public class SecurityFacadeImpl implements SecurityFacade {
     @Override
     public List<RolesGrantedDto> getUserRolesOverResourceGroup(String userName, String resourceGroupName) {
         return resourceGroupManager.getUserRolesOverResourceGroup(userName, resourceGroupName);
+    }
+
+    @Override
+    public List<Group> getGroupsWhereUserHasAnyPrivilege(String userName) {
+        return resourceGroupManager.getGroupsWhereUserHasAnyPrivilege(userName);
     }
 
     @Override

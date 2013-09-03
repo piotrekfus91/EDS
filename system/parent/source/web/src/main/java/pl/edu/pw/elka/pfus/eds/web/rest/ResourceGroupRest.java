@@ -42,10 +42,10 @@ public class ResourceGroupRest {
     }
 
     @GET
-    @Path("/founded")
+    @Path("/my")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getResourceGroupsFoundedByCurrentUser() {
-        List<ResourceGroup> resourceGroups = resourceGroupService.getCurrentUserResourceGroups();
+        List<ResourceGroup> resourceGroups = resourceGroupService.getGroupsWhereCurrentUserHasAnyPrivilege();
         String exported = resourceGroupListExporter.exportSuccess(resourceGroups);
         return Response.status(Response.Status.OK).entity(exported).build();
     }

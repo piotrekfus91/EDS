@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.logic.resource.group.impl;
 
 import org.objectledge.context.Context;
+import org.objectledge.security.object.Group;
 import org.objectledge.security.object.SecurityUser;
 import pl.edu.pw.elka.pfus.eds.domain.dao.ResourceGroupDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
@@ -73,5 +74,17 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
     @Override
     public List<RolesGrantedDto> getUserRolesOverResourceGroups(String userName, String resourceGroupName) {
         return securityFacade.getUserRolesOverResourceGroup(userName, resourceGroupName);
+    }
+
+    @Override
+    public List<ResourceGroup> getGroupsWhereCurrentUserHasAnyPrivilege() {
+        User currentUser = securityFacade.getCurrentUser(context);
+        List<Group> securityGroups =  securityFacade.getGroupsWhereUserHasAnyPrivilege(currentUser.getName());
+        List<ResourceGroup> resourceGroups = new LinkedList<>();
+        for(Group securityGroup : securityGroups) {
+            ResourceGroup resourceGroup = resourceGroupDao.findByName(securityGroup.getName());
+            resourceGroups.add(resourceGroup);
+        }
+        return resourceGroups;
     }
 }

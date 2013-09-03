@@ -40,3 +40,11 @@ function rest(suffix) {
 function is_success(result) {
     return result.result == "SUCCESS";
 }
+
+function has_privilege(privilegeStatus, privilegeName) {
+    if(privilegeName in privilegeStatus) {
+        return privilegeStatus[privilegeName];
+    } else {
+        return false;
+    }
+}

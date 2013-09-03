@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.security.resource.group;
 
+import org.objectledge.security.object.Group;
 import org.objectledge.security.object.SecurityUser;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 
@@ -66,4 +67,12 @@ public interface ResourceGroupManager {
      * @return użytkownicy.
      */
     List<SecurityUser> getAllUsersWithAnyPrivilegeOnResourceGroup(String resourceGroupName);
+
+    /**
+     * Zwraca listę grup, w których użytkownik ma jakiekolwiek uprawnienia.
+     *
+     * @param userName nazwa użytkownika.
+     * @return lista grup, w których użytkownik ma uprawnienia.
+     */
+    List<Group> getGroupsWhereUserHasAnyPrivilege(String userName);
 }

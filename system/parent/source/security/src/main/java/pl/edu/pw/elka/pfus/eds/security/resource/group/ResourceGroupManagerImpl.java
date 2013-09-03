@@ -7,15 +7,18 @@ import org.objectledge.security.exception.DataBackendException;
 import org.objectledge.security.object.Group;
 import org.objectledge.security.object.Role;
 import org.objectledge.security.object.SecurityUser;
+import org.objectledge.security.util.GroupSet;
 import org.objectledge.security.util.RoleSet;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 import pl.edu.pw.elka.pfus.eds.security.exception.SecurityException;
+import pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeService;
 import pl.edu.pw.elka.pfus.eds.security.user.UserManager;
 import pl.edu.pw.elka.pfus.eds.security.user.UserValidator;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class ResourceGroupManagerImpl implements ResourceGroupManager {
     private static final Logger logger = Logger.getLogger(ResourceGroupManagerImpl.class);
@@ -23,14 +26,16 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
     private Context context;
     private DataBackend dataBackend;
     private UserManager userManager;
+    private PrivilegeService privilegeService;
     private UserValidator userValidator;
     private Config config;
 
     public ResourceGroupManagerImpl(Context context, DataBackend dataBackend, UserManager userManager,
-                                    UserValidator userValidator, Config config) {
+                                    PrivilegeService privilegeService, UserValidator userValidator, Config config) {
         this.context = context;
         this.dataBackend = dataBackend;
         this.userManager = userManager;
+        this.privilegeService = privilegeService;
         this.userValidator = userValidator;
         this.config = config;
     }
@@ -109,6 +114,7 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
             SecurityUser user = dataBackend.getUserByName(userName);
             Role role = dataBackend.getRoleByName(roleName);
             Group group = dataBackend.getGroupByName(resourceGroupName);
+//            dobry joke, ledge nie wspiera odbierania uprawnien:)
 //            dataBackend.revoke(user, group, role);
         } catch (Exception e) {
             throw new SecurityException(e);
@@ -130,5 +136,30 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
         } catch (DataBackendException e) {
             throw new SecurityException(e);
         }
+    }
+
+    @Override
+    public List<Group> getGroupsWhereUserHasAnyPrivilege(String userName) {
+        List<Group> userGroups = new LinkedList<>();
+        try {
+            GroupSet groups = dataBackend.getAllGroups();
+            for(Group group : groups) {
+                Map<String, Boolean> privileges = privilegeService.getPrivilegesStatus(userName, group.getName());
+                if(hasAnyPrivilege(privileges)) {
+                    userGroups.add(group);
+                }
+            }
+            return userGroups;
+        } catch (DataBackendException e) {
+            throw new SecurityException(e);
+        }
+    }
+
+    private boolean hasAnyPrivilege(Map<String, Boolean> privileges) {
+        for(Boolean hasPrivilege : privileges.values()) {
+            if(hasPrivilege)
+                return true;
+        }
+        return false;
     }
 }
