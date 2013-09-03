@@ -5,18 +5,22 @@ import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssigne
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class ResourceGroupUsersJsonDto {
     private ResourceGroupJsonDto resourceGroup;
     private List<UserJsonDto> users;
+    private Map<String, Boolean> privilegesStatus;
 
     public ResourceGroupUsersJsonDto() {
 
     }
 
-    public ResourceGroupUsersJsonDto(ResourceGroupJsonDto resourceGroup, List<UserJsonDto> users) {
+    public ResourceGroupUsersJsonDto(ResourceGroupJsonDto resourceGroup, List<UserJsonDto> users,
+                                     Map<String, Boolean> privilegesStatus) {
         this.resourceGroup = resourceGroup;
         this.users = users;
+        this.privilegesStatus = privilegesStatus;
     }
 
     public static ResourceGroupUsersJsonDto from(ResourceGroupWithAssignedUsers resourceGroupWithAssignedUsers) {
@@ -26,7 +30,8 @@ public class ResourceGroupUsersJsonDto {
         for(User user : resourceGroupWithAssignedUsers.getUsers())
             users.add(UserJsonDto.from(user));
         return new ResourceGroupUsersJsonDto(
-                ResourceGroupJsonDto.from(resourceGroupWithAssignedUsers.getResourceGroup()), users);
+                ResourceGroupJsonDto.from(resourceGroupWithAssignedUsers.getResourceGroup()), users,
+                resourceGroupWithAssignedUsers.getPrivilegeStatus());
     }
 
     public ResourceGroupJsonDto getResourceGroup() {
@@ -43,5 +48,13 @@ public class ResourceGroupUsersJsonDto {
 
     public void setUsers(List<UserJsonDto> users) {
         this.users = users;
+    }
+
+    public Map<String, Boolean> getPrivilegesStatus() {
+        return privilegesStatus;
+    }
+
+    public void setPrivilegesStatus(Map<String, Boolean> privilegesStatus) {
+        this.privilegesStatus = privilegesStatus;
     }
 }

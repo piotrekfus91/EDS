@@ -23,5 +23,5 @@ public interface SuccessFailureJsonExporter<T>  {
      * @param object
      * @return
      */
-    String  exportFailure(String errorMessage, T object);
+    String exportFailure(String errorMessage, T object);
 }

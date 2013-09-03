@@ -11,20 +11,24 @@ import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssigne
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
+import pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeService;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class ResourceGroupFinderImpl implements ResourceGroupFinder {
     private Context context;
     private SecurityFacade securityFacade;
+    private PrivilegeService privilegeService;
     private ResourceGroupDao resourceGroupDao;
     private UserDao userDao;
 
-    public ResourceGroupFinderImpl(Context context, SecurityFacade securityFacade, ResourceGroupDao resourceGroupDao,
-                                   UserDao userDao) {
+    public ResourceGroupFinderImpl(Context context, SecurityFacade securityFacade, PrivilegeService privilegeService,
+                                   ResourceGroupDao resourceGroupDao, UserDao userDao) {
         this.context = context;
         this.securityFacade = securityFacade;
+        this.privilegeService = privilegeService;
         this.resourceGroupDao = resourceGroupDao;
         this.userDao = userDao;
     }
@@ -59,7 +63,11 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
             users.add(user);
         }
 
-        return new ResourceGroupWithAssignedUsers(resourceGroup, users);
+        User currentUser = securityFacade.getCurrentUser(context);
+        String userName = currentUser.getName();
+        Map<String, Boolean> currentUserPermissionStatus = privilegeService.getPrivilegesStatus(userName, name);
+
+        return new ResourceGroupWithAssignedUsers(resourceGroup, users, currentUserPermissionStatus);
     }
 
     @Override

@@ -10,6 +10,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
+import pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeService;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
@@ -22,6 +23,7 @@ public class ResourceGroupFinderImplTest {
     private ResourceGroupDao resourceGroupDao;
     private UserDao userDao;
     private SecurityFacade securityFacade;
+    private PrivilegeService privilegeService;
     private User user;
     private ResourceGroup resourceGroup;
 
@@ -30,8 +32,9 @@ public class ResourceGroupFinderImplTest {
         resourceGroupDao = mock(ResourceGroupDao.class);
         context = mock(Context.class);
         securityFacade = mock(SecurityFacade.class);
+        privilegeService = mock(PrivilegeService.class);
         userDao = mock(UserDao.class);
-        finder = new ResourceGroupFinderImpl(context, securityFacade, resourceGroupDao, userDao);
+        finder = new ResourceGroupFinderImpl(context, securityFacade, privilegeService, resourceGroupDao, userDao);
 
         user = new User();
         resourceGroup = new ResourceGroup();

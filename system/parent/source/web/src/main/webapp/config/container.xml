@@ -42,6 +42,8 @@
     <component class="pl.edu.pw.elka.pfus.eds.security.user.UserValidator" />
     <component class-key="pl.edu.pw.elka.pfus.eds.security.resource.group.ResourceGroupManager"
                class="pl.edu.pw.elka.pfus.eds.security.resource.group.ResourceGroupManagerImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeService"
+               class="pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeServiceImpl" />
     <component class="pl.edu.pw.elka.pfus.eds.security.valve.CheckLoginValve" />
 
     <!-- logic -->
