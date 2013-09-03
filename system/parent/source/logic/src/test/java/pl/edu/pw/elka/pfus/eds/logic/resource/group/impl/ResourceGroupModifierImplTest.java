@@ -32,7 +32,7 @@ public class ResourceGroupModifierImplTest {
         userDao = mock(UserDao.class);
         resourceGroup = new ResourceGroup();
         user = new User();
-        modifier = new ResourceGroupModifierImpl(context, securityFacade, resourceGroupDao, userDao);
+        modifier = new ResourceGroupModifierImpl(context, securityFacade, privilegeService, resourceGroupDao, userDao);
     }
 
     @Test

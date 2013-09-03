@@ -7,10 +7,13 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
+import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupModifier;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
+import pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeService;
+import pl.edu.pw.elka.pfus.eds.security.privilege.Privileges;
 
 import java.util.List;
 
@@ -19,13 +22,15 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
 
     private Context context;
     private SecurityFacade securityFacade;
+    private PrivilegeService privilegeService;
     private ResourceGroupDao resourceGroupDao;
     private UserDao userDao;
 
-    public ResourceGroupModifierImpl(Context context, SecurityFacade securityFacade,
+    public ResourceGroupModifierImpl(Context context, SecurityFacade securityFacade, PrivilegeService privilegeService,
                                      ResourceGroupDao resourceGroupDao, UserDao userDao) {
         this.context = context;
         this.securityFacade = securityFacade;
+        this.privilegeService = privilegeService;
         this.resourceGroupDao = resourceGroupDao;
         this.userDao = userDao;
     }
@@ -58,7 +63,8 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
         LogicValidator.validateExistence(resourceGroup);
 
         User currentUser = securityFacade.getCurrentUser(context);
-        LogicValidator.validateOwnershipOverResourceGroup(currentUser, resourceGroup);
+        if(!privilegeService.hasPrivilege(currentUser.getName(), Privileges.UPDATE_INFO, oldName))
+            throw new InvalidPrivilegesException();
 
         try {
             resourceGroupDao.beginTransaction();
@@ -78,6 +84,10 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
 
     @Override
     public void updateRoles(String groupName, String userName, List<RolesGrantedDto> rolesGranted) {
+        User currentUser = securityFacade.getCurrentUser(context);
+        if(!privilegeService.hasPrivilege(currentUser.getName(), Privileges.MANAGE_ROLES, groupName))
+            throw new InvalidPrivilegesException();
+
         for(RolesGrantedDto roleGranted : rolesGranted) {
             if(roleGranted.isHas()) {
                 securityFacade.grantRoleToUserOverResourceGroup(userName, roleGranted.getRoleName(), groupName);
@@ -93,7 +103,8 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
         LogicValidator.validateExistence(resourceGroup);
 
         User currentUser = securityFacade.getCurrentUser(context);
-        LogicValidator.validateOwnershipOverResourceGroup(currentUser, resourceGroup);
+        if(!privilegeService.hasPrivilege(currentUser.getName(), Privileges.DELETE, name))
+            throw new InvalidPrivilegesException();
 
         try {
             resourceGroupDao.beginTransaction();
