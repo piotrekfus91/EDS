@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
+import static pl.edu.pw.elka.pfus.eds.web.rest.Rest.rest;
+
 public class TaggedCommentedDocumentJsonDto extends DocumentJsonDto {
     private static final String DATE_FORMAT = "dd-MM-yyyy";
 
@@ -19,8 +21,8 @@ public class TaggedCommentedDocumentJsonDto extends DocumentJsonDto {
     }
 
     public TaggedCommentedDocumentJsonDto(int id, String name, String stringPath, String created, String mime,
-                                          List<Comment> comments, List<Tag> tags, String owner) {
-        super(id, name, stringPath, created, mime, owner);
+                                          List<Comment> comments, List<Tag> tags, String owner, String url) {
+        super(id, name, stringPath, created, mime, owner, url);
         this.created = created;
         this.mime = mime;
         for(Comment comment : comments) {
@@ -39,7 +41,8 @@ public class TaggedCommentedDocumentJsonDto extends DocumentJsonDto {
         SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
         return new TaggedCommentedDocumentJsonDto(document.getId(), document.getName(), document.getStringPath(),
                 dateFormatter.format(document.getCreated()), document.getMimeType().getType(), document.getComments(),
-                document.getTags(), document.getOwner().getFriendlyName());
+                document.getTags(), document.getOwner().getFriendlyName(),
+                rest("/documents/download/" + document.getId()));
     }
 
     @Override

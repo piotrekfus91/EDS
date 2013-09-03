@@ -28,6 +28,15 @@ public interface DocumentDao extends IdentifableDao<Document> {
     List<Document> getSessionDocuments(int userId);
 
     /**
+     * Zwraca listę dokumentów wraz z grupami, do których należy.
+     *
+     *
+     * @param documentId id dokumentu.
+     * @return dokument.
+     */
+    Document getDocumentWithGroups(int documentId);
+
+    /**
      * Usuwa pliki sesyjne podanego użytkownika.
      *
      * @param user użytkownik.

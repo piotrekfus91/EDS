@@ -162,7 +162,9 @@ function post_resource_group_info(div, data) {
                 content += "</td>";
                 content += "<td>";
                     if(has_privilege(privilegesStatus, 'download_files')) {
-                        content += "<a href=\"#\">";
+                        content += "<a href=\"";
+                                content += this.url;
+                                content += "\">";
                             content += "Pobierz";
                         content += "</a>";
                     }

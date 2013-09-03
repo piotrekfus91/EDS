@@ -19,6 +19,12 @@ public class HibernateDocumentDao extends IdentifableGenericDao<Document> implem
             "WHERE own.id = :ownerId " +
                     "AND d.directory IS NULL";
 
+    private static final String WITH_RESOURCE_GROUPS_QUERY =
+            "SELECT d " +
+                    "FROM Document d " +
+                    "LEFT JOIN d.resourceGroups " +
+                    "WHERE d.id = :documentId";
+
     private static final String CLEAN_SESSION_DOCUMENTS_QUERY =
             "DELETE " +
             "FROM Document d " +
@@ -43,6 +49,13 @@ public class HibernateDocumentDao extends IdentifableGenericDao<Document> implem
         Query query = session.createQuery(GET_SESSION_DOCUMENTS_QUERY);
         query.setInteger("ownerId", userId);
         return query.list();
+    }
+
+    @Override
+    public Document getDocumentWithGroups(int documentId) {
+        Query query = session.createQuery(WITH_RESOURCE_GROUPS_QUERY);
+        query.setInteger("documentId", documentId);
+        return (Document) query.uniqueResult();
     }
 
     @Override

@@ -4,22 +4,27 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 
 import java.text.SimpleDateFormat;
 
+import static pl.edu.pw.elka.pfus.eds.web.rest.Rest.rest;
+
 public class DocumentJsonDto extends FileSystemEntryJsonDto {
     private static final String DATE_FORMAT = "dd-MM-yyyy";
 
     protected String created;
     protected String mime;
     protected String owner;
+    protected String url;
 
     public DocumentJsonDto() {
 
     }
 
-    public DocumentJsonDto(int id, String name, String stringPath, String created, String mime, String owner) {
+    public DocumentJsonDto(int id, String name, String stringPath, String created, String mime, String owner,
+                           String url) {
         super(id, name, false, stringPath);
         this.created = created;
         this.mime = mime;
         this.owner = owner;
+        this.url = url;
     }
 
     public static DocumentJsonDto from(Document document) {
@@ -28,7 +33,7 @@ public class DocumentJsonDto extends FileSystemEntryJsonDto {
         SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
         return new DocumentJsonDto(document.getId(), document.getName(), document.getStringPath(),
                 dateFormatter.format(document.getCreated()), document.getMimeType().getType(),
-                document.getOwner().getFriendlyName());
+                document.getOwner().getFriendlyName(), rest("/documents/download/" + document.getId()));
     }
 
     @Override

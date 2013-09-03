@@ -87,7 +87,9 @@ function load_tag_info(div, tagName) {
             append += "<ul>";
             $.each(result.docs, function() {
                 append += "<li>";
-                    append += "<a href=\"#\">";
+                    append += "<a href=\"";
+                            append += this.url;
+                            append += "\">";
                         append += this.title;
                     append += "</a>";
                 append += "</li>";

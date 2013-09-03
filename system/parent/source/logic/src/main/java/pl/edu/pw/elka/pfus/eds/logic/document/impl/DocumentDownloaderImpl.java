@@ -33,7 +33,7 @@ public class DocumentDownloaderImpl implements DocumentDownloader {
 
     @Override
     public DocumentNameBytesDto getDocumentNameAndBytesById(int documentId) {
-        Document document = documentDao.findById(documentId);
+        Document document = documentDao.getDocumentWithGroups(documentId);
         User currentUser = securityFacade.getCurrentUser(context);
 
         if(!canDownload(currentUser, document))

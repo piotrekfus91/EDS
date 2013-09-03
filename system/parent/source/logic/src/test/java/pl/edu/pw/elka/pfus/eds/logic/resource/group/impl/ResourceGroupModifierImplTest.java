@@ -11,6 +11,7 @@ import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
+import pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeService;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -21,6 +22,7 @@ public class ResourceGroupModifierImplTest {
     private ResourceGroupDao resourceGroupDao;
     private UserDao userDao;
     private SecurityFacade securityFacade;
+    private PrivilegeService privilegeService;
     private ResourceGroup resourceGroup;
     private User user;
 
@@ -28,6 +30,7 @@ public class ResourceGroupModifierImplTest {
     public void setUp() throws Exception {
         context = mock(Context.class);
         securityFacade = mock(SecurityFacade.class);
+        privilegeService = mock(PrivilegeService.class);
         resourceGroupDao = mock(ResourceGroupDao.class);
         userDao = mock(UserDao.class);
         resourceGroup = new ResourceGroup();
