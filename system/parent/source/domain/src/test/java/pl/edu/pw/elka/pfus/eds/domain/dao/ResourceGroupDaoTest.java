@@ -10,6 +10,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -28,6 +29,16 @@ public class ResourceGroupDaoTest extends IdentifableDaoTest<ResourceGroup, Reso
 
         List<ResourceGroup> resourceGroups = resourceGroupDao.getAllOfFounder(user);
         assertThat(resourceGroups).containsExactly(resourceGroup);
+    }
+
+    @Test
+    public void testGetSharedDtoWithDocument() throws Exception {
+        ResourceGroup resourceGroup = factory.getSampleEntity();
+        resourceGroup.setName("sample name");
+        getDao().persist(resourceGroup);
+
+        List<String> groupNames = Arrays.asList("");
+        getDao().getResourceGroupsWithNames(groupNames);
     }
 
     @Override

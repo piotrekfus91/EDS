@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pfus.eds.logic.resource.group;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
+import pl.edu.pw.elka.pfus.eds.domain.dao.dto.SharedResourceGroupDto;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 
 import java.util.List;
@@ -42,6 +43,16 @@ public interface ResourceGroupFinder {
      * @return grupa zasobów o podanej nazwie.
      */
     ResourceGroupWithAssignedUsers getByNameWithUsers(String name);
+
+    /**
+     * Zwraca listę grup, w których zalogowany użytkownik ma prawo udostępniać.
+     * Listy są w postaci DTO, zawierające nazwę grupy i informację
+     * czy dany dokument jest już udostępniony.
+     *
+     * @param documentId id dokumentu.
+     * @return grupy, gdzie użytkownik może udostępniać.
+     */
+    List<SharedResourceGroupDto> getSharableGroupsForCurrentUserAndDocument(int documentId);
 
     /**
      * Zwraca listę posiadanych rol przez danego użytkownika na danej grupie zasobów.

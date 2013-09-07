@@ -99,6 +99,11 @@ function post_resource_group_info(div, data) {
         content += resource_group.description;
     content += "</div>";
     content += "<div id=\"resource_group_buttons\">";
+        content += "<button onclick=\"\"";
+                if(!has_privilege(privilegesStatus, "manage_roles")) content += " disabled=\"disabled\"";
+                content += ">";
+            content += "Dodaj nowego użytkownika";
+        content += "</button>";
         content += "<button onclick=\"javascript:edit_resource_group_button_click('" + resource_group.name + "')\"";
                 if(!has_privilege(privilegesStatus, 'update_info')) content += " disabled=\"disabled\""
                 content += ">";

@@ -155,6 +155,21 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
         }
     }
 
+    @Override
+    public List<Group> getGroupsWhereUserHasPrivilege(String userName, String privilegeName) {
+        List<Group> groupsWithPrivilege = new LinkedList<>();
+        try {
+            GroupSet groups = dataBackend.getAllGroups();
+            for(Group group : groups) {
+                if(privilegeService.hasPrivilege(userName, privilegeName, group.getName()))
+                    groupsWithPrivilege.add(group);
+            }
+            return groupsWithPrivilege;
+        } catch (DataBackendException e) {
+            throw new SecurityException(e);
+        }
+    }
+
     private boolean hasAnyPrivilege(Map<String, Boolean> privileges) {
         for(Boolean hasPrivilege : privileges.values()) {
             if(hasPrivilege)

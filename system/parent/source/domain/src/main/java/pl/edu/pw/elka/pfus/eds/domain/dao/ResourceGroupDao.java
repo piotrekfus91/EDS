@@ -26,4 +26,12 @@ public interface ResourceGroupDao extends NamedDao<ResourceGroup>, IdentifableDa
      * @return lista grup zasobów.
      */
     List<ResourceGroup> getAllOfFounder(int userId);
+
+    /**
+     * Zwraca grupy zasobów, których nazwa znajduje się w kolekcji.
+     *
+     * @param groupNames nazwy grup zasobów.
+     * @return grupy zasobów.
+     */
+    List<ResourceGroup> getResourceGroupsWithNames(List<String> groupNames);
 }

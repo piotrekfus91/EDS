@@ -17,6 +17,11 @@ public class HibernateResourceGroupDao extends IdentifableGenericDao<ResourceGro
             "FROM ResourceGroup rg " +
             "WHERE rg.founder.id = :userId";
 
+    private static final String SHARED_WITH_DOCUMENT_QUERY =
+            "SELECT rg " +
+            "FROM ResourceGroup rg " +
+            "WHERE rg.name IN :groupNames";
+
     private HibernateNamedDao<ResourceGroup> namedDao;
 
     public HibernateResourceGroupDao(Context context, SessionFactory sessionFactory) {
@@ -38,6 +43,13 @@ public class HibernateResourceGroupDao extends IdentifableGenericDao<ResourceGro
     public List<ResourceGroup> getAllOfFounder(int userId) {
         Query query = session.createQuery(ALL_OF_FOUNDER_QUERY);
         query.setInteger("userId", userId);
+        return query.list();
+    }
+
+    @Override
+    public List<ResourceGroup> getResourceGroupsWithNames(List<String> groupNames) {
+        Query query = session.createQuery(SHARED_WITH_DOCUMENT_QUERY);
+        query.setParameterList("groupNames", groupNames);
         return query.list();
     }
 

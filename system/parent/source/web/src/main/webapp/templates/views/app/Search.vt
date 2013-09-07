@@ -1,6 +1,7 @@
 $viewEnclosureTool.top()
 <script src="$link.content('js/tagcloud/jquery.tagcloud.js')"></script>
 <script src="$link.content('js/app/search.js')"></script>
+<script src="$link.content('js/app/tag_cloud.js')"></script>
 
 <table>
     <tr>

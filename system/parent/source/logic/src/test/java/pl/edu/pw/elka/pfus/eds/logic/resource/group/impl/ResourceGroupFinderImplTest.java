@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pfus.eds.logic.resource.group.impl;
 import org.objectledge.context.Context;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.ResourceGroupDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
@@ -23,6 +24,7 @@ public class ResourceGroupFinderImplTest {
     private Context context;
     private ResourceGroupDao resourceGroupDao;
     private UserDao userDao;
+    private DocumentDao documentDao;
     private SecurityFacade securityFacade;
     private PrivilegeService privilegeService;
     private User user;
@@ -35,7 +37,9 @@ public class ResourceGroupFinderImplTest {
         securityFacade = mock(SecurityFacade.class);
         privilegeService = mock(PrivilegeService.class);
         userDao = mock(UserDao.class);
-        finder = new ResourceGroupFinderImpl(context, securityFacade, privilegeService, resourceGroupDao, userDao);
+        documentDao = mock(DocumentDao.class);
+        finder = new ResourceGroupFinderImpl(context, securityFacade, privilegeService, resourceGroupDao, userDao,
+                documentDao);
 
         user = new User();
         resourceGroup = new ResourceGroup();

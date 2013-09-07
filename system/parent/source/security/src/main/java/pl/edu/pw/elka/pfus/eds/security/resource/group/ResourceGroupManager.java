@@ -75,4 +75,13 @@ public interface ResourceGroupManager {
      * @return lista grup, w których użytkownik ma uprawnienia.
      */
     List<Group> getGroupsWhereUserHasAnyPrivilege(String userName);
+
+    /**
+     * Zwraca listę grup, gdzie użytkownik ma dane uprawnienie.
+     *
+     * @param userName nazwa użytkownika.
+     * @param privilegeName nazwa uprawnienia.
+     * @return grupy, gdzie użytkownik ma dane uprawnienie.
+     */
+    List<Group> getGroupsWhereUserHasPrivilege(String userName, String privilegeName);
 }

@@ -101,3 +101,12 @@ $viewEnclosureTool.top()
         </table>
     </form>
 </div>
+
+<div id="shared_resource_groups_div" title="Grupy zasobów" style="display: none">
+    Grupy zasobów, dla których dostępny jest <span id="shared_resource_groups_doc_or_dir"></span> <span style="font-weight: bold" id="shared_resource_groups_file_name"></span>
+    <form onsubmit="return false;" id="shared_resource_groups_form">
+        <div id="shared_resource_groups">
+
+        </div>
+    </form>
+</div>

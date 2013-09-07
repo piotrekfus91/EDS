@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.logic.directory.impl;
 
+import com.google.common.collect.ImmutableList;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
@@ -56,7 +57,7 @@ public class DirectoryFinderImpl implements DirectoryFinder {
             throw new ObjectNotFoundException();
 
         if(currentUser.isOwnerOfDirectory(parentDirectory)) {
-            return new LinkedList<>(parentDirectory.getSubdirectories());
+            return ImmutableList.copyOf(parentDirectory.getSubdirectories());
         } else {
             throw new InvalidPrivilegesException();
         }

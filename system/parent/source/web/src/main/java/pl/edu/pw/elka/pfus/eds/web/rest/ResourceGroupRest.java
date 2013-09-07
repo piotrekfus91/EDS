@@ -1,15 +1,13 @@
 package pl.edu.pw.elka.pfus.eds.web.rest;
 
 import org.apache.log4j.Logger;
+import pl.edu.pw.elka.pfus.eds.domain.dao.dto.SharedResourceGroupDto;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupService;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
-import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupExporter;
-import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupListExporter;
-import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResourceGroupWithAssignedUsersExporter;
-import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonRolesGrantedListExporter;
+import pl.edu.pw.elka.pfus.eds.web.rest.json.*;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.dto.SimpleResourceGroupJsonDto;
 
 import javax.inject.Inject;
@@ -25,6 +23,7 @@ public class ResourceGroupRest {
     private ResourceGroupService resourceGroupService;
     private JsonResourceGroupExporter resourceGroupExporter;
     private JsonResourceGroupListExporter resourceGroupListExporter;
+    private JsonSharedResourceGroupListExporter sharedResourceGroupListExporter;
     private JsonResourceGroupWithAssignedUsersExporter resourceGroupWithAssignedUsersExporter;
     private JsonRolesGrantedListExporter rolesGrantedExporter;
 
@@ -32,11 +31,13 @@ public class ResourceGroupRest {
     public ResourceGroupRest(ResourceGroupService resourceGroupService,
                              JsonResourceGroupExporter resourceGroupExporter,
                              JsonResourceGroupListExporter resourceGroupListExporter,
+                             JsonSharedResourceGroupListExporter sharedResourceGroupListExporter,
                              JsonResourceGroupWithAssignedUsersExporter resourceGroupWithAssignedUsersExporter,
                              JsonRolesGrantedListExporter rolesGrantedExporter) {
         this.resourceGroupService = resourceGroupService;
         this.resourceGroupExporter = resourceGroupExporter;
         this.resourceGroupListExporter = resourceGroupListExporter;
+        this.sharedResourceGroupListExporter = sharedResourceGroupListExporter;
         this.resourceGroupWithAssignedUsersExporter = resourceGroupWithAssignedUsersExporter;
         this.rolesGrantedExporter = rolesGrantedExporter;
     }
@@ -71,6 +72,16 @@ public class ResourceGroupRest {
     public Response getUserRoles(@PathParam("groupName") String groupName, @PathParam("userName") String userName) {
         List<RolesGrantedDto> grantedRoles = resourceGroupService.getUserRolesOverResourceGroups(userName, groupName);
         String exported = rolesGrantedExporter.export(grantedRoles);
+        return Response.status(Response.Status.OK).entity(exported).build();
+    }
+
+    @GET
+    @Path("/my/sharable/document/{documentId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSharableGroupsForDocument(@PathParam("documentId") int documentId) {
+        List<SharedResourceGroupDto> sharableResourceGroups = resourceGroupService
+                .getSharableGroupsForCurrentUserAndDocument(documentId);
+        String exported = sharedResourceGroupListExporter.exportSuccess(sharableResourceGroups);
         return Response.status(Response.Status.OK).entity(exported).build();
     }
 
@@ -121,6 +132,14 @@ public class ResourceGroupRest {
         logger.info("new roles: " + rolesGranted);
         resourceGroupService.updateRoles(groupName, userName, rolesGranted);
         return getResourceGroupByName(groupName);
+    }
+
+    @PUT
+    @Path("/share/document/{documentId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateDocumentSharing(@PathParam("documentId") int documentId) {
+        return null;
     }
 
     @DELETE

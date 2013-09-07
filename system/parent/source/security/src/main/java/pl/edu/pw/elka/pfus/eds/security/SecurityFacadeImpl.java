@@ -61,6 +61,11 @@ public class SecurityFacadeImpl implements SecurityFacade {
     }
 
     @Override
+    public List<Group> getGroupsWhereUserHasPrivilege(String userName, String privilegeName) {
+        return resourceGroupManager.getGroupsWhereUserHasPrivilege(userName, privilegeName);
+    }
+
+    @Override
     public void grantRoleToUserOverResourceGroup(String userName, String roleName, String resourceGroupName) {
         resourceGroupManager.grantRoleToUserOverResourceGroup(userName, roleName, resourceGroupName);
     }
