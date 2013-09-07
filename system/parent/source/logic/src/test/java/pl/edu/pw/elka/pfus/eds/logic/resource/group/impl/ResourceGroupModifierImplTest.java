@@ -80,6 +80,7 @@ public class ResourceGroupModifierImplTest {
         when(userDao.findById(anyInt())).thenReturn(user);
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
         when(resourceGroupDao.merge(resourceGroup)).thenReturn(resourceGroup);
+        when(privilegeService.hasPrivilege(anyString(), anyString(), anyString())).thenReturn(true);
         resourceGroup.setFounder(user);
 
         resourceGroup.setName("starting name");
@@ -98,6 +99,7 @@ public class ResourceGroupModifierImplTest {
         when(resourceGroupDao.findByName("starting name")).thenReturn(resourceGroup);
         when(userDao.findById(anyInt())).thenReturn(user);
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
+        when(privilegeService.hasPrivilege(anyString(), anyString(), anyString())).thenReturn(true);
         doThrow(new InternalException()).when(resourceGroupDao).commitTransaction();
         resourceGroup.setFounder(user);
 
@@ -126,6 +128,7 @@ public class ResourceGroupModifierImplTest {
     public void testDeletingForSuccess() throws Exception {
         when(resourceGroupDao.findByName(anyString())).thenReturn(resourceGroup);
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
+        when(privilegeService.hasPrivilege(anyString(), anyString(), anyString())).thenReturn(true);
         resourceGroup.setFounder(user);
 
         modifier.delete("");
@@ -137,6 +140,7 @@ public class ResourceGroupModifierImplTest {
     public void testDeletingForRollback() throws Exception {
         when(resourceGroupDao.findByName(anyString())).thenReturn(resourceGroup);
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
+        when(privilegeService.hasPrivilege(anyString(), anyString(), anyString())).thenReturn(true);
         resourceGroup.setFounder(user);
         doThrow(new InternalException()).when(resourceGroupDao).commitTransaction();
 
