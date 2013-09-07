@@ -7,7 +7,7 @@ $viewEnclosureTool.top()
         <td width="80%" style="vertical-align: top">
             <div id="search" class="search" style="display: none">
                 <form onsubmit="return false;">
-                    <input type="text" id="search_value_input" size="30" />
+                    <input type="text" id="search_value_input" size="30" autocomplete="off" />
                     <div id="radio_button_set">
                         <input type="radio" name="where" value="tags" id="radio_tags" checked="checked" /><label for="radio_tags">Tagi</label>
                         <input type="radio" name="where" value="names" id="radio_names" /><label for="radio_names">Nazwy dokumentów</label>
