@@ -4,10 +4,12 @@ import com.google.common.collect.ImmutableList;
 import org.objectledge.context.Context;
 import org.objectledge.security.object.Group;
 import org.objectledge.security.object.SecurityUser;
+import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.ResourceGroupDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.dto.SharedResourceGroupDto;
+import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
@@ -30,15 +32,18 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
     private ResourceGroupDao resourceGroupDao;
     private UserDao userDao;
     private DocumentDao documentDao;
+    private DirectoryDao directoryDao;
 
     public ResourceGroupFinderImpl(Context context, SecurityFacade securityFacade, PrivilegeService privilegeService,
-                                   ResourceGroupDao resourceGroupDao, UserDao userDao, DocumentDao documentDao) {
+                                   ResourceGroupDao resourceGroupDao, UserDao userDao, DocumentDao documentDao,
+                                   DirectoryDao directoryDao) {
         this.context = context;
         this.securityFacade = securityFacade;
         this.privilegeService = privilegeService;
         this.resourceGroupDao = resourceGroupDao;
         this.userDao = userDao;
         this.documentDao = documentDao;
+        this.directoryDao = directoryDao;
     }
 
     @Override
@@ -80,13 +85,7 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
 
     @Override
     public List<SharedResourceGroupDto> getSharableGroupsForCurrentUserAndDocument(int documentId) {
-        User currentUser = securityFacade.getCurrentUser(context);
-        return getSharableGroupsForUser(currentUser.getName(), documentId);
-    }
-
-    private List<SharedResourceGroupDto> getSharableGroupsForUser(String userName, int documentId) {
-        List<Group> securityGroups = securityFacade.getGroupsWhereUserHasPrivilege(userName, Privileges.SHARE_FILES);
-        List<String> groupNames = getGroupNames(securityGroups);
+        List<String> groupNames = getGroupNamesWithSharePrivilege();
         List<SharedResourceGroupDto> sharedResourceGroupDtos = new LinkedList<>();
         if(!groupNames.isEmpty()) {
             List<ResourceGroup> resourceGroups = resourceGroupDao.getResourceGroupsWithNames(groupNames);
@@ -99,7 +98,28 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
         return ImmutableList.copyOf(sharedResourceGroupDtos);
     }
 
-    private List<String> getGroupNames(List<Group> securityGroups) {
+    @Override
+    public List<SharedResourceGroupDto> getSharableGroupsForCurrentUserAndDirectory(int directoryId) {
+        List<String> groupNames = getGroupNamesWithSharePrivilege();
+        List<SharedResourceGroupDto> sharedResourceGroupDtos = new LinkedList<>();
+        if(!groupNames.isEmpty()) {
+            List<ResourceGroup> resourceGroups = resourceGroupDao.getResourceGroupsWithNames(groupNames);
+            Directory directory = directoryDao.findById(directoryId);
+            for(ResourceGroup resourceGroup : resourceGroups) {
+                boolean shared = resourceGroup.getDirectories().contains(directory);
+                sharedResourceGroupDtos.add(new SharedResourceGroupDto(resourceGroup, shared));
+            }
+        }
+        return ImmutableList.copyOf(sharedResourceGroupDtos);
+    }
+
+    private List<Group> getGroupsWithSharePrivilege() {
+        User currentUser = securityFacade.getCurrentUser(context);
+        return securityFacade.getGroupsWhereUserHasPrivilege(currentUser.getName(), Privileges.SHARE_FILES);
+    }
+
+    private List<String> getGroupNamesWithSharePrivilege() {
+        List<Group> securityGroups = getGroupsWithSharePrivilege();
         List<String> groupNames = new LinkedList<>();
         for(Group group : securityGroups) {
             groupNames.add(group.getName());

@@ -55,6 +55,16 @@ public interface ResourceGroupFinder {
     List<SharedResourceGroupDto> getSharableGroupsForCurrentUserAndDocument(int documentId);
 
     /**
+     * Zwraca listę grup, w których zalogowany użytkownik ma prawo udostępniać.
+     * Listy są w postaci DTO, zawierające nazwę grupy i informację
+     * czy dany katalog jest już udostępniony.
+     *
+     * @param directoryId id katalogu.
+     * @return grupy, gdzie użytkownik może udostępniać.
+     */
+    List<SharedResourceGroupDto> getSharableGroupsForCurrentUserAndDirectory(int directoryId);
+
+    /**
      * Zwraca listę posiadanych rol przez danego użytkownika na danej grupie zasobów.
      *
      * @param userName nazwa użytkownika.

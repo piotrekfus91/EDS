@@ -47,6 +47,11 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     }
 
     @Override
+    public List<SharedResourceGroupDto> getSharableGroupsForCurrentUserAndDirectory(int directoryId) {
+        return resourceGroupFinder.getSharableGroupsForCurrentUserAndDirectory(directoryId);
+    }
+
+    @Override
     public List<RolesGrantedDto> getUserRolesOverResourceGroups(String userName, String resourceGroupName) {
         return resourceGroupFinder.getUserRolesOverResourceGroups(userName, resourceGroupName);
     }

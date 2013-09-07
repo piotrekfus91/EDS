@@ -79,9 +79,22 @@ public class ResourceGroupRest {
     @Path("/my/sharable/document/{documentId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSharableGroupsForDocument(@PathParam("documentId") int documentId) {
-        List<SharedResourceGroupDto> sharableResourceGroups = resourceGroupService
+        List<SharedResourceGroupDto> sharedResourceGroups = resourceGroupService
                 .getSharableGroupsForCurrentUserAndDocument(documentId);
-        String exported = sharedResourceGroupListExporter.exportSuccess(sharableResourceGroups);
+        return returnSharedResourceGroups(sharedResourceGroups);
+    }
+
+    @GET
+    @Path("/my/sharable/directory/{directoryId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSharableGroupsForDirectory(@PathParam("directoryId") int directoryId) {
+        List<SharedResourceGroupDto> sharedResourceGroups = resourceGroupService
+                .getSharableGroupsForCurrentUserAndDirectory(directoryId);
+        return returnSharedResourceGroups(sharedResourceGroups);
+    }
+
+    private Response returnSharedResourceGroups(List<SharedResourceGroupDto> sharedResourceGroups) {
+        String exported = sharedResourceGroupListExporter.exportSuccess(sharedResourceGroups);
         return Response.status(Response.Status.OK).entity(exported).build();
     }
 
