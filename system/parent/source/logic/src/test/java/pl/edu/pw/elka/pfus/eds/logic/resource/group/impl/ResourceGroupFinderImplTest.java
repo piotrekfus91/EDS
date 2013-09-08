@@ -15,7 +15,12 @@ import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeService;
 import pl.edu.pw.elka.pfus.eds.security.privilege.Privileges;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -57,8 +62,11 @@ public class ResourceGroupFinderImplTest {
 
     @Test
     public void testGetByNameWithDocumentsForSuccess() throws Exception {
-        when(resourceGroupDao.findByName(anyString())).thenReturn(resourceGroup);
+        when(resourceGroupDao.findById(anyInt())).thenReturn(resourceGroup);
         when(securityFacade.getCurrentUser(context)).thenReturn(user);
+        List<Integer> intList = new LinkedList<>();
+        intList.add(1);
+        when(resourceGroupDao.getIdsOfNames(anyList())).thenReturn(intList);
         when(privilegeService.hasPrivilege(user.getName(), Privileges.DELETE, "")).thenReturn(true);
 
         ResourceGroupWithAssignedUsers found = finder.getByNameWithUsers("");

@@ -14,6 +14,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupFinder;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
@@ -65,7 +66,10 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
 
     @Override
     public ResourceGroupWithAssignedUsers getByNameWithUsers(String name) {
-        Integer groupId = resourceGroupDao.getIdsOfNames(Lists.newArrayList(name)).get(0);
+        List<Integer> groupIds = resourceGroupDao.getIdsOfNames(Lists.newArrayList(name));
+        if(groupIds.size() != 1)
+            throw new ObjectNotFoundException();
+        Integer groupId = groupIds.get(0);
         ResourceGroup resourceGroup = resourceGroupDao.findById(groupId);
         LogicValidator.validateExistence(resourceGroup);
 
