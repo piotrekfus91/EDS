@@ -1,11 +1,15 @@
 package pl.edu.pw.elka.pfus.eds.logic.tag.impl;
 
+import org.objectledge.context.Context;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import pl.edu.pw.elka.pfus.eds.domain.dao.TagDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
+import pl.edu.pw.elka.pfus.eds.logic.document.DownloadPrivilegeManager;
 import pl.edu.pw.elka.pfus.eds.logic.tag.cache.TagCache;
+import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
 import pl.edu.pw.elka.pfus.eds.util.config.impl.MapConfig;
 import pl.edu.pw.elka.pfus.eds.util.word.distance.LevenshteinDistance;
@@ -25,6 +29,10 @@ public class TagFinderImplTest {
     private TagFinderImpl tagFinder;
     private TagCache tagCache;
     private WordDistance distance;
+    private TagDao tagDao;
+    private DownloadPrivilegeManager downloadPrivilegeManager;
+    private SecurityFacade securityFacade;
+    private Context context;
 
     @BeforeClass
     private void setUpClass() {
@@ -37,7 +45,12 @@ public class TagFinderImplTest {
     private void setUp() {
         distance = new LevenshteinDistance();
         tagCache = mock(TagCache.class);
-        tagFinder = new TagFinderImpl(config, tagCache, distance, null);
+        tagDao = mock(TagDao.class);
+        downloadPrivilegeManager = mock(DownloadPrivilegeManager.class);
+        securityFacade = mock(SecurityFacade.class);
+        context = mock(Context.class);
+        tagFinder = new TagFinderImpl(config, tagCache, distance, tagDao, downloadPrivilegeManager,
+                securityFacade, context);
     }
 
     @Test(dataProvider = "similars")

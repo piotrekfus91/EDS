@@ -4,9 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Klasa reprezentująca dokument.
@@ -134,6 +132,17 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
 
     public List<ResourceGroup> getResourceGroups() {
         return ImmutableList.copyOf(resourceGroups);
+    }
+
+    public Set<ResourceGroup> getAllResourceGroups() {
+        Set<ResourceGroup> allResourceGroups = new HashSet();
+        allResourceGroups.addAll(resourceGroups);
+        Directory directory = this.directory;
+        while(!directory.isRootDirectory()) {
+            allResourceGroups.addAll(directory.getResourceGroups());
+            directory = directory.getParentDirectory();
+        }
+        return allResourceGroups;
     }
 
     public void setResourceGroups(List<ResourceGroup> resourceGroups) {

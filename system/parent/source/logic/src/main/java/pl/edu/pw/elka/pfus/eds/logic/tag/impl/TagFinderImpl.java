@@ -2,10 +2,15 @@ package pl.edu.pw.elka.pfus.eds.logic.tag.impl;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.primitives.Ints;
+import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.TagDao;
+import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
+import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.logic.document.DownloadPrivilegeManager;
 import pl.edu.pw.elka.pfus.eds.logic.tag.TagFinder;
 import pl.edu.pw.elka.pfus.eds.logic.tag.cache.TagCache;
+import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.util.ValueNormalizer;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
 import pl.edu.pw.elka.pfus.eds.util.word.distance.WordDistance;
@@ -18,21 +23,33 @@ public class TagFinderImpl implements TagFinder {
     private TagCache tagCache;
     private WordDistance distance;
     private TagDao tagDao;
+    private DownloadPrivilegeManager downloadPrivilegeManager;
+    private SecurityFacade securityFacade;
+    private Context context;
     private final int MAX_DISTANCE;
 
-    public TagFinderImpl(Config config, TagCache tagCache, WordDistance distance, TagDao tagDao) {
+    public TagFinderImpl(Config config, TagCache tagCache, WordDistance distance, TagDao tagDao,
+                         DownloadPrivilegeManager downloadPrivilegeManager, SecurityFacade securityFacade,
+                         Context context) {
         this.config = config;
         this.tagCache = tagCache;
         this.distance = distance;
         this.tagDao = tagDao;
+        this.downloadPrivilegeManager = downloadPrivilegeManager;
+        this.securityFacade = securityFacade;
+        this.context = context;
         MAX_DISTANCE = this.config.getInt("max_distance");
     }
 
     @Override
     public Tag getTagWithLoadedDocuments(String value) {
         Tag tag = tagDao.findByValue(value);
-        tag.getDocuments();
-        return tag;
+        Tag detachedTag = Tag.from(tag);
+        User currentUser = securityFacade.getCurrentUser(context);
+        List<Document> filteredOutDocuments = downloadPrivilegeManager
+                .filterOutInaccessibleDocuments(currentUser, tag.getDocuments());
+        detachedTag.setDocuments(filteredOutDocuments);
+        return detachedTag;
     }
 
     @Override

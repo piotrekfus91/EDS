@@ -1,10 +1,13 @@
 package pl.edu.pw.elka.pfus.eds.logic.search.impl;
 
 import com.google.common.collect.Lists;
+import org.objectledge.context.Context;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
+import pl.edu.pw.elka.pfus.eds.logic.document.DownloadPrivilegeManager;
 import pl.edu.pw.elka.pfus.eds.logic.tag.cache.TagCache;
+import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import java.util.List;
 
@@ -14,6 +17,9 @@ import static org.mockito.Mockito.when;
 
 public class PlainJavaSearcherTest {
     private PlainJavaSearcher searcher;
+    private DownloadPrivilegeManager downloadPrivilegeManager;
+    private Context context;
+    private SecurityFacade securityFacade;
     private TagCache tagCache;
     private Tag lfcTag;
     private Tag wallpaperTag;
@@ -24,7 +30,10 @@ public class PlainJavaSearcherTest {
     private void setUp() {
         tagCache = mock(TagCache.class);
         when(tagCache.getAll()).thenReturn(getSampleTags());
-        searcher = new PlainJavaSearcher(tagCache);
+        downloadPrivilegeManager = mock(DownloadPrivilegeManager.class);
+        context = mock(Context.class);
+        securityFacade = mock(SecurityFacade.class);
+        searcher = new PlainJavaSearcher(downloadPrivilegeManager, tagCache, context, securityFacade);
     }
 
     @Test

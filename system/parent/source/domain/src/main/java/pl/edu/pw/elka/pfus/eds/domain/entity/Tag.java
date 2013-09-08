@@ -2,6 +2,7 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import pl.edu.pw.elka.pfus.eds.util.ValueNormalizer;
 
 import java.util.Collections;
@@ -22,6 +23,14 @@ public class Tag extends IdentifableEntity {
      */
     private String normalizedValue;
     public List<Document> documents = new LinkedList<>();
+
+    public static Tag from(Tag tag) {
+        Tag newTag = new Tag();
+        newTag.setId(tag.getId());
+        newTag.setValue(tag.getValue());
+        newTag.setDocuments(Lists.newLinkedList(tag.getDocuments()));
+        return newTag;
+    }
 
     /**
      * Zwraca id encji.
