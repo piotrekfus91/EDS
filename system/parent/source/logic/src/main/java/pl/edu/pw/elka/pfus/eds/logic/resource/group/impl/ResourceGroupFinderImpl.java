@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.logic.resource.group.impl;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import org.objectledge.context.Context;
 import org.objectledge.security.object.Group;
 import org.objectledge.security.object.SecurityUser;
@@ -64,7 +65,8 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
 
     @Override
     public ResourceGroupWithAssignedUsers getByNameWithUsers(String name) {
-        ResourceGroup resourceGroup = resourceGroupDao.findByName(name);
+        Integer groupId = resourceGroupDao.getIdsOfNames(Lists.newArrayList(name)).get(0);
+        ResourceGroup resourceGroup = resourceGroupDao.findById(groupId);
         LogicValidator.validateExistence(resourceGroup);
 
         resourceGroup.getAllDocuments();

@@ -17,8 +17,13 @@ public class HibernateResourceGroupDao extends IdentifableGenericDao<ResourceGro
             "FROM ResourceGroup rg " +
             "WHERE rg.founder.id = :userId";
 
-    private static final String SHARED_WITH_DOCUMENT_QUERY =
+    private static final String GROUPS_BY_NAMES_QUERY =
             "SELECT rg " +
+            "FROM ResourceGroup rg " +
+            "WHERE rg.name IN :groupNames";
+
+    private static final String IDS_BY_NAMES_QUERY =
+            "SELECT rg.id " +
             "FROM ResourceGroup rg " +
             "WHERE rg.name IN :groupNames";
 
@@ -48,7 +53,14 @@ public class HibernateResourceGroupDao extends IdentifableGenericDao<ResourceGro
 
     @Override
     public List<ResourceGroup> getResourceGroupsWithNames(List<String> groupNames) {
-        Query query = session.createQuery(SHARED_WITH_DOCUMENT_QUERY);
+        Query query = session.createQuery(GROUPS_BY_NAMES_QUERY);
+        query.setParameterList("groupNames", groupNames);
+        return query.list();
+    }
+
+    @Override
+    public List<Integer> getIdsOfNames(List<String> groupNames) {
+        Query query = session.createQuery(IDS_BY_NAMES_QUERY);
         query.setParameterList("groupNames", groupNames);
         return query.list();
     }

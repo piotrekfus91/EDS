@@ -34,4 +34,12 @@ public interface ResourceGroupDao extends NamedDao<ResourceGroup>, IdentifableDa
      * @return grupy zasobów.
      */
     List<ResourceGroup> getResourceGroupsWithNames(List<String> groupNames);
+
+    /**
+     * Zwraca identyfikatory grup zasobów o podanych nazwach.
+     *
+     * @param groupNames nazwy grup zasobów.
+     * @return identyfikatory grup zasobów.
+     */
+    List<Integer> getIdsOfNames(List<String> groupNames);
 }

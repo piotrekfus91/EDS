@@ -10,6 +10,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.dto.SharedResourceGroupDto;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 
 import java.util.List;
+import java.util.Map;
 
 public class ResourceGroupServiceImpl implements ResourceGroupService {
     private ResourceGroupFinder resourceGroupFinder;
@@ -74,6 +75,16 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     @Override
     public void updateRoles(String groupName, String userName, List<RolesGrantedDto> rolesGranted) {
         resourceGroupModifier.updateRoles(groupName, userName, rolesGranted);
+    }
+
+    @Override
+    public void updateDocumentPublishing(int documentId, Map<String, Boolean> sharedInGroups) {
+        resourceGroupModifier.updateDocumentPublishing(documentId, sharedInGroups);
+    }
+
+    @Override
+    public void updateDirectoryPublishing(int directoryId, Map<String, Boolean> sharedInGroups) {
+        resourceGroupModifier.updateDirectoryPublishing(directoryId, sharedInGroups);
     }
 
     @Override

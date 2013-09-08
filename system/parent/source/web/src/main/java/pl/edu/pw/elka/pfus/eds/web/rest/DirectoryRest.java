@@ -6,7 +6,6 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.FileSystemEntry;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryService;
 import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryExporter;
-import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryListExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonFileSystemEntryListExporter;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonResultExporter;
 
@@ -20,17 +19,14 @@ import java.util.List;
 public class DirectoryRest {
     private static final Logger logger = Logger.getLogger(DirectoryRest.class);
     private DirectoryService directoryService;
-    private JsonDirectoryListExporter directoryListExporter;
     private JsonFileSystemEntryListExporter fileSystemEntryListExporter;
     private JsonDirectoryExporter directoryExporter;
     private JsonResultExporter resultExporter;
 
     @Inject
-    public DirectoryRest(DirectoryService directoryService, JsonDirectoryListExporter directoryListExporter,
-                         JsonFileSystemEntryListExporter fileSystemEntryListExporter,
+    public DirectoryRest(DirectoryService directoryService, JsonFileSystemEntryListExporter fileSystemEntryListExporter,
                          JsonDirectoryExporter directoryExporter, JsonResultExporter resultExporter) {
         this.directoryService = directoryService;
-        this.directoryListExporter = directoryListExporter;
         this.fileSystemEntryListExporter = fileSystemEntryListExporter;
         this.directoryExporter = directoryExporter;
         this.resultExporter = resultExporter;

@@ -4,6 +4,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Fasada dla operacji modyfikacji encji {@link pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup}.
@@ -36,6 +37,22 @@ public interface ResourceGroupModifier {
      * @param rolesGranted lista ról.
      */
     void updateRoles(String groupName, String userName, List<RolesGrantedDto> rolesGranted);
+
+    /**
+     * Aktualizuje informacje o publikowaniu danego dokumentu.
+     *
+     * @param documentId id dokumentu.
+     * @param sharedInGroups mapa zawierające pary: nazwa grupy zasobów - czy dostępny.
+     */
+    void updateDocumentPublishing(int documentId, Map<String, Boolean> sharedInGroups);
+
+    /**
+     * Aktualizuje informacje o publikowaniu danego katalogu.
+     *
+     * @param directoryId id katalogu.
+     * @param sharedInGroups mapa zawierające pary: nazwa grupy zasobów - czy dostępny.
+     */
+    void updateDirectoryPublishing(int directoryId, Map<String, Boolean> sharedInGroups);
 
     /**
      * Usuwa grupę zasobów.

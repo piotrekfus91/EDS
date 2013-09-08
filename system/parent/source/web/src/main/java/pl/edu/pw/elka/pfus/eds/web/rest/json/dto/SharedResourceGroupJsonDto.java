@@ -1,12 +1,10 @@
 package pl.edu.pw.elka.pfus.eds.web.rest.json.dto;
 
-import com.google.gson.annotations.SerializedName;
 import pl.edu.pw.elka.pfus.eds.domain.dao.dto.SharedResourceGroupDto;
 
 public class SharedResourceGroupJsonDto {
     private String name;
-    @SerializedName("isShared")
-    private boolean isShared;
+    private boolean shared;
 
     public SharedResourceGroupJsonDto() {
 
@@ -14,7 +12,7 @@ public class SharedResourceGroupJsonDto {
 
     public SharedResourceGroupJsonDto(String name, boolean shared) {
         this.name = name;
-        isShared = shared;
+        this.shared = shared;
     }
 
     public static SharedResourceGroupJsonDto from(SharedResourceGroupDto sharedResourceGroupDto) {
@@ -32,11 +30,11 @@ public class SharedResourceGroupJsonDto {
         this.name = name;
     }
 
-    public boolean getShared() {
-        return isShared;
+    public boolean isShared() {
+        return shared;
     }
 
     public void setShared(boolean shared) {
-        isShared = shared;
+        this.shared = shared;
     }
 }

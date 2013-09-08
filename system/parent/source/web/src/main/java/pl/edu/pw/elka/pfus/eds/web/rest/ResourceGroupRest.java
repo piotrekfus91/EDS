@@ -8,13 +8,16 @@ import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupService;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.*;
+import pl.edu.pw.elka.pfus.eds.web.rest.json.dto.SharedResourceGroupJsonDto;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.dto.SimpleResourceGroupJsonDto;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Path("/resourceGroups")
 public class ResourceGroupRest {
@@ -26,6 +29,7 @@ public class ResourceGroupRest {
     private JsonSharedResourceGroupListExporter sharedResourceGroupListExporter;
     private JsonResourceGroupWithAssignedUsersExporter resourceGroupWithAssignedUsersExporter;
     private JsonRolesGrantedListExporter rolesGrantedExporter;
+    private JsonResultExporter resultExporter;
 
     @Inject
     public ResourceGroupRest(ResourceGroupService resourceGroupService,
@@ -33,13 +37,14 @@ public class ResourceGroupRest {
                              JsonResourceGroupListExporter resourceGroupListExporter,
                              JsonSharedResourceGroupListExporter sharedResourceGroupListExporter,
                              JsonResourceGroupWithAssignedUsersExporter resourceGroupWithAssignedUsersExporter,
-                             JsonRolesGrantedListExporter rolesGrantedExporter) {
+                             JsonRolesGrantedListExporter rolesGrantedExporter, JsonResultExporter resultExporter) {
         this.resourceGroupService = resourceGroupService;
         this.resourceGroupExporter = resourceGroupExporter;
         this.resourceGroupListExporter = resourceGroupListExporter;
         this.sharedResourceGroupListExporter = sharedResourceGroupListExporter;
         this.resourceGroupWithAssignedUsersExporter = resourceGroupWithAssignedUsersExporter;
         this.rolesGrantedExporter = rolesGrantedExporter;
+        this.resultExporter = resultExporter;
     }
 
     @GET
@@ -149,10 +154,44 @@ public class ResourceGroupRest {
 
     @PUT
     @Path("/share/document/{documentId}")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateDocumentSharing(@PathParam("documentId") int documentId) {
-        return null;
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateDocumentSharing(@PathParam("documentId") int documentId,
+                                          List<SharedResourceGroupJsonDto> sharedResourceGroupJsonDtos) {
+        Map<String, Boolean> sharedInGroups = new HashMap<>();
+        for(SharedResourceGroupJsonDto sharedResourceGroupJsonDto : sharedResourceGroupJsonDtos) {
+            sharedInGroups.put(sharedResourceGroupJsonDto.getName(), sharedResourceGroupJsonDto.isShared());
+        }
+        String exported;
+        try {
+            resourceGroupService.updateDocumentPublishing(documentId, sharedInGroups);
+            exported = resultExporter.exportSuccess(null);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            exported = resultExporter.exportFailure(e.getMessage(), null);
+        }
+        return Response.status(Response.Status.OK).entity(exported).build();
+    }
+
+    @PUT
+    @Path("/share/directory/{directoryId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateDirectorySharing(@PathParam("directoryId") int directoryId,
+                                          List<SharedResourceGroupJsonDto> sharedResourceGroupJsonDtos) {
+        Map<String, Boolean> sharedInGroups = new HashMap<>();
+        for(SharedResourceGroupJsonDto sharedResourceGroupJsonDto : sharedResourceGroupJsonDtos) {
+            sharedInGroups.put(sharedResourceGroupJsonDto.getName(), sharedResourceGroupJsonDto.isShared());
+        }
+        String exported;
+        try {
+            resourceGroupService.updateDirectoryPublishing(directoryId, sharedInGroups);
+            exported = resultExporter.exportSuccess(null);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            exported = resultExporter.exportFailure(e.getMessage(), null);
+        }
+        return Response.status(Response.Status.OK).entity(exported).build();
     }
 
     @DELETE

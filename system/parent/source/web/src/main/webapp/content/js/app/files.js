@@ -448,7 +448,7 @@ function post_sharable_groups_and_open_dialog(resource_groups) {
     var content = "";
     $.each(resource_groups, function() {
         content += "<input type=\"checkbox\" id=\"" + this.name + "\" name=\"" + this.name + "\"";
-        if(this.isShared) content += " checked=\"checked\"";
+        if(this.shared) content += " checked=\"checked\"";
         content += " />";
         content += "<label for=\"" + this.name + "\">" + this.name + "</label>";
     });
@@ -589,9 +589,9 @@ function serialize_form(formId) {
         var entry = {};
         entry['name'] = label.text();
         if(checkbox.is(':checked'))
-            entry['isShared'] = true;
+            entry['shared'] = true;
         else
-            entry['isShared'] = false;
+            entry['shared'] = false;
         result.push(entry);
     });
     return JSON.stringify(result);

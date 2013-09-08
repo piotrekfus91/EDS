@@ -242,7 +242,9 @@ public class DatabaseInitializer implements Startable {
         lfcFansRG.setName("LFC fans");
         lfcFansRG.setDescription("Grupa zasobów fanów największego klubu piłkarskiego na świecie - Liverpool FC");
         lfcFansRG.addDirectory(lfcPicturesDirectory);
+        lfcPicturesDirectory.addResourceGroup(lfcFansRG);
         lfcFansRG.addDocument(liverpoolWallpaperDocument);
+        liverpoolWallpaperDocument.addResourceGroup(lfcFansRG);
         resourceGroupDao.persist(lfcFansRG);
 
         mimeTypeDao.setSession(directoryDao.getSession());

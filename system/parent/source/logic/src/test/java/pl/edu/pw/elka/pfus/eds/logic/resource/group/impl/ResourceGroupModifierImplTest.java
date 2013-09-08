@@ -3,6 +3,8 @@ package pl.edu.pw.elka.pfus.eds.logic.resource.group.impl;
 import org.objectledge.context.Context;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
+import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.ResourceGroupDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
@@ -21,6 +23,8 @@ public class ResourceGroupModifierImplTest {
     private Context context;
     private ResourceGroupDao resourceGroupDao;
     private UserDao userDao;
+    private DocumentDao documentDao;
+    private DirectoryDao directoryDao;
     private SecurityFacade securityFacade;
     private PrivilegeService privilegeService;
     private ResourceGroup resourceGroup;
@@ -35,7 +39,10 @@ public class ResourceGroupModifierImplTest {
         userDao = mock(UserDao.class);
         resourceGroup = new ResourceGroup();
         user = new User();
-        modifier = new ResourceGroupModifierImpl(context, securityFacade, privilegeService, resourceGroupDao, userDao);
+        documentDao = mock(DocumentDao.class);
+        directoryDao = mock(DirectoryDao.class);
+        modifier = new ResourceGroupModifierImpl(context, securityFacade, privilegeService, resourceGroupDao, userDao,
+                documentDao, directoryDao);
     }
 
     @Test
