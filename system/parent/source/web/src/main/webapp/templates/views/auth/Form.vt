@@ -10,17 +10,38 @@ $pageTool.setTitle('EDS - logowanie')
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>$pageTool.title</title>
     <link rel="stylesheet" href="$link.content('css/jquery-ui/jquery-ui.css')" />
-    <link rel="stylesheet" type="text/css" href="/content/css/auth/form.css" />
+    <link rel="stylesheet" type="text/css" href="$link.content('css/auth/form.css')" />
     <script src="$link.content('js/jquery/jquery-1.9.1.js')"></script>
     <script src="$link.content('js/jquery-ui/jquery-ui.js')"></script>
     <script src="$link.content('js/corners/jquery.corner.js')"></script>
-    <script src="$link.content('js/auth/form.js')"></script>
     <script src="$link.content('js/common/noty/jquery.noty.js')"></script>
     <script src="$link.content('js/common/noty/topRight.js')"></script>
     <script src="$link.content('js/common/noty/default.js')"></script>
     <script src="$link.content('js/common/noty.js')"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+            $('input').button();
+            var login_div = $('#login_div');
+            login_div.dialog({
+                autoOpen: false,
+                modal: true,
+                open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); },
+                closeOnEscape: false,
+                dialogClass: 'no-close',
+                width: 'auto',
+                height: 'auto',
+                buttons: {
+                    "Zaloguj się": function() {
+                        login_div.find('#login_form').submit();
+                    }
+                }
+            });
+            login_div.keypress(function(e) {
+                if (e.keyCode == 13) { // ENTER
+                    login_div.find('#login_form').submit();
+                }
+            });
+            login_div.dialog('open');
             #foreach($message in $messages)
                 post_message('$message.type', '$message.text', '$message.date');
             #end
@@ -28,8 +49,8 @@ $pageTool.setTitle('EDS - logowanie')
     </script>
 </head>
 <body>
-    <div class="login_div">
-        <form method="post" action="$loginUrl">
+    <div id="login_div" title="Logowanie">
+        <form method="post" id="login_form" action="$loginUrl">
             <table class="log_table">
                 <tr>
                     <td style="vertical-align: middle">Login:</td>
@@ -38,11 +59,6 @@ $pageTool.setTitle('EDS - logowanie')
                 <tr>
                     <td style="vertical-align: middle">Hasło:</td>
                     <td><input type="password" name="$passwordValue" class="log_input log_input_text" /></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <input type="submit" value="Zaloguj" class="log_input" style="padding: 0" />
-                    </td>
                 </tr>
             </table>
          </form>

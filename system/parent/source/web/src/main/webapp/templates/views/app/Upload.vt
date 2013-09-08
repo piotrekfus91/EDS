@@ -5,6 +5,6 @@ $viewEnclosureTool.top()
 <script src="$link.content('js/plupload/pl.js')"></script>
 <script src="$link.content('js/app/upload.js')"></script>
 
-<div id="file_upload">
+<div id="file_upload" class="lazy_open">
 
 </div>

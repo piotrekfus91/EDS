@@ -3,12 +3,13 @@ html, body {
     padding: 0;
     height: 100%;
     z-index: 0;
+    background-color: #eff5f9;
 }
 
 #ajax_loading {
     background-image: url('/content/images/loading.gif');
-    height: 55px;
-    width: 55px;
+    height: 66px;
+    width: 66px;
     padding: 0;
     margin: 0;
     position: absolute;
@@ -19,12 +20,13 @@ html, body {
 }
 
 .tabs {
-    margin: 10px;
-    height: 95%;
+    height: 100%;
+    background: #eff5f9 url('/content/images/background.png') no-repeat fixed center;
 }
 
 .files_main_table {
     width: 100%;
+    height: 100%;
 }
 
 .files_main_table tr td {
@@ -63,7 +65,7 @@ html, body {
 
 .files_comment_even {
     padding-top: 3px;
-    background-color: white;
+    background-color: #b5cde0;
 }
 
 .files_comment_odd {

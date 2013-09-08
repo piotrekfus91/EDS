@@ -1,32 +1,33 @@
 $viewEnclosureTool.top()
 <script src="$link.content('/js/app/resource_groups.js')"></script>
+<div class="lazy_open">
+    <buttion id="create_new_resource_group_button">Utwórz nową grupę zasobów</buttion>
 
-<buttion id="create_new_resource_group_button">Utwórz nową grupę zasobów</buttion>
+    <div id="resource_groups" class="resource_groups">
 
-<div id="resource_groups" class="resource_groups">
+    </div>
 
-</div>
+    <div id="resource_group_div" title="Grupa zasobów" style="display: none">
+        <form onsubmit="return false;">
+            <table>
+                <tr>
+                    <td>Nazwa</td>
+                    <td><input type="text" id="resource_group_name_input" /></td>
+                </tr>
+                <tr>
+                    <td>Opis</td>
+                    <td><textarea id="resource_group_description_textarea"></textarea></td>
+                </tr>
+            </table>
+        </form>
+    </div>
 
-<div id="resource_group_div" title="Grupa zasobów" style="display: none">
-    <form onsubmit="return false;">
-        <table>
-            <tr>
-                <td>Nazwa</td>
-                <td><input type="text" id="resource_group_name_input" /></td>
-            </tr>
-            <tr>
-                <td>Opis</td>
-                <td><textarea id="resource_group_description_textarea"></textarea></td>
-            </tr>
-        </table>
-    </form>
-</div>
+    <div id="user_roles_div" title="Uprawnienia" style="display: none">
+        Role użytkownika <span id="user_roles_user_span"></span> w grupie zasobów <span id="user_roles_group_span"></span>.
+        <form id="user_roles_form" onsubmit="return false;">
+            <div id="user_roles_roles_div">
 
-<div id="user_roles_div" title="Uprawnienia" style="display: none">
-    Role użytkownika <span id="user_roles_user_span"></span> w grupie zasobów <span id="user_roles_group_span"></span>.
-    <form id="user_roles_form" onsubmit="return false;">
-        <div id="user_roles_roles_div">
-
-        </div>
-    </form>
+            </div>
+        </form>
+    </div>
 </div>

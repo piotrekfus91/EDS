@@ -7,19 +7,16 @@ $(document).ready(function() {
 
 });
 
-function animate_page() {
-    $('body').hide().effect(
-        'slide',
-        {
-            direction: "down"
-        },
-        1000
-    );
-}
-
 function make_tabs() {
     var tabs = $('#tabs');
-    tabs.tabs();
+    tabs.tabs({
+        heightStyle: 'fill',
+        fx: {
+            height: 'toggle',
+            opacity: 'toggle',
+            duration: 5000
+        }
+    });
     // wylaczamy link z tabów, żeby otworzył się jako czysty GET
     tabs.find('#logout_link').unbind('click');
 }
@@ -47,4 +44,13 @@ function has_privilege(privilegeStatus, privilegeName) {
     } else {
         return false;
     }
+}
+
+function open_lazy() {
+//    console.log("opening");
+//    $('.lazy_open').effect(
+//        "slide",
+//        {},
+//        5000
+//    );
 }

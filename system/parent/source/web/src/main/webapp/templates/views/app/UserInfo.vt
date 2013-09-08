@@ -1,15 +1,19 @@
 $viewEnclosureTool.top()
-<table class="info_table">
-    <tr>
-        <td class="info_key">Login</td>
-        <td class="info_value">$currentUser.name</td>
-    </tr>
-    <tr>
-        <td class="info_key">Imię</span></td>
-        <td class="info_value">$currentUser.firstName</td>
-    </tr>
-    <tr>
-        <td class="info_key">Nazwisko</td>
-        <td class="info_value">$currentUser.lastName</td>
-    </tr>
-</table>
+<script src="$link.content('js/app/user_info.js')"></script>
+
+<div class="lazy_open">
+    <table class="info_table">
+        <tr>
+            <td class="info_key">Login</td>
+            <td class="info_value">$currentUser.name</td>
+        </tr>
+        <tr>
+            <td class="info_key">Imię</span></td>
+            <td class="info_value">$currentUser.firstName</td>
+        </tr>
+        <tr>
+            <td class="info_key">Nazwisko</td>
+            <td class="info_value">$currentUser.lastName</td>
+        </tr>
+    </table>
+</div>

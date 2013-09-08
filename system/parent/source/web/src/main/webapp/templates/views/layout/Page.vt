@@ -23,10 +23,11 @@ $pageTool.insertTitlePrefix('EDS')
     <script type="text/javascript">
         $(document).ready(function() {
             make_tabs();
-            animate_page();
+            $('#tabs').removeClass('ui-widget-content');
             #foreach($message in $messages)
                 post_message('$message.type', '$message.text', '$message.date');
             #end
+            open_lazy();
         });
     </script>
     <title>$pageTool.title</title>

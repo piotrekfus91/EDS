@@ -1,6 +1,15 @@
 var currentNode;
 
 $(document).ready(function() {
+    var files_accordion_props = {
+        disabled: true,
+        heightStyle: 'fill'
+    };
+    $('#files_tree_td').accordion(files_accordion_props);
+    $('#info_td').accordion(files_accordion_props);
+    var height = $('#files_tree_td').height() - 100;
+    $('.lazy_fill_height').height(height);
+    open_lazy();
     $.ajax({
         type: "GET",
         url: rest('/directories/root'),
@@ -15,7 +24,7 @@ $(document).ready(function() {
         error: function() {
             post_message_now('error', 'Błąd wczytywania katalogu głównego');
         }
-    })
+    });
 });
 
 function init_tree(root) {
@@ -44,7 +53,8 @@ function init_tree(root) {
             if (isError) {
                 post_message_now('error', 'Błąd wczytywania katalogu głównego');
             } else {
-                post_message_now('success', 'Wczytano katalog główny');
+                var node = $("#files_tree").dynatree("getRoot");
+                node.toggleExpand();
             }
         },
         onActivate: function (node) {
@@ -82,6 +92,7 @@ function init_tree(root) {
             preventVoidMoves: true
         }
     });
+    $('#files_tree .dynatree-container').css('border', '0px solid white');
 }
 
 function get_children(key) {

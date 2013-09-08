@@ -2,19 +2,17 @@ $viewEnclosureTool.top()
 <script src="$link.content('/js/app/files.js')"></script>
 <script src="$link.content('/js/app/tags.js')"></script>
 <script src="$link.content('/js/app/search.js')"></script>
-<table class="files_main_table">
+<table class="files_main_table lazy_open">
     <tr>
-        <td>
-            <fieldset class="files_fieldset">
-                <legend>Struktura katalogwa</legend>
-                <div class="tree" id="files_tree">
+        <td id="files_tree_td">
+            <h3>Struktura katalogowa</h3>
+            <div class="tree lazy_fill_height" id="files_tree">
 
-                </div>
-            </fieldset>
+            </div>
         </td>
-        <td>
-            <fieldset class="files_fieldset">
-                <legend>Szczegóły</legend>
+        <td id="info_td">
+            <h3>Szczegóły</h3>
+            <div id="info_div" class="lazy_fill_height">
                 <table class="info_table">
                     <tr>
                         <td class="info_key">Typ</span></td>
@@ -44,7 +42,7 @@ $viewEnclosureTool.top()
                 <div id="files_comments">
 
                 </div>
-            </fieldset>
+            </div>
         </td>
     </tr>
 </table>

@@ -3,28 +3,30 @@ $viewEnclosureTool.top()
 <script src="$link.content('js/app/search.js')"></script>
 <script src="$link.content('js/app/tag_cloud.js')"></script>
 
-<table>
-    <tr>
-        <td width="80%" style="vertical-align: top">
-            <div id="search" class="search" style="display: none">
-                <form onsubmit="return false;">
-                    <input type="text" id="search_value_input" size="30" autocomplete="off" />
-                    <div id="radio_button_set">
-                        <input type="radio" name="where" value="tags" id="radio_tags" checked="checked" /><label for="radio_tags">Tagi</label>
-                        <input type="radio" name="where" value="names" id="radio_names" /><label for="radio_names">Nazwy dokumentów</label>
-                    </div>
-                    <input type="submit" name="submit" id="searcher" value="Wyszukaj" />
-                </form>
-            </div>
-            <div id="search_results">
+<div class="lazy_open">
+    <table>
+        <tr>
+            <td width="80%" style="vertical-align: top">
+                <div id="search" class="search" style="display: none">
+                    <form onsubmit="return false;">
+                        <input type="text" id="search_value_input" size="30" autocomplete="off" />
+                        <span id="radio_button_set">
+                            <input type="radio" name="where" value="tags" id="radio_tags" checked="checked" /><label for="radio_tags">Tagi</label>
+                            <input type="radio" name="where" value="names" id="radio_names" /><label for="radio_names">Nazwy dokumentów</label>
+                            <input type="radio" name="where" value="content" id="radio_content" /><label for="radio_content">Zawartość</label>
+                        </span>
+                        <input type="submit" name="submit" id="searcher" value="Wyszukaj" />
+                    </form>
+                </div>
+                <div id="search_results">
 
-            </div>
-        </td>
-        <td style="vertical-align: top">
-            <div id="tag_cloud" class="tag_cloud">
+                </div>
+            </td>
+            <td style="vertical-align: top">
+                <div id="tag_cloud" class="tag_cloud">
 
-            </div>
-        </td>
-    </tr>
-</table>
-
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -10,6 +10,7 @@ $(document).ready(function() {
         else if($('#radio_names').is(':checked'))
             search_file_names(content_to_search);
     });
+    open_lazy();
 });
 
 function search_tags_by_name(name) {

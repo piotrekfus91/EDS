@@ -12,6 +12,7 @@ $(document).ready(function() {
     $('#create_new_resource_group_button').click(create_new_resource_group_button_click);
 
     reload_resource_groups();
+    open_lazy();
 });
 
 function reload_resource_groups() {
