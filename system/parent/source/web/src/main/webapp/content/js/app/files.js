@@ -524,6 +524,7 @@ $('#shared_resource_groups_div').dialog({
                 type: "PUT",
                 url: rest('/resourceGroups/share/' + docOrDir + '/' + currentNode.data.key),
                 dataType: "json",
+                async: false,
                 contentType: "application/json; charset=utf-8",
                 data: data,
                 success: function(result) {
