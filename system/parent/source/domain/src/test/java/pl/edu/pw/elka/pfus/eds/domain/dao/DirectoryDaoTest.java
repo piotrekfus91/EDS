@@ -11,6 +11,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.MockEntityValidator;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -94,7 +95,7 @@ public class DirectoryDaoTest extends IdentifableDaoTest<Directory, DirectoryDao
 
     @Override
     protected void prepareDao(SessionFactory sessionFactory, Context context) {
-        directoryDao = new HibernateDirectoryDao(context, sessionFactory);
+        directoryDao = new HibernateDirectoryDao(context, sessionFactory, new MockEntityValidator());
     }
 
     @Override

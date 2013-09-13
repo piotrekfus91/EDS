@@ -7,6 +7,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.IdentifableGenericDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.MimeTypeDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.EntityValidator;
 
 public class HibernateMimeTypeDao extends IdentifableGenericDao<MimeType> implements MimeTypeDao {
     private static final String FIND_BY_NAME_QUERY =
@@ -14,12 +15,12 @@ public class HibernateMimeTypeDao extends IdentifableGenericDao<MimeType> implem
             "FROM MimeType mt " +
             "WHERE mt.type = :type";
 
-    public HibernateMimeTypeDao(Context context, SessionFactory sessionFactory) {
-        super(context, sessionFactory);
+    public HibernateMimeTypeDao(Context context, SessionFactory sessionFactory, EntityValidator validator) {
+        super(context, sessionFactory, validator);
     }
 
-    public HibernateMimeTypeDao(Session session) {
-        super(session);
+    public HibernateMimeTypeDao(Session session, EntityValidator validator) {
+        super(session, validator);
     }
 
     @Override

@@ -11,6 +11,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.document.DocumentModifier;
+import pl.edu.pw.elka.pfus.eds.logic.error.handler.ErrorHandler;
 import pl.edu.pw.elka.pfus.eds.logic.exception.AlreadyExistsException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.mime.type.detector.MimeTypeDetector;
@@ -98,9 +99,7 @@ public class DocumentModifierImpl implements DocumentModifier {
             documentDao.persist(document);
             documentDao.commitTransaction();
         } catch (Exception e) {
-            documentDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
-            throw new InternalException();
+            ErrorHandler.handle(e, documentDao);
         }
     }
 

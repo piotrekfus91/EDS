@@ -6,6 +6,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.factory.TagFactory;
 import pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateTagDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.MockEntityValidator;
 
 public class TagDaoTest extends IdentifableDaoTest<Tag, TagDao> {
     private TagDao tagDao;
@@ -23,7 +24,7 @@ public class TagDaoTest extends IdentifableDaoTest<Tag, TagDao> {
 
     @Override
     protected void prepareDao(SessionFactory sessionFactory, Context context) {
-        tagDao = new HibernateTagDao(context, sessionFactory);
+        tagDao = new HibernateTagDao(context, sessionFactory, new MockEntityValidator());
     }
 
     @Override

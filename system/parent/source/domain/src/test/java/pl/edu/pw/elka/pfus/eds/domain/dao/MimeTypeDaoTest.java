@@ -7,6 +7,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.factory.MimeTypeFactory;
 import pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateMimeTypeDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.MockEntityValidator;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -56,7 +57,7 @@ public class MimeTypeDaoTest extends IdentifableDaoTest<MimeType, MimeTypeDao> {
 
     @Override
     protected void prepareDao(SessionFactory sessionFactory, Context context) {
-        mimeTypeDao = new HibernateMimeTypeDao(context, sessionFactory);
+        mimeTypeDao = new HibernateMimeTypeDao(context, sessionFactory, new MockEntityValidator());
     }
 
     @Override

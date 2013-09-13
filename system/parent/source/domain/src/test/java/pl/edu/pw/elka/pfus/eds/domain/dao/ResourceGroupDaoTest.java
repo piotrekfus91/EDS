@@ -9,6 +9,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateResourceGroupDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.MockEntityValidator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -53,7 +54,7 @@ public class ResourceGroupDaoTest extends IdentifableDaoTest<ResourceGroup, Reso
 
     @Override
     protected void prepareDao(SessionFactory sessionFactory, Context context) {
-        resourceGroupDao = new HibernateResourceGroupDao(context, sessionFactory);
+        resourceGroupDao = new HibernateResourceGroupDao(context, sessionFactory, new MockEntityValidator());
     }
 
     @Override

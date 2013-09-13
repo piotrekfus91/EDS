@@ -9,6 +9,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.MockEntityValidator;
 
 import java.util.Date;
 
@@ -56,7 +57,7 @@ public class DocumentDaoTest extends IdentifableDaoTest<Document, DocumentDao> {
 
     @Override
     protected void prepareDao(SessionFactory sessionFactory, Context context) {
-        documentDao = new HibernateDocumentDao(context, sessionFactory);
+        documentDao = new HibernateDocumentDao(context, sessionFactory, new MockEntityValidator());
     }
 
     @Override

@@ -8,6 +8,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.IdentifableGenericDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.EntityValidator;
 
 import java.util.List;
 
@@ -43,12 +44,12 @@ public class HibernateDirectoryDao extends IdentifableGenericDao<Directory> impl
             "WHERE dir.id = :directoryId " +
             "ORDER BY subdirs.name, docs.name";
 
-    public HibernateDirectoryDao(Context context, SessionFactory sessionFactory) {
-        super(context, sessionFactory);
+    public HibernateDirectoryDao(Context context, SessionFactory sessionFactory, EntityValidator validator) {
+        super(context, sessionFactory, validator);
     }
 
-    public HibernateDirectoryDao(Session session) {
-        super(session);
+    public HibernateDirectoryDao(Session session, EntityValidator validator) {
+        super(session, validator);
     }
 
     @Override

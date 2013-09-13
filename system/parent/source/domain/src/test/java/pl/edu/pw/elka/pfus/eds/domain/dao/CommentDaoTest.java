@@ -8,6 +8,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.MockEntityValidator;
 
 public class CommentDaoTest extends IdentifableDaoTest<Comment, CommentDao> {
     private static int counter = 0;
@@ -29,7 +30,7 @@ public class CommentDaoTest extends IdentifableDaoTest<Comment, CommentDao> {
 
     @Override
     protected void prepareDao(SessionFactory sessionFactory, Context context) {
-        commentDao = new HibernateCommentDao(context, sessionFactory);
+        commentDao = new HibernateCommentDao(context, sessionFactory, new MockEntityValidator());
     }
 
     @Override

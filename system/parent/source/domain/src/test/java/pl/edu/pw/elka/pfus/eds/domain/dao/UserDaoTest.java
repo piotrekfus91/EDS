@@ -7,6 +7,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.factory.UserFactory;
 import pl.edu.pw.elka.pfus.eds.domain.dao.impl.HibernateUserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.MockEntityValidator;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -83,7 +84,7 @@ public class UserDaoTest extends IdentifableDaoTest<User, UserDao> {
 
     @Override
     protected void prepareDao(SessionFactory sessionFactory, Context context) {
-        setDao(new HibernateUserDao(context, sessionFactory));
+        setDao(new HibernateUserDao(context, sessionFactory, new MockEntityValidator()));
     }
 
     @Override

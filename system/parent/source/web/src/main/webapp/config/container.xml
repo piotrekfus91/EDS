@@ -84,6 +84,8 @@
                class="pl.edu.pw.elka.pfus.eds.logic.search.impl.PlainJavaSearcher" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.statistics.Statistics"
                class="pl.edu.pw.elka.pfus.eds.logic.statistics.StatisticsImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.domain.validator.EntityValidator"
+               class="pl.edu.pw.elka.pfus.eds.logic.validator.EntityValidatorImpl" />
 
     <!-- web -->
     <component class="pl.edu.pw.elka.pfus.eds.web.init.DatabaseInitializer" />

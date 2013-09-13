@@ -6,22 +6,27 @@ import org.hibernate.Session;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.entity.GenericEntity;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.EntityValidator;
 
 import java.util.List;
 
 public abstract class GenericDao<T extends GenericEntity> implements Dao<T> {
     protected Session session;
+    protected EntityValidator validator;
 
-    public GenericDao(Session session) {
+    public GenericDao(Session session, EntityValidator validator) {
         this.session = session;
+        this.validator = validator;
     }
 
-    public GenericDao(Context context, SessionFactory sessionFactory) {
+    public GenericDao(Context context, SessionFactory sessionFactory, EntityValidator validator) {
+        this.validator = validator;
         session = sessionFactory.getSession(context);
     }
 
     @Override
     public void persist(T entity) {
+        validator.validate(entity);
         session.saveOrUpdate(entity);
     }
 

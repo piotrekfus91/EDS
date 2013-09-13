@@ -9,6 +9,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.dto.DocumentsNumberInDaysDto;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.EntityValidator;
 
 import java.util.Date;
 import java.util.List;
@@ -47,12 +48,12 @@ public class HibernateDocumentDao extends IdentifableGenericDao<Document> implem
             "WHERE d.owner.id = :ownerId " +
                     "AND d.sessionDocument = TRUE";
 
-    public HibernateDocumentDao(Context context, SessionFactory sessionFactory) {
-        super(context, sessionFactory);
+    public HibernateDocumentDao(Context context, SessionFactory sessionFactory, EntityValidator validator) {
+        super(context, sessionFactory, validator);
     }
 
-    public HibernateDocumentDao(Session session) {
-        super(session);
+    public HibernateDocumentDao(Session session, EntityValidator validator) {
+        super(session, validator);
     }
 
     @Override

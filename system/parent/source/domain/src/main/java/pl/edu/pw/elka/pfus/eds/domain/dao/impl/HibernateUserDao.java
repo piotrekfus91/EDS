@@ -8,6 +8,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.NamedDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.EntityValidator;
 
 public class HibernateUserDao extends IdentifableGenericDao<User> implements UserDao {
     private static final String BY_NAME_AND_PASSWORD_QUERY =
@@ -18,14 +19,14 @@ public class HibernateUserDao extends IdentifableGenericDao<User> implements Use
 
     private NamedDao<User> namedDao;
 
-    public HibernateUserDao(Context context, SessionFactory sessionFactory) {
-        super(context, sessionFactory);
-        namedDao = new HibernateNamedDao<>(session, User.class);
+    public HibernateUserDao(Context context, SessionFactory sessionFactory, EntityValidator validator) {
+        super(context, sessionFactory, validator);
+        namedDao = new HibernateNamedDao<>(session, User.class, validator);
     }
 
-    public HibernateUserDao(Session session) {
-        super(session);
-        namedDao = new HibernateNamedDao<>(session, User.class);
+    public HibernateUserDao(Session session, EntityValidator validator) {
+        super(session, validator);
+        namedDao = new HibernateNamedDao<>(session, User.class, validator);
     }
 
     @Override

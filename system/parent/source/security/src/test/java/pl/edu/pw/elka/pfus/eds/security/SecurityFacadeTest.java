@@ -18,7 +18,7 @@ public class SecurityFacadeTest {
     public void beforeMethod() {
         Context context = mock(Context.class);
         SessionFactory sessionFactory = new MockSessionFactory();
-        userDao = new HibernateUserDao(context, sessionFactory);
+        userDao = new HibernateUserDao(context, sessionFactory, null);
         assertThat(userDao).isNotNull();
     }
 

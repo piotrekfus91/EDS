@@ -3,7 +3,12 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
+import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 /**
@@ -11,6 +16,7 @@ import java.util.*;
  */
 public class Document extends IdentifableEntity implements Versionable, FileSystemEntry {
     private Integer id;
+    @Size(min=3, max=255, message = "{document.name.size}")
     private String name;
     private Date created;
     private String contentMd5;

@@ -8,6 +8,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.ResourceGroupDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.EntityValidator;
 
 import java.util.List;
 
@@ -29,14 +30,14 @@ public class HibernateResourceGroupDao extends IdentifableGenericDao<ResourceGro
 
     private HibernateNamedDao<ResourceGroup> namedDao;
 
-    public HibernateResourceGroupDao(Context context, SessionFactory sessionFactory) {
-        super(context, sessionFactory);
-        namedDao = new HibernateNamedDao<>(session, ResourceGroup.class);
+    public HibernateResourceGroupDao(Context context, SessionFactory sessionFactory, EntityValidator validator) {
+        super(context, sessionFactory, validator);
+        namedDao = new HibernateNamedDao<>(session, ResourceGroup.class, validator);
     }
 
-    public HibernateResourceGroupDao(Session session) {
-        super(session);
-        namedDao = new HibernateNamedDao<ResourceGroup>(session, ResourceGroup.class);
+    public HibernateResourceGroupDao(Session session, EntityValidator validator) {
+        super(session, validator);
+        namedDao = new HibernateNamedDao<>(session, ResourceGroup.class, validator);
     }
 
     @Override

@@ -7,6 +7,7 @@ import pl.edu.pw.elka.pfus.eds.domain.dao.IdentifableGenericDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.TagDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.domain.validator.EntityValidator;
 
 public class HibernateTagDao extends IdentifableGenericDao<Tag> implements TagDao {
     private static final String BY_VALUE_QUERY =
@@ -14,12 +15,12 @@ public class HibernateTagDao extends IdentifableGenericDao<Tag> implements TagDa
             "FROM Tag t " +
             "WHERE t.value = :value";
 
-    public HibernateTagDao(Context context, SessionFactory sessionFactory) {
-        super(context, sessionFactory);
+    public HibernateTagDao(Context context, SessionFactory sessionFactory, EntityValidator validator) {
+        super(context, sessionFactory, validator);
     }
 
-    public HibernateTagDao(Session session) {
-        super(session);
+    public HibernateTagDao(Session session, EntityValidator validator) {
+        super(session, validator);
     }
 
     @Override
