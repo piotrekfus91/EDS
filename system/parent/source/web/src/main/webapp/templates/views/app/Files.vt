@@ -13,7 +13,7 @@ $viewEnclosureTool.top()
         <td id="info_td">
             <h3>Szczegóły</h3>
             <div id="info_div" class="lazy_fill_height">
-                <table class="info_table">
+                <table class="info_table" style="width: 80%">
                     <tr>
                         <td class="info_key">Typ</span></td>
                         <td class="info_value" id="files_type" /></td>

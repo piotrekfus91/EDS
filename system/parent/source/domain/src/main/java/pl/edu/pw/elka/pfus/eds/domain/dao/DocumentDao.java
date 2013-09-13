@@ -1,8 +1,10 @@
 package pl.edu.pw.elka.pfus.eds.domain.dao;
 
+import pl.edu.pw.elka.pfus.eds.domain.dao.dto.DocumentsNumberInDaysDto;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,4 +51,15 @@ public interface DocumentDao extends IdentifableDao<Document> {
      * @param userId id użytkownika.
      */
     void cleanSessionDocuments(int userId);
+
+    /**
+     * Zwraca listę zawierającą statystykę ostatnio uploadowanych plików
+     * danego użytkownika. Lista zawiera {@code days} ostatnich dni,
+     * w którym każdy posiada datę i liczbę uploadowanych plików.
+     *
+     * @param userId id użytkownika.
+     * @param fromDate data początkowa.
+     * @return DTO daty i ilości plików uploadowanych.
+     */
+    List<DocumentsNumberInDaysDto> findDocumentsNumberUploadRecently(int userId, Date fromDate);
 }

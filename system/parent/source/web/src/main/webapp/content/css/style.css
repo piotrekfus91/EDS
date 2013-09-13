@@ -44,8 +44,8 @@ html, body {
 }
 
 .info_table {
-    margin: 20px 5%;
-    width: 90%;
+    width: 200px;
+    margin: auto;
 }
 
 .info_key {

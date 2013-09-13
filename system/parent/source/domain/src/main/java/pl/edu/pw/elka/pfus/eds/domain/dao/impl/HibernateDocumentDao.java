@@ -5,10 +5,12 @@ import org.hibernate.Session;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.IdentifableGenericDao;
+import pl.edu.pw.elka.pfus.eds.domain.dao.dto.DocumentsNumberInDaysDto;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 
+import java.util.Date;
 import java.util.List;
 
 public class HibernateDocumentDao extends IdentifableGenericDao<Document> implements DocumentDao {
@@ -24,6 +26,20 @@ public class HibernateDocumentDao extends IdentifableGenericDao<Document> implem
                     "FROM Document d " +
                     "LEFT JOIN d.resourceGroups " +
                     "WHERE d.id = :documentId";
+
+    private static final String DOCUMENTS_UPLOADED_RECENTLY_QUERY =
+            "SELECT new pl.edu.pw.elka.pfus.eds.domain.dao.dto.DocumentsNumberInDaysDto(" +
+                    "day(d.created), " +
+                    "month(d.created), " +
+                    "year(d.created), " +
+                    "COUNT(d)" +
+            ") " +
+            "FROM Document d " +
+            "WHERE d.owner.id = :userId " +
+                    "AND d.created >= :fromDate " +
+            "GROUP BY day(d.created), " +
+                    "month(d.created), " +
+                    "year(d.created)";
 
     private static final String CLEAN_SESSION_DOCUMENTS_QUERY =
             "DELETE " +
@@ -68,6 +84,14 @@ public class HibernateDocumentDao extends IdentifableGenericDao<Document> implem
         Query query = session.createQuery(CLEAN_SESSION_DOCUMENTS_QUERY);
         query.setInteger("ownerId", userId);
         query.executeUpdate();
+    }
+
+    @Override
+    public List<DocumentsNumberInDaysDto> findDocumentsNumberUploadRecently(int userId, Date fromDate) {
+        Query query = session.createQuery(DOCUMENTS_UPLOADED_RECENTLY_QUERY);
+        query.setInteger("userId", userId);
+        query.setDate("fromDate", fromDate);
+        return query.list();
     }
 
     @Override

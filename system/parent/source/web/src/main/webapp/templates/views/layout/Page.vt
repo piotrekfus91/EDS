@@ -6,12 +6,16 @@ $pageTool.insertTitlePrefix('EDS')
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="$link.content('css/style.css')" />
     <link rel="stylesheet" href="$link.content('css/jquery-ui/jquery-ui.css')" />
+    <link rel="stylesheet" href="$link.content('css/jchartfx/start.css')" />
     <link rel="stylesheet" href="$link.content('css/dynatree/skin/ui.dynatree.css')" />
     <link rel="stylesheet" href="$link.content('css/contextMenu/jquery.contextMenu.css')" />
     <link rel="stylesheet" href="$link.content('css/plupload/jquery.ui.plupload.css')" />
     <script src="$link.content('js/jquery/jquery-1.9.1.js')"></script>
     <script src="$link.content('js/jquery-ui/jquery-ui.js')"></script>
-    <script src="$link.content('js/corners/jquery.corners.js')"></script>
+    <script src="$link.content('js/jchartfx/jchartfx.system.js')"></script>
+    <script src="$link.content('js/jchartfx/jchartfx.coreVector.js')"></script>
+    <script src="$link.content('js/jchartfx/jchartfx.advanced.js')"></script>
+    <script src="$link.content('js/jchartfx/jchartfx.animation.js')"></script>
     <script src="$link.content('js/common/noty/jquery.noty.js')"></script>
     <script src="$link.content('js/common/noty/topRight.js')"></script>
     <script src="$link.content('js/common/noty/default.js')"></script>

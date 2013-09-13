@@ -1,19 +1,25 @@
 $viewEnclosureTool.top()
 <script src="$link.content('js/app/user_info.js')"></script>
+<script src="$link.content('js/app/charts.js')"></script>
 
-<div class="lazy_open">
-    <table class="info_table">
-        <tr>
-            <td class="info_key">Login</td>
-            <td class="info_value">$currentUser.name</td>
-        </tr>
-        <tr>
-            <td class="info_key">Imię</span></td>
-            <td class="info_value">$currentUser.firstName</td>
-        </tr>
-        <tr>
-            <td class="info_key">Nazwisko</td>
-            <td class="info_value">$currentUser.lastName</td>
-        </tr>
-    </table>
+<div style="width: 600px; margin: auto">
+    <div>
+        <table class="info_table">
+            <tr>
+                <td class="info_key">Login</td>
+                <td class="info_value">$currentUser.name</td>
+            </tr>
+            <tr>
+                <td class="info_key">Imię</span></td>
+                <td class="info_value">$currentUser.firstName</td>
+            </tr>
+            <tr>
+                <td class="info_key">Nazwisko</td>
+                <td class="info_value">$currentUser.lastName</td>
+            </tr>
+        </table>
+    </div>
+    <div id="ChartDiv" style="width:100%; height:400px; display:inline-block">
+
+    </div>
 </div>

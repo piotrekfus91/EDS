@@ -14,6 +14,7 @@ import pl.edu.pw.elka.pfus.eds.web.init.impl.SqlScriptLoader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DatabaseInitializer implements Startable {
@@ -120,7 +121,7 @@ public class DatabaseInitializer implements Startable {
         documentsDirectory.setParentDirectory(rootDirectory);
             Document polishDocument = new Document();
             polishDocument.setName("Plan-polski.doc");
-            polishDocument.setCreated(new Date());
+            polishDocument.setCreated(getDateWithDaysBefore(3));
             polishDocument.setContentMd5("3779b2ec5fddd49aefb6fdf18b394bc8");
             polishDocument.setMimeType(docMimeType);
             polishDocument.setOwner(rootUser);
@@ -136,7 +137,7 @@ public class DatabaseInitializer implements Startable {
                     Document thesisDocument = new Document();
                     thesisDocument.setName("Praca.pdf");
                     thesisDocument.setOwner(rootUser);
-                    thesisDocument.setCreated(new Date());
+                    thesisDocument.setCreated(getDateWithDaysBefore(3));
                     thesisDocument.setContentMd5("e78b47846e48ed63ca58794b65701c53");
                     thesisDocument.setMimeType(pdfMimeType);
                     thesisDocument.addTag(thesisTag);
@@ -149,7 +150,7 @@ public class DatabaseInitializer implements Startable {
                     saveDocumentToRepository(thesisDocument);
                     Document technologiesDocument = new Document();
                     technologiesDocument.setName("technologie.tex");
-                    technologiesDocument.setCreated(new Date());
+                    technologiesDocument.setCreated(getDateWithDaysBefore(6));
                     technologiesDocument.setOwner(rootUser);
                     technologiesDocument.setContentMd5("693324fdccbb70a358591f764cbf3400");
                     technologiesDocument.setMimeType(plainTextMimeType);
@@ -175,7 +176,7 @@ public class DatabaseInitializer implements Startable {
             lfcPicturesDirectory.setParentDirectory(picturesDirectory);
                 Document gerrard20 = new Document();
                 gerrard20.setName("Gerrard20.jpeg");
-                gerrard20.setCreated(new Date());
+                gerrard20.setCreated(getDateWithDaysBefore(3));
                 gerrard20.setContentMd5("be4c71489e5964dcca00b6b3b3519631");
                 gerrard20.setMimeType(jpegMimeType);
                 jpegMimeType.addDocument(gerrard20);
@@ -188,7 +189,7 @@ public class DatabaseInitializer implements Startable {
                 wallpaperTag.addDocument(gerrard20);
                 Document lfc_226410 = new Document();
                 lfc_226410.setName("lfc_226410.jpg");
-                lfc_226410.setCreated(new Date());
+                lfc_226410.setCreated(getDateWithDaysBefore(5));
                 lfc_226410.setContentMd5("abbda56a02ca7d81fda888760d08127c");
                 lfc_226410.setMimeType(jpegMimeType);
                 jpegMimeType.addDocument(lfc_226410);
@@ -330,5 +331,11 @@ public class DatabaseInitializer implements Startable {
         } catch (IOException e) {
             throw new ExceptionInInitializerError(e);
         }
+    }
+
+    private Date getDateWithDaysBefore(int days) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -days);
+        return calendar.getTime();
     }
 }

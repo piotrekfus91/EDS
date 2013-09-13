@@ -10,6 +10,8 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
 
+import java.util.Date;
+
 import static org.fest.assertions.Assertions.assertThat;
 
 public class DocumentDaoTest extends IdentifableDaoTest<Document, DocumentDao> {
@@ -35,6 +37,11 @@ public class DocumentDaoTest extends IdentifableDaoTest<Document, DocumentDao> {
         documentDao.persist(nonSessionDocument);
 
         assertThat(documentDao.getSessionDocuments(user)).containsExactly(sessionDocument);
+    }
+
+    @Test
+    public void testGetRecentDocuments() throws Exception {
+        documentDao.findDocumentsNumberUploadRecently(1, new Date());
     }
 
     @Override
