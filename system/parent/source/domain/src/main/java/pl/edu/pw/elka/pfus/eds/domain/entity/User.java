@@ -2,6 +2,8 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -12,10 +14,17 @@ import java.util.List;
  */
 public class User extends IdentifableEntity implements Named, Versionable {
     private Integer id;
+    @Length(min = 1, max = 32, message = "{user.name.length}")
     private String name;
     private String passwordValue;
+
+    @Length(min = 1, max = 99, message = "{user.firstName.length}")
     private String firstName;
+
+    @Length(min = 1, max = 99, message = "{user.lastName.length}")
     private String lastName;
+
+    @Email(message = "{email.incorrect}")
     private String email;
     private boolean locked = false;
     private Date created;

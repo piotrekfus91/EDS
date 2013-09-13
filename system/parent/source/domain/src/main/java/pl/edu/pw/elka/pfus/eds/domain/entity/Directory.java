@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +16,10 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
     private Integer id;
     private String name;
     private Integer version;
+
+    @NotNull(message = "{document.owner.not.empty}")
     private User owner;
+
     private List<ResourceGroup> resourceGroups = new LinkedList<>();
     private List<Directory> subdirectories = new LinkedList<>();
     private Directory parentDirectory;

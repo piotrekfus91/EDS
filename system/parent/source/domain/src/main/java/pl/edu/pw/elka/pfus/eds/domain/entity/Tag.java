@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.hibernate.validator.constraints.Length;
 import pl.edu.pw.elka.pfus.eds.util.ValueNormalizer;
 
 import java.util.Collections;
@@ -14,6 +15,7 @@ import java.util.List;
  */
 public class Tag extends IdentifableEntity {
     private Integer id;
+    @Length(min = 1, max = 30, message = "{tag.length}")
     private String value;
 
     /**

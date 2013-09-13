@@ -1,7 +1,9 @@
 package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -9,11 +11,20 @@ import java.util.Date;
  */
 public class Comment extends IdentifableEntity implements Versionable {
     private Integer id;
+
+    @Length(min=1, message = "{comment.not.empty}")
     private String content;
+
+    @NotNull(message = "{creation.date.not.empty}")
     private Date created;
+
     private Date modified;
     private Integer version;
+
+    @NotNull(message = "{comment.user.not.empty}")
     private User user;
+
+    @NotNull(message = "{comment.document.not.empty}")
     private Document document;
 
     /**

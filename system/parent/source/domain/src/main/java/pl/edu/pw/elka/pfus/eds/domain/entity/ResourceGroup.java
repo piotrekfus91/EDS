@@ -2,7 +2,9 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,10 +15,16 @@ import java.util.Set;
  */
 public class ResourceGroup extends IdentifableEntity implements Named, Versionable {
     private Integer id;
+
+    @Length(min = 1, max = 30, message = "{resource.group.length}")
+
     private String name;
     private String description;
     private Integer version;
+
+    @NotNull(message = "{resource.group.owner.not.empty}")
     private User founder;
+
     private List<Directory> directories = new LinkedList<>();
     private List<Document> documents = new LinkedList<>();
 

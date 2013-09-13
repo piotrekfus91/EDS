@@ -16,9 +16,12 @@ import java.util.*;
  */
 public class Document extends IdentifableEntity implements Versionable, FileSystemEntry {
     private Integer id;
-    @Size(min=3, max=255, message = "{document.name.size}")
     private String name;
+
+    @NotNull(message = "{document.creation.date.not.empty}")
     private Date created;
+
+    @NotNull(message = "{document.contentMd5.not.empty}")
     private String contentMd5;
     private Integer version;
     private List<ResourceGroup> resourceGroups = new LinkedList<>();

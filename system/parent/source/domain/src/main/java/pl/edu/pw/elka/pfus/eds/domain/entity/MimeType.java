@@ -2,6 +2,7 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +12,9 @@ import java.util.List;
  */
 public class MimeType extends IdentifableEntity {
     private Integer id;
+    @Length(min = 1, max = 30, message = "{mime.type.type.length}")
     private String type;
+
     private boolean enabled = true;
     private String defaultExtension;
     private String description;
