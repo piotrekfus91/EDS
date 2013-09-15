@@ -17,11 +17,11 @@ import static pl.edu.pw.elka.pfus.eds.web.rest.Rest.responseWithContent;
 @Path("/search")
 public class SearchRest {
     private static final Logger logger = Logger.getLogger(SearchRest.class);
-    private Searcher searcher;
+    private Searcher tagSearcher;
     private JsonTagListExporter tagListExporter;
 
     @Inject
-    public SearchRest(Searcher searcher, JsonTagListExporter tagListExporter) {
+    public SearchRest(Searcher tagSearcher, JsonTagListExporter tagListExporter) {
         this.searcher = searcher;
         this.tagListExporter = tagListExporter;
     }

@@ -82,6 +82,10 @@
     <component class="pl.edu.pw.elka.pfus.eds.logic.tag.cache.impl.TagCacheLoader" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.search.Searcher"
                class="pl.edu.pw.elka.pfus.eds.logic.search.impl.PlainJavaSearcher" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.search.Indexer"
+               class="pl.edu.pw.elka.pfus.eds.logic.search.impl.LuceneIndexer" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.search.Searcher"
+               class="pl.edu.pw.elka.pfus.eds.logic.search.impl.LuceneSearcher" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.statistics.Statistics"
                class="pl.edu.pw.elka.pfus.eds.logic.statistics.StatisticsImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.domain.validator.EntityValidator"

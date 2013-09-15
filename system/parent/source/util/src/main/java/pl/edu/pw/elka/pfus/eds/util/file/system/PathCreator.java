@@ -5,10 +5,15 @@ package pl.edu.pw.elka.pfus.eds.util.file.system;
  */
 public interface PathCreator {
     /**
-     * Tworzy katalog główny aplikacji na podstawie {@link pl.edu.pw.elka.pfus.eds.util.config.Config},
-     * wpisu {@code file_system_root}.
+     * Tworzy katalogi niezbędne do działania aplikacji
+     * podstawie {@link pl.edu.pw.elka.pfus.eds.util.config.Config},
+     * wpisów:
+     * <ul>
+     *     <li>{@code file_system_root}</li>
+     *     <li>{@code index_dir}</li>
+     * </ul>.
      */
-    void createFileSystemRoot();
+    void createNecessaryDirectories();
     /**
      * Tworzy ścieżkę począwszy od podanego {@code rootPath}
      * z podfolderami zgodnymi z {@code hashedPath}.

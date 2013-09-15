@@ -81,7 +81,7 @@ public class PathCreatorImplTest {
     public void testCreateRoot() throws Exception {
         FileUtils.deleteDirectory(new File(ROOT_DIR));
 
-        pathCreator.createFileSystemRoot();
+        pathCreator.createNecessaryDirectories();
 
         assertThat(new File(ROOT_DIR).exists()).isTrue();
     }

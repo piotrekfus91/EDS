@@ -7,6 +7,7 @@ import org.picocontainer.Startable;
 import pl.edu.pw.elka.pfus.eds.domain.dao.*;
 import pl.edu.pw.elka.pfus.eds.domain.entity.*;
 import pl.edu.pw.elka.pfus.eds.domain.session.SessionFactory;
+import pl.edu.pw.elka.pfus.eds.logic.search.Indexer;
 import pl.edu.pw.elka.pfus.eds.logic.tag.cache.TagCache;
 import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
 import pl.edu.pw.elka.pfus.eds.util.file.system.PathCreator;
@@ -30,6 +31,7 @@ public class DatabaseInitializer implements Startable {
     private FileManager fileManager;
     private PathCreator pathCreator;
     private TagCache tagCache;
+    private Indexer indexer;
 
     private MimeType jpegMimeType;
     private MimeType pdfMimeType;
@@ -44,7 +46,7 @@ public class DatabaseInitializer implements Startable {
     public DatabaseInitializer(SessionFactory sessionFactory, UserDao userDao, DirectoryDao directoryDao,
                                MimeTypeDao mimeTypeDao, CommentDao commentDao, TagDao tagDao,
                                ResourceGroupDao resourceGroupDao, FileManager fileManager, PathCreator pathCreator,
-                               TagCache tagCache) {
+                               TagCache tagCache, Indexer indexer) {
         this.sessionFactory = sessionFactory;
         this.userDao = userDao;
         this.directoryDao = directoryDao;
@@ -55,211 +57,225 @@ public class DatabaseInitializer implements Startable {
         this.fileManager = fileManager;
         this.pathCreator = pathCreator;
         this.tagCache = tagCache;
+        this.indexer = indexer;
         tagCache.setSession(userDao.getSession());
     }
 
     @Override
     public void start() {
-        logger.info("initializing database");
-        initFromScripts();
+        try {
+            logger.info("initializing database");
+            initFromScripts();
 
-        initMimeTypes();
-        initTags();
+            initMimeTypes();
+            initTags();
 
-        pathCreator.createFileSystemRoot();
+            pathCreator.createNecessaryDirectories();
 
-        userDao.beginTransaction();
-        User rootUser = new User();
-        rootUser.setName("root");
-        rootUser.setPasswordValue("asdf");
-        rootUser.setEmail("root@localhost");
-        rootUser.setFirstName("Piotrek");
-        rootUser.setLastName("Fus");
-        rootUser.setCreated(new Date());
+            userDao.beginTransaction();
+            User rootUser = new User();
+            rootUser.setName("root");
+            rootUser.setPasswordValue("asdf");
+            rootUser.setEmail("root@localhost");
+            rootUser.setFirstName("Piotrek");
+            rootUser.setLastName("Fus");
+            rootUser.setCreated(new Date());
 
-        User johnnyUser = new User();
-        johnnyUser.setName("johnny");
-        johnnyUser.setPasswordValue("asdf");
-        johnnyUser.setEmail("johnny@localhost");
-        johnnyUser.setFirstName("Johnny");
-        johnnyUser.setLastName("Opalony");
-        johnnyUser.setCreated(new Date());
+            User johnnyUser = new User();
+            johnnyUser.setName("johnny");
+            johnnyUser.setPasswordValue("asdf");
+            johnnyUser.setEmail("johnny@localhost");
+            johnnyUser.setFirstName("Johnny");
+            johnnyUser.setLastName("Opalony");
+            johnnyUser.setCreated(new Date());
 
-        User jerryUser = new User();
-        jerryUser.setName("jerry");
-        jerryUser.setPasswordValue("asdf");
-        jerryUser.setEmail("jerry@localhost");
-        jerryUser.setFirstName("Jurek");
-        jerryUser.setLastName("Ogórek");
-        jerryUser.setCreated(new Date());
+            User jerryUser = new User();
+            jerryUser.setName("jerry");
+            jerryUser.setPasswordValue("asdf");
+            jerryUser.setEmail("jerry@localhost");
+            jerryUser.setFirstName("Jurek");
+            jerryUser.setLastName("Ogórek");
+            jerryUser.setCreated(new Date());
 
-        userDao.persist(rootUser);
-        userDao.persist(johnnyUser);
-        userDao.persist(jerryUser);
-        userDao.commitTransaction();
+            userDao.persist(rootUser);
+            userDao.persist(johnnyUser);
+            userDao.persist(jerryUser);
+            userDao.commitTransaction();
 
-        userDao.beginTransaction();
+            userDao.beginTransaction();
 
-        directoryDao.setSession(userDao.getSession());
-        mimeTypeDao.setSession(userDao.getSession());
-        commentDao.setSession(userDao.getSession());
-        tagDao.setSession(userDao.getSession());
-        resourceGroupDao.setSession(userDao.getSession());
+            directoryDao.setSession(userDao.getSession());
+            mimeTypeDao.setSession(userDao.getSession());
+            commentDao.setSession(userDao.getSession());
+            tagDao.setSession(userDao.getSession());
+            resourceGroupDao.setSession(userDao.getSession());
 
-        jpegMimeType = mimeTypeDao.findById(jpegMimeType.getId());
-        pdfMimeType = mimeTypeDao.findById(pdfMimeType.getId());
-        docMimeType = mimeTypeDao.findById(docMimeType.getId());
-        plainTextMimeType = mimeTypeDao.findById(plainTextMimeType.getId());
-        lfcTag = tagDao.findById(lfcTag.getId());
-        wallpaperTag = tagDao.findById(wallpaperTag.getId());
-        thesisTag = tagDao.findById(thesisTag.getId());
+            jpegMimeType = mimeTypeDao.findById(jpegMimeType.getId());
+            pdfMimeType = mimeTypeDao.findById(pdfMimeType.getId());
+            docMimeType = mimeTypeDao.findById(docMimeType.getId());
+            plainTextMimeType = mimeTypeDao.findById(plainTextMimeType.getId());
+            lfcTag = tagDao.findById(lfcTag.getId());
+            wallpaperTag = tagDao.findById(wallpaperTag.getId());
+            thesisTag = tagDao.findById(thesisTag.getId());
 
-        Directory rootDirectory = directoryDao.getRootDirectory(rootUser);
+            Directory rootDirectory = directoryDao.getRootDirectory(rootUser);
 
-        Directory documentsDirectory = new Directory();
-        documentsDirectory.setName("dokumenty");
-        documentsDirectory.setParentDirectory(rootDirectory);
-            Document polishDocument = new Document();
-            polishDocument.setName("Plan-polski.doc");
-            polishDocument.setCreated(getDateWithDaysBefore(3));
-            polishDocument.setContentMd5("3779b2ec5fddd49aefb6fdf18b394bc8");
-            polishDocument.setMimeType(docMimeType);
-            polishDocument.setOwner(rootUser);
-            polishDocument.setDirectory(documentsDirectory);
-            documentsDirectory.addDocument(polishDocument);
-            saveDocumentToRepository(polishDocument);
-            Directory schoolDocumentsDirectory = new Directory();
-            schoolDocumentsDirectory.setName("szkolne");
-            schoolDocumentsDirectory.setParentDirectory(documentsDirectory);
-                Directory pdiDirectory = new Directory();
-                pdiDirectory.setName("PDI");
-                pdiDirectory.setParentDirectory(schoolDocumentsDirectory);
-                    Document thesisDocument = new Document();
-                    thesisDocument.setName("Praca.pdf");
-                    thesisDocument.setOwner(rootUser);
-                    thesisDocument.setCreated(getDateWithDaysBefore(3));
-                    thesisDocument.setContentMd5("e78b47846e48ed63ca58794b65701c53");
-                    thesisDocument.setMimeType(pdfMimeType);
-                    thesisDocument.addTag(thesisTag);
-                    thesisDocument.setOwner(rootUser);
-                    thesisTag.addDocument(thesisDocument);
-                    thesisDocument.addTag(scholarTag);
-                    scholarTag.addDocument(thesisDocument);
-                    pdiDirectory.addDocument(thesisDocument);
-                    thesisDocument.setDirectory(pdiDirectory);
-                    saveDocumentToRepository(thesisDocument);
-                    Document technologiesDocument = new Document();
-                    technologiesDocument.setName("technologie.tex");
-                    technologiesDocument.setCreated(getDateWithDaysBefore(6));
-                    technologiesDocument.setOwner(rootUser);
-                    technologiesDocument.setContentMd5("693324fdccbb70a358591f764cbf3400");
-                    technologiesDocument.setMimeType(plainTextMimeType);
-                    technologiesDocument.setOwner(rootUser);
-                    technologiesDocument.addTag(thesisTag);
-                    thesisTag.addDocument(technologiesDocument);
-                    technologiesDocument.addTag(scholarTag);
-                    scholarTag.addDocument(technologiesDocument);
-                    technologiesDocument.setDirectory(pdiDirectory);
-                    pdiDirectory.addDocument(technologiesDocument);
-                    saveDocumentToRepository(thesisDocument);
-                for(int i = 0; i < 7; i++) {
-                    Directory semDirectory = new Directory();
-                    semDirectory.setName("Semestr " + (i+1));
-                    semDirectory.setParentDirectory(schoolDocumentsDirectory);
-                }
+            Directory documentsDirectory = new Directory();
+            documentsDirectory.setName("dokumenty");
+            documentsDirectory.setParentDirectory(rootDirectory);
+                Document polishDocument = new Document();
+                polishDocument.setName("Plan-polski.doc");
+                polishDocument.setCreated(getDateWithDaysBefore(3));
+                polishDocument.setContentMd5("3779b2ec5fddd49aefb6fdf18b394bc8");
+                polishDocument.setMimeType(docMimeType);
+                polishDocument.setOwner(rootUser);
+                polishDocument.setDirectory(documentsDirectory);
+                documentsDirectory.addDocument(polishDocument);
+                saveDocumentToRepository(polishDocument);
+                indexer.index(polishDocument);
 
-        Directory picturesDirectory = new Directory();
-        picturesDirectory.setName("obrazki");
-        picturesDirectory.setParentDirectory(rootDirectory);
-            Directory lfcPicturesDirectory = new Directory();
-            lfcPicturesDirectory.setName("LFC");
-            lfcPicturesDirectory.setParentDirectory(picturesDirectory);
-                Document gerrard20 = new Document();
-                gerrard20.setName("Gerrard20.jpeg");
-                gerrard20.setCreated(getDateWithDaysBefore(3));
-                gerrard20.setContentMd5("be4c71489e5964dcca00b6b3b3519631");
-                gerrard20.setMimeType(jpegMimeType);
-                jpegMimeType.addDocument(gerrard20);
-                gerrard20.setDirectory(lfcPicturesDirectory);
-                lfcPicturesDirectory.addDocument(gerrard20);
-                saveDocumentToRepository(gerrard20);
-                gerrard20.addTag(lfcTag);
-                lfcTag.addDocument(gerrard20);
-                gerrard20.addTag(wallpaperTag);
-                wallpaperTag.addDocument(gerrard20);
-                Document lfc_226410 = new Document();
-                lfc_226410.setName("lfc_226410.jpg");
-                lfc_226410.setCreated(getDateWithDaysBefore(5));
-                lfc_226410.setContentMd5("abbda56a02ca7d81fda888760d08127c");
-                lfc_226410.setMimeType(jpegMimeType);
-                jpegMimeType.addDocument(lfc_226410);
-                lfc_226410.setDirectory(lfcPicturesDirectory);
-                lfcPicturesDirectory.addDocument(lfc_226410);
-                saveDocumentToRepository(lfc_226410);
-                String[] commentsContent = new String[]{
-                        "Bardzo ładny obrazek.",
-                        "You'll never walk alone!",
-                        "Fajne, skąd to masz?",
-                        "Ja też taki chcę!",
-                        "Ustawię sobie na tapecie."
-                };
-                for(int i = 0; i < commentsContent.length; i++) {
-                    Comment comment = new Comment();
-                    comment.setCreated(new Date());
-                    comment.setContent(commentsContent[i]);
-                    comment.setDocument(lfc_226410);
-                    comment.setUser(i % 2 == 0 ? jerryUser : johnnyUser);
-                    commentDao.persist(comment);
-                }
-                lfc_226410.addTag(lfcTag);
-                lfcTag.addDocument(lfc_226410);
+                Directory schoolDocumentsDirectory = new Directory();
+                schoolDocumentsDirectory.setName("szkolne");
+                schoolDocumentsDirectory.setParentDirectory(documentsDirectory);
+                    Directory pdiDirectory = new Directory();
+                    pdiDirectory.setName("PDI");
+                    pdiDirectory.setParentDirectory(schoolDocumentsDirectory);
+                        Document thesisDocument = new Document();
+                        thesisDocument.setName("Praca.pdf");
+                        thesisDocument.setOwner(rootUser);
+                        thesisDocument.setCreated(getDateWithDaysBefore(3));
+                        thesisDocument.setContentMd5("e78b47846e48ed63ca58794b65701c53");
+                        thesisDocument.setMimeType(pdfMimeType);
+                        thesisDocument.addTag(thesisTag);
+                        thesisDocument.setOwner(rootUser);
+                        thesisTag.addDocument(thesisDocument);
+                        thesisDocument.addTag(scholarTag);
+                        scholarTag.addDocument(thesisDocument);
+                        pdiDirectory.addDocument(thesisDocument);
+                        thesisDocument.setDirectory(pdiDirectory);
+                        saveDocumentToRepository(thesisDocument);
+                        indexer.index(thesisDocument);
 
-        Directory filesDirectory = new Directory();
-        filesDirectory.setName("pliki");
-        filesDirectory.setParentDirectory(rootDirectory);
-            Directory binariesDirectory = new Directory();
-            binariesDirectory.setName("binarki");
-            binariesDirectory.setParentDirectory(filesDirectory);
+                        Document technologiesDocument = new Document();
+                        technologiesDocument.setName("technologie.tex");
+                        technologiesDocument.setCreated(getDateWithDaysBefore(6));
+                        technologiesDocument.setOwner(rootUser);
+                        technologiesDocument.setContentMd5("693324fdccbb70a358591f764cbf3400");
+                        technologiesDocument.setMimeType(plainTextMimeType);
+                        technologiesDocument.setOwner(rootUser);
+                        technologiesDocument.addTag(thesisTag);
+                        thesisTag.addDocument(technologiesDocument);
+                        technologiesDocument.addTag(scholarTag);
+                        scholarTag.addDocument(technologiesDocument);
+                        technologiesDocument.setDirectory(pdiDirectory);
+                        pdiDirectory.addDocument(technologiesDocument);
+                        saveDocumentToRepository(technologiesDocument);
+                        indexer.index(technologiesDocument);
+                        for(int i = 0; i < 7; i++) {
+                            Directory semDirectory = new Directory();
+                            semDirectory.setName("Semestr " + (i+1));
+                            semDirectory.setParentDirectory(schoolDocumentsDirectory);
+                        }
 
-        Directory johnnyRootDirectory = directoryDao.getRootDirectory(johnnyUser);
+            Directory picturesDirectory = new Directory();
+            picturesDirectory.setName("obrazki");
+            picturesDirectory.setParentDirectory(rootDirectory);
+                Directory lfcPicturesDirectory = new Directory();
+                lfcPicturesDirectory.setName("LFC");
+                lfcPicturesDirectory.setParentDirectory(picturesDirectory);
+                    Document gerrard20 = new Document();
+                    gerrard20.setName("Gerrard20.jpeg");
+                    gerrard20.setCreated(getDateWithDaysBefore(3));
+                    gerrard20.setContentMd5("be4c71489e5964dcca00b6b3b3519631");
+                    gerrard20.setMimeType(jpegMimeType);
+                    jpegMimeType.addDocument(gerrard20);
+                    gerrard20.setDirectory(lfcPicturesDirectory);
+                    lfcPicturesDirectory.addDocument(gerrard20);
+                    saveDocumentToRepository(gerrard20);
+                    gerrard20.addTag(lfcTag);
+                    lfcTag.addDocument(gerrard20);
+                    gerrard20.addTag(wallpaperTag);
+                    wallpaperTag.addDocument(gerrard20);
+                    indexer.index(gerrard20);
 
-        Directory lfcDirectory = new Directory();
-        lfcDirectory.setName("LFC");
-        lfcDirectory.setParentDirectory(johnnyRootDirectory);
-            Document liverpoolWallpaperDocument = new Document();
-            liverpoolWallpaperDocument.setName("liverpool-wallpapers_1.jpg");
-            liverpoolWallpaperDocument.setCreated(new Date());
-            liverpoolWallpaperDocument.setContentMd5("81810819ba7a6e3718e0c87d5103eaf1");
-            liverpoolWallpaperDocument.setMimeType(jpegMimeType);
-            liverpoolWallpaperDocument.addTag(lfcTag);
-            lfcTag.addDocument(liverpoolWallpaperDocument);
-            saveDocumentToRepository(liverpoolWallpaperDocument);
-            liverpoolWallpaperDocument.setDirectory(lfcDirectory);
-            lfcDirectory.addDocument(liverpoolWallpaperDocument);
-            liverpoolWallpaperDocument.setOwner(johnnyUser);
+                    Document lfc_226410 = new Document();
+                    lfc_226410.setName("lfc_226410.jpg");
+                    lfc_226410.setCreated(getDateWithDaysBefore(5));
+                    lfc_226410.setContentMd5("abbda56a02ca7d81fda888760d08127c");
+                    lfc_226410.setMimeType(jpegMimeType);
+                    jpegMimeType.addDocument(lfc_226410);
+                    lfc_226410.setDirectory(lfcPicturesDirectory);
+                    lfcPicturesDirectory.addDocument(lfc_226410);
+                    saveDocumentToRepository(lfc_226410);
+                    String[] commentsContent = new String[]{
+                            "Bardzo ładny obrazek.",
+                            "You'll never walk alone!",
+                            "Fajne, skąd to masz?",
+                            "Ja też taki chcę!",
+                            "Ustawię sobie na tapecie."
+                    };
+                    for(int i = 0; i < commentsContent.length; i++) {
+                        Comment comment = new Comment();
+                        comment.setCreated(new Date());
+                        comment.setContent(commentsContent[i]);
+                        comment.setDocument(lfc_226410);
+                        comment.setUser(i % 2 == 0 ? jerryUser : johnnyUser);
+                        commentDao.persist(comment);
+                    }
+                    lfc_226410.addTag(lfcTag);
+                    lfcTag.addDocument(lfc_226410);
+                    indexer.index(lfc_226410);
 
-        ResourceGroup lfcFansRG = new ResourceGroup();
-        lfcFansRG.setFounder(rootUser);
-        lfcFansRG.setName("LFC fans");
-        lfcFansRG.setDescription("Grupa zasobów fanów największego klubu piłkarskiego na świecie - Liverpool FC");
-        lfcFansRG.addDirectory(lfcPicturesDirectory);
-        lfcPicturesDirectory.addResourceGroup(lfcFansRG);
-        lfcFansRG.addDocument(liverpoolWallpaperDocument);
-        liverpoolWallpaperDocument.addResourceGroup(lfcFansRG);
-        resourceGroupDao.persist(lfcFansRG);
+            Directory filesDirectory = new Directory();
+            filesDirectory.setName("pliki");
+            filesDirectory.setParentDirectory(rootDirectory);
+                Directory binariesDirectory = new Directory();
+                binariesDirectory.setName("binarki");
+                binariesDirectory.setParentDirectory(filesDirectory);
 
-        mimeTypeDao.setSession(directoryDao.getSession());
-        mimeTypeDao.persist(jpegMimeType);
-        mimeTypeDao.persist(plainTextMimeType);
-        mimeTypeDao.persist(docMimeType);
-        mimeTypeDao.persist(pdfMimeType);
-        directoryDao.persist(picturesDirectory);
-        directoryDao.persist(documentsDirectory);
-        directoryDao.persist(filesDirectory);
-        directoryDao.persist(lfcDirectory);
-        directoryDao.commitTransaction();
+            Directory johnnyRootDirectory = directoryDao.getRootDirectory(johnnyUser);
 
-        tagCache.rebuild();
+            Directory lfcDirectory = new Directory();
+            lfcDirectory.setName("LFC");
+            lfcDirectory.setParentDirectory(johnnyRootDirectory);
+                Document liverpoolWallpaperDocument = new Document();
+                liverpoolWallpaperDocument.setName("liverpool-wallpapers_1.jpg");
+                liverpoolWallpaperDocument.setCreated(new Date());
+                liverpoolWallpaperDocument.setContentMd5("81810819ba7a6e3718e0c87d5103eaf1");
+                liverpoolWallpaperDocument.setMimeType(jpegMimeType);
+                liverpoolWallpaperDocument.addTag(lfcTag);
+                lfcTag.addDocument(liverpoolWallpaperDocument);
+                saveDocumentToRepository(liverpoolWallpaperDocument);
+                liverpoolWallpaperDocument.setDirectory(lfcDirectory);
+                lfcDirectory.addDocument(liverpoolWallpaperDocument);
+                liverpoolWallpaperDocument.setOwner(johnnyUser);
+                indexer.index(liverpoolWallpaperDocument);
+
+            ResourceGroup lfcFansRG = new ResourceGroup();
+            lfcFansRG.setFounder(rootUser);
+            lfcFansRG.setName("LFC fans");
+            lfcFansRG.setDescription("Grupa zasobów fanów największego klubu piłkarskiego na świecie - Liverpool FC");
+            lfcFansRG.addDirectory(lfcPicturesDirectory);
+            lfcPicturesDirectory.addResourceGroup(lfcFansRG);
+            lfcFansRG.addDocument(liverpoolWallpaperDocument);
+            liverpoolWallpaperDocument.addResourceGroup(lfcFansRG);
+            resourceGroupDao.persist(lfcFansRG);
+
+            mimeTypeDao.setSession(directoryDao.getSession());
+            mimeTypeDao.persist(jpegMimeType);
+            mimeTypeDao.persist(plainTextMimeType);
+            mimeTypeDao.persist(docMimeType);
+            mimeTypeDao.persist(pdfMimeType);
+            directoryDao.persist(picturesDirectory);
+            directoryDao.persist(documentsDirectory);
+            directoryDao.persist(filesDirectory);
+            directoryDao.persist(lfcDirectory);
+            directoryDao.commitTransaction();
+
+            tagCache.rebuild();
+        } catch (Exception e) {
+            throw new ExceptionInInitializerError(e);
+        }
     }
 
     @Override

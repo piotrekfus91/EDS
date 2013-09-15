@@ -7,7 +7,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.document.DownloadPrivilegeManager;
-import pl.edu.pw.elka.pfus.eds.logic.search.Searcher;
+import pl.edu.pw.elka.pfus.eds.logic.search.TagSearcher;
 import pl.edu.pw.elka.pfus.eds.logic.tag.cache.TagCache;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.util.ValueNormalizer;
@@ -19,14 +19,14 @@ import java.util.regex.Pattern;
 /**
  * Implementacja wyszukiwarki czystej javy.
  */
-public class PlainJavaSearcher implements Searcher {
+public class PlainJavaTagSearcher implements TagSearcher {
     private DownloadPrivilegeManager downloadPrivilegeManager;
     private TagCache tagCache;
     private Context context;
     private SecurityFacade securityFacade;
 
-    public PlainJavaSearcher(DownloadPrivilegeManager downloadPrivilegeManager, TagCache tagCache,
-                             Context context, SecurityFacade securityFacade) {
+    public PlainJavaTagSearcher(DownloadPrivilegeManager downloadPrivilegeManager, TagCache tagCache,
+                                Context context, SecurityFacade securityFacade) {
         this.downloadPrivilegeManager = downloadPrivilegeManager;
         this.tagCache = tagCache;
         this.context = context;

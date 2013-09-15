@@ -16,7 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class PlainJavaSearcherTest {
-    private PlainJavaSearcher searcher;
+    private PlainJavaTagSearcher searcher;
     private DownloadPrivilegeManager downloadPrivilegeManager;
     private Context context;
     private SecurityFacade securityFacade;
@@ -33,7 +33,7 @@ public class PlainJavaSearcherTest {
         downloadPrivilegeManager = mock(DownloadPrivilegeManager.class);
         context = mock(Context.class);
         securityFacade = mock(SecurityFacade.class);
-        searcher = new PlainJavaSearcher(downloadPrivilegeManager, tagCache, context, securityFacade);
+        searcher = new PlainJavaTagSearcher(downloadPrivilegeManager, tagCache, context, securityFacade);
     }
 
     @Test

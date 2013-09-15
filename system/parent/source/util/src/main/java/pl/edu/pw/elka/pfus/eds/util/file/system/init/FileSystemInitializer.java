@@ -12,7 +12,7 @@ public class FileSystemInitializer implements Startable {
 
     @Override
     public void start() {
-        pathCreator.createFileSystemRoot();
+        pathCreator.createNecessaryDirectories();
     }
 
     @Override
