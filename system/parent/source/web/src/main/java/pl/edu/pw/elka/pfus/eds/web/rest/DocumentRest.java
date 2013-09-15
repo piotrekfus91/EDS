@@ -39,9 +39,9 @@ public class DocumentRest {
         try {
             Document document = documentService.getById(documentId);
             exported = documentExporter.exportSuccess(document);
-        } catch (Exception e) {
+        } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = documentExporter.exportFailure(e.getMessage(), null);
+            exported = documentExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }
@@ -72,9 +72,9 @@ public class DocumentRest {
         try {
             documentService.rename(documentId, newName);
             exported = resultExporter.exportSuccess(null);
-        } catch (Exception e) {
+        } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = resultExporter.exportFailure(e.getMessage(), null);
+            exported = resultExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }
@@ -91,7 +91,7 @@ public class DocumentRest {
             exported = resultExporter.exportSuccess(null);
         } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = resultExporter.exportFailure(e.getMessage(), null);
+            exported = resultExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }
@@ -107,7 +107,7 @@ public class DocumentRest {
             exported = resultExporter.exportSuccess(null);
         } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = resultExporter.exportFailure(e.getMessage(), null);
+            exported = resultExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }

@@ -68,7 +68,7 @@ public class ResourceGroupRest {
             exported = resourceGroupWithAssignedUsersExporter.exportSuccess(resourceGroupDto);
         } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = resourceGroupExporter.exportFailure(e.getMessage(), null);
+            exported = resourceGroupExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }
@@ -118,7 +118,7 @@ public class ResourceGroupRest {
             exported = resourceGroupExporter.exportSuccess(resourceGroup);
         } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = resourceGroupExporter.exportFailure(e.getMessage(), null);
+            exported = resourceGroupExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }
@@ -137,7 +137,7 @@ public class ResourceGroupRest {
             exported = resourceGroupExporter.exportSuccess(resourceGroup);
         } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = resourceGroupExporter.exportFailure(e.getMessage(), null);
+            exported = resourceGroupExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }
@@ -168,9 +168,9 @@ public class ResourceGroupRest {
         try {
             resourceGroupService.updateDocumentPublishing(documentId, sharedInGroups);
             exported = resultExporter.exportSuccess(null);
-        } catch (Exception e) {
+        } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = resultExporter.exportFailure(e.getMessage(), null);
+            exported = resultExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }
@@ -189,9 +189,9 @@ public class ResourceGroupRest {
         try {
             resourceGroupService.updateDirectoryPublishing(directoryId, sharedInGroups);
             exported = resultExporter.exportSuccess(null);
-        } catch (Exception e) {
+        } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = resultExporter.exportFailure(e.getMessage(), null);
+            exported = resultExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }
@@ -205,7 +205,7 @@ public class ResourceGroupRest {
             resourceGroupService.delete(name);
             exported = resourceGroupExporter.exportSuccess(null);
         } catch (LogicException e) {
-            exported = resourceGroupExporter.exportFailure(e.getMessage(), null);
+            exported = resourceGroupExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }

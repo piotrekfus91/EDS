@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.web.rest.json;
 
+import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.dto.ResultJsonDto;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.dto.ResultType;
 
@@ -14,6 +15,11 @@ public abstract class AbstractSuccessFailureJsonExporter extends AbstractJsonExp
 
     public String failure(String errorMessage, Object data) {
         ResultJsonDto resultJsonDto = ResultJsonDto.from(ResultType.FAILURE, errorMessage, data);
+        return getGson().toJson(resultJsonDto);
+    }
+
+    public String exportFailure(LogicException e) {
+        ResultJsonDto resultJsonDto = ResultJsonDto.from(ResultType.FAILURE, e.getMessage(), e);
         return getGson().toJson(resultJsonDto);
     }
 }

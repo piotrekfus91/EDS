@@ -73,7 +73,7 @@ public class DirectoryRest {
             exported = directoryExporter.exportSuccess(directory);
         } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = directoryExporter.exportFailure(e.getMessage(), null);
+            exported = directoryExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }
@@ -87,9 +87,9 @@ public class DirectoryRest {
         try {
             directoryService.move(directoryId, destinationDirectoryId);
             exported = resultExporter.exportSuccess(null);
-        } catch (Exception e) {
+        } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = resultExporter.exportFailure(e.getMessage(), null);
+            exported = resultExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }
@@ -105,7 +105,7 @@ public class DirectoryRest {
             exported = fileSystemEntryListExporter.exportSuccess(fileSystemEntries);
         } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = fileSystemEntryListExporter.exportFailure(e.getMessage(), null);
+            exported = fileSystemEntryListExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }
@@ -120,7 +120,7 @@ public class DirectoryRest {
             exported = directoryExporter.exportSuccess(renamedDirectory);
         } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = directoryExporter.exportFailure(e.getMessage(), null);
+            exported = directoryExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }

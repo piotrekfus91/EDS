@@ -71,7 +71,7 @@ public class TagRest {
             exported = resultExporter.exportSuccess(null);
         } catch (LogicException e) {
             logger.error(e.getMessage(), e);
-            exported = resultExporter.exportFailure(e.getMessage(), null);
+            exported = resultExporter.exportFailure(e);
         }
         return responseWithContent(exported);
     }

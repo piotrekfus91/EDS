@@ -1,6 +1,9 @@
 package pl.edu.pw.elka.pfus.eds.web.rest.json.dto;
 
 import com.google.gson.annotations.SerializedName;
+import pl.edu.pw.elka.pfus.eds.logic.exception.ConstraintsViolatedException;
+
+import java.util.List;
 
 /**
  * DTO zwracające informację o błędzie.
@@ -13,6 +16,9 @@ public class ResultJsonDto {
 
     private Object data;
 
+    @SerializedName("validation_error")
+    private List<String> validationErrors;
+
     public ResultJsonDto() {
 
     }
@@ -21,7 +27,12 @@ public class ResultJsonDto {
         ResultJsonDto resultJsonDto = new ResultJsonDto();
         resultJsonDto.setResult(result);
         resultJsonDto.setErrorMessage(errorMessage);
-        resultJsonDto.setData(data);
+        if(data instanceof ConstraintsViolatedException) {
+            ConstraintsViolatedException constraintsViolatedException = (ConstraintsViolatedException) data;
+            resultJsonDto.setValidationErrors(constraintsViolatedException.getErrorsAsStrings());
+        } else if(!(data instanceof Exception)) {
+            resultJsonDto.setData(data);
+        }
         return resultJsonDto;
     }
 
@@ -47,5 +58,13 @@ public class ResultJsonDto {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public List<String> getValidationErrors() {
+        return validationErrors;
+    }
+
+    public void setValidationErrors(List<String> validationErrors) {
+        this.validationErrors = validationErrors;
     }
 }
