@@ -11,10 +11,10 @@ public class UserFactory implements EntityFactory<User> {
     public User getSampleEntity() {
         User user = new User();
         user.setName("login name" + counter++);
-        user.setPasswordValue("");
-        user.setFirstName("");
-        user.setLastName("");
-        user.setEmail("");
+        user.setPasswordValue("password");
+        user.setFirstName("first");
+        user.setLastName("last");
+        user.setEmail("mail@mail.pl");
         user.setCreated(new Date());
         return user;
     }
