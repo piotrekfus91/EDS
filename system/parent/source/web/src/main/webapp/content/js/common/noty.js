@@ -11,7 +11,18 @@ function post_message_now(type, text) {
 }
 
 function post_error_from_result(result) {
-    post_message_now('error', result.error_message);
+    var content = result.error_message;
+    var validation_errors = result.validation_errors;
+    if(typeof validation_errors !== 'undefined' && validation_errors.length > 0) {
+        content += "<ul>";
+        $.each(validation_errors, function() {
+            content += "<li>";
+            content += this;
+            content += "</li>";
+        });
+        content += "</ul>";
+    }
+    post_message_now('error', content);
 }
 
 $.noty.defaults = {

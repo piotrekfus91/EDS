@@ -8,27 +8,20 @@ import java.util.List;
 import java.util.Set;
 
 public class ConstraintsViolatedException extends LogicException {
+    private static final String ERROR_MESSAGE = "Wpisane dane są niepoprawne";
+
     private Set<ConstraintViolation<GenericEntity>> errors;
 
     public ConstraintsViolatedException(Set<ConstraintViolation<GenericEntity>> errors) {
-        super(""); // myk na dziedziczenie
+        super(ERROR_MESSAGE);
         this.errors = errors;
     }
 
-    public Set<ConstraintViolation<GenericEntity>> getErrors() {
-        return errors;
-    }
-
-    public List<String> getErrorsAsStrings() {
+    public List<String> getErrors() {
         List<String> constraintViolations = new LinkedList<>();
         for(ConstraintViolation<GenericEntity> constraintViolation : errors) {
             constraintViolations.add(constraintViolation.getMessage());
         }
         return constraintViolations;
-    }
-
-    @Override
-    public String getMessage() {
-        return errors.toString();
     }
 }

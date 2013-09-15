@@ -16,7 +16,7 @@ public class ResultJsonDto {
 
     private Object data;
 
-    @SerializedName("validation_error")
+    @SerializedName("validation_errors")
     private List<String> validationErrors;
 
     public ResultJsonDto() {
@@ -29,7 +29,7 @@ public class ResultJsonDto {
         resultJsonDto.setErrorMessage(errorMessage);
         if(data instanceof ConstraintsViolatedException) {
             ConstraintsViolatedException constraintsViolatedException = (ConstraintsViolatedException) data;
-            resultJsonDto.setValidationErrors(constraintsViolatedException.getErrorsAsStrings());
+            resultJsonDto.setValidationErrors(constraintsViolatedException.getErrors());
         } else if(!(data instanceof Exception)) {
             resultJsonDto.setData(data);
         }
