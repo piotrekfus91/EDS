@@ -15,6 +15,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+import static pl.edu.pw.elka.pfus.eds.web.rest.Rest.responseWithContent;
+
 @Path("/directories")
 public class DirectoryRest {
     private static final Logger logger = Logger.getLogger(DirectoryRest.class);
@@ -38,7 +40,7 @@ public class DirectoryRest {
     public Response getRootDirectoryAndSessionFiles() {
         List<FileSystemEntry> result = directoryService.getRootDirectoryAndSessionDocuments();
         String exported = fileSystemEntryListExporter.exportSuccess(result);
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @GET
@@ -47,7 +49,7 @@ public class DirectoryRest {
     public Response getDirectoriesById(@PathParam("directoryId") int directoryId) {
         List<FileSystemEntry> fileSystemEntriesOfDirectory = directoryService.getFileSystemEntries(directoryId);
         String exportedFileSystemEntries = fileSystemEntryListExporter.exportSuccess(fileSystemEntriesOfDirectory);
-        return Response.status(Response.Status.OK).entity(exportedFileSystemEntries).build();
+        return responseWithContent(exportedFileSystemEntries);
     }
 
     @GET
@@ -56,7 +58,7 @@ public class DirectoryRest {
     public Response getSingleDirectoryById(@PathParam("directoryId") int directoryId) {
         Directory directory = directoryService.getById(directoryId);
         String exportedDirectory = directoryExporter.exportSuccess(directory);
-        return Response.status(Response.Status.OK).entity(exportedDirectory).build();
+        return responseWithContent(exportedDirectory);
     }
 
     @POST
@@ -73,7 +75,7 @@ public class DirectoryRest {
             logger.error(e.getMessage(), e);
             exported = directoryExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @PUT
@@ -89,7 +91,7 @@ public class DirectoryRest {
             logger.error(e.getMessage(), e);
             exported = resultExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @DELETE
@@ -105,7 +107,7 @@ public class DirectoryRest {
             logger.error(e.getMessage(), e);
             exported = fileSystemEntryListExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @PUT
@@ -120,6 +122,6 @@ public class DirectoryRest {
             logger.error(e.getMessage(), e);
             exported = directoryExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 }

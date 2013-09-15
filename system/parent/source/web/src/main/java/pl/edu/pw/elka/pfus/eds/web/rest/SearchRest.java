@@ -12,6 +12,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static pl.edu.pw.elka.pfus.eds.web.rest.Rest.responseWithContent;
+
 @Path("/search")
 public class SearchRest {
     private static final Logger logger = Logger.getLogger(SearchRest.class);
@@ -29,6 +31,6 @@ public class SearchRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Response findTagsByName(@PathParam("name") String name) {
         String exported = tagListExporter.export(searcher.findTagsByName(name));
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 }

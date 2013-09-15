@@ -14,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+import static pl.edu.pw.elka.pfus.eds.web.rest.Rest.responseWithContent;
+
 @Path("/tags")
 public class TagRest {
     private static final Logger logger = Logger.getLogger(TagRest.class);
@@ -37,7 +39,7 @@ public class TagRest {
     public Response getByName(@PathParam("name") String name) {
         Tag tag = tagService.getTagWithLoadedDocuments(name);
         String exported = tagExporter.export(tag);
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @GET
@@ -46,7 +48,7 @@ public class TagRest {
     public Response getAllForAutoComplete(@QueryParam("term") String word) {
         List<Tag> tags = tagService.getSimilars(word);
         String exported = tagListExporter.export(tags);
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @GET
@@ -55,7 +57,7 @@ public class TagRest {
     public Response getAllForTagCloud() {
         List<Tag> tags = tagService.getAllWithLoadedDocuments();
         String exported = tagListExporter.export(tags);
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @PUT
@@ -71,6 +73,6 @@ public class TagRest {
             logger.error(e.getMessage(), e);
             exported = resultExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 }

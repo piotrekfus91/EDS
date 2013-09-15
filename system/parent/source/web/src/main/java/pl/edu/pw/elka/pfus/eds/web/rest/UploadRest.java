@@ -16,6 +16,8 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static pl.edu.pw.elka.pfus.eds.web.rest.Rest.responseWithContent;
+
 @Path("/upload")
 public class UploadRest {
     private static final Logger logger = Logger.getLogger(UploadRest.class);
@@ -41,6 +43,6 @@ public class UploadRest {
             logger.error(e.getMessage(), e);
             exported = pluploadExporter.export(new PluploadJsonDto(e.getMessage()));
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 }

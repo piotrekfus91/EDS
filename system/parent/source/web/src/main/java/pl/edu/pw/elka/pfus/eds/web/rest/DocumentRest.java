@@ -13,6 +13,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static pl.edu.pw.elka.pfus.eds.web.rest.Rest.responseWithContent;
+
 @Path("/documents")
 public class DocumentRest {
     private static final Logger logger = Logger.getLogger(DocumentRest.class);
@@ -41,7 +43,7 @@ public class DocumentRest {
             logger.error(e.getMessage(), e);
             exported = documentExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @GET
@@ -74,7 +76,7 @@ public class DocumentRest {
             logger.error(e.getMessage(), e);
             exported = resultExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @PUT
@@ -91,7 +93,7 @@ public class DocumentRest {
             logger.error(e.getMessage(), e);
             exported = resultExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @DELETE
@@ -107,6 +109,6 @@ public class DocumentRest {
             logger.error(e.getMessage(), e);
             exported = resultExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 }

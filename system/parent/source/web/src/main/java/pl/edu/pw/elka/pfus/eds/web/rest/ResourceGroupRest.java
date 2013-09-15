@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static pl.edu.pw.elka.pfus.eds.web.rest.Rest.responseWithContent;
+
 @Path("/resourceGroups")
 public class ResourceGroupRest {
     private static final Logger logger = Logger.getLogger(ResourceGroupRest.class);
@@ -53,7 +55,7 @@ public class ResourceGroupRest {
     public Response getResourceGroupsFoundedByCurrentUser() {
         List<ResourceGroup> resourceGroups = resourceGroupService.getGroupsWhereCurrentUserHasAnyPrivilege();
         String exported = resourceGroupListExporter.exportSuccess(resourceGroups);
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @GET
@@ -68,7 +70,7 @@ public class ResourceGroupRest {
             logger.error(e.getMessage(), e);
             exported = resourceGroupExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @GET
@@ -77,7 +79,7 @@ public class ResourceGroupRest {
     public Response getUserRoles(@PathParam("groupName") String groupName, @PathParam("userName") String userName) {
         List<RolesGrantedDto> grantedRoles = resourceGroupService.getUserRolesOverResourceGroups(userName, groupName);
         String exported = rolesGrantedExporter.export(grantedRoles);
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @GET
@@ -100,7 +102,7 @@ public class ResourceGroupRest {
 
     private Response returnSharedResourceGroups(List<SharedResourceGroupDto> sharedResourceGroups) {
         String exported = sharedResourceGroupListExporter.exportSuccess(sharedResourceGroups);
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @POST
@@ -118,7 +120,7 @@ public class ResourceGroupRest {
             logger.error(e.getMessage(), e);
             exported = resourceGroupExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @PUT
@@ -137,7 +139,7 @@ public class ResourceGroupRest {
             logger.error(e.getMessage(), e);
             exported = resourceGroupExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @PUT
@@ -170,7 +172,7 @@ public class ResourceGroupRest {
             logger.error(e.getMessage(), e);
             exported = resultExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @PUT
@@ -191,7 +193,7 @@ public class ResourceGroupRest {
             logger.error(e.getMessage(), e);
             exported = resultExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 
     @DELETE
@@ -205,6 +207,6 @@ public class ResourceGroupRest {
         } catch (LogicException e) {
             exported = resourceGroupExporter.exportFailure(e.getMessage(), null);
         }
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 }

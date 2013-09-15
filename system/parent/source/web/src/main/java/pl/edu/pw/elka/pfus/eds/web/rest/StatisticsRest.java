@@ -12,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+import static pl.edu.pw.elka.pfus.eds.web.rest.Rest.responseWithContent;
+
 @Path("/statistics")
 public class StatisticsRest {
     public static final int WEEK_LENGTH = 7;
@@ -31,6 +33,6 @@ public class StatisticsRest {
     public Response getLastWeekUploadStatistics() {
         List<DocumentsNumberInDaysDto> documentsNumberInDaysDtos = statistics.documentsUploadedInLastDays(WEEK_LENGTH);
         String exported = documentsNumberInDaysListExporter.export(documentsNumberInDaysDtos);
-        return Response.status(Response.Status.OK).entity(exported).build();
+        return responseWithContent(exported);
     }
 }
