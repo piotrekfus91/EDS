@@ -256,7 +256,7 @@ public class User extends IdentifableEntity implements Named, Versionable {
 
     @Override
     public int hashCode() {
-        return id;
+        return id != null ? id : 0;
     }
 
     @Override

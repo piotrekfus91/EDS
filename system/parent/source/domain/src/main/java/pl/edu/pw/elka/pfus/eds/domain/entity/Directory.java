@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pfus.eds.domain.entity;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
@@ -14,6 +15,9 @@ import java.util.List;
  */
 public class Directory extends IdentifableEntity implements Versionable, FileSystemEntry {
     private Integer id;
+
+    @NotNull(message = "{file.system.name}")
+    @Length(min = 1, max = 30, message = "{file.system.name}")
     private String name;
     private Integer version;
 
