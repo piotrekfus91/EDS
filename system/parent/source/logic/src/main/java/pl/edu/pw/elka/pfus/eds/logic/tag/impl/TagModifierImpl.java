@@ -17,6 +17,8 @@ import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import java.util.List;
 
+import static pl.edu.pw.elka.pfus.eds.logic.error.handler.ErrorHandler.handle;
+
 public class TagModifierImpl implements TagModifier {
     private static final Logger logger = Logger.getLogger(TagModifierImpl.class);
 
@@ -69,8 +71,7 @@ public class TagModifierImpl implements TagModifier {
             documentDao.commitTransaction();
             tagCache.rebuild();
         } catch (Exception e) {
-            documentDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, documentDao);
             throw new InternalException();
         }
     }

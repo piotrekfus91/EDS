@@ -1,6 +1,5 @@
 package pl.edu.pw.elka.pfus.eds.logic.resource.group.impl;
 
-import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
 import org.objectledge.context.Context;
@@ -14,7 +13,6 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
-import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupModifier;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
@@ -24,6 +22,8 @@ import pl.edu.pw.elka.pfus.eds.security.privilege.Privileges;
 
 import java.util.List;
 import java.util.Map;
+
+import static pl.edu.pw.elka.pfus.eds.logic.error.handler.ErrorHandler.handle;
 
 public class ResourceGroupModifierImpl implements ResourceGroupModifier {
     private static final Logger logger = Logger.getLogger(ResourceGroupModifierImpl.class);
@@ -63,8 +63,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
             resourceGroupDao.commitTransaction();
             return resourceGroup;
         } catch (Exception e) {
-            resourceGroupDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, resourceGroupDao);
             throw new InternalException();
         }
     }
@@ -89,8 +88,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
             resourceGroupDao.commitTransaction();
             return resourceGroup;
         } catch (Exception e) {
-            resourceGroupDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, resourceGroupDao);
             throw new InternalException();
         }
     }
@@ -140,9 +138,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
             }
             resourceGroupDao.commitTransaction();
         } catch (Exception e) {
-            resourceGroupDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
-            Throwables.propagateIfInstanceOf(e, LogicException.class);
+            handle(e, resourceGroupDao);
             throw new InternalException();
         }
     }
@@ -177,9 +173,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
             }
             resourceGroupDao.commitTransaction();
         } catch (Exception e) {
-            resourceGroupDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
-            Throwables.propagateIfInstanceOf(e, LogicException.class);
+            handle(e, resourceGroupDao);
             throw new InternalException();
         }
     }
@@ -204,8 +198,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
             resourceGroupDao.delete(resourceGroup);
             resourceGroupDao.commitTransaction();
         } catch (Exception e) {
-            resourceGroupDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, resourceGroupDao);
             throw new InternalException();
         }
     }

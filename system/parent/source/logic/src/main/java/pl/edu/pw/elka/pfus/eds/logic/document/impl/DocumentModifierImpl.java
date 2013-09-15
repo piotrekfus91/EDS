@@ -11,7 +11,6 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.MimeType;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.document.DocumentModifier;
-import pl.edu.pw.elka.pfus.eds.logic.error.handler.ErrorHandler;
 import pl.edu.pw.elka.pfus.eds.logic.exception.AlreadyExistsException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.mime.type.detector.MimeTypeDetector;
@@ -21,6 +20,8 @@ import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
 import pl.edu.pw.elka.pfus.eds.util.hash.ByteArrayHasher;
 
 import java.util.Date;
+
+import static pl.edu.pw.elka.pfus.eds.logic.error.handler.ErrorHandler.handle;
 
 public class DocumentModifierImpl implements DocumentModifier {
     private static final Logger logger = Logger.getLogger(DocumentModifierImpl.class);
@@ -76,8 +77,7 @@ public class DocumentModifierImpl implements DocumentModifier {
             fileManager.create(input, document.getFileSystemName());
             documentDao.commitTransaction();
         } catch (Exception e) {
-            documentDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, documentDao);
             fileManager.delete(document.getFileSystemName(), document.getContentMd5());
             throw new InternalException();
         }
@@ -99,7 +99,8 @@ public class DocumentModifierImpl implements DocumentModifier {
             documentDao.persist(document);
             documentDao.commitTransaction();
         } catch (Exception e) {
-            ErrorHandler.handle(e, documentDao);
+            handle(e, documentDao);
+            throw new InternalException();
         }
     }
 
@@ -140,8 +141,7 @@ public class DocumentModifierImpl implements DocumentModifier {
             directoryDao.persist(destinationDirectory);
             directoryDao.commitTransaction();
         } catch(Exception e) {
-            directoryDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, directoryDao);
             throw new InternalException();
         }
     }
@@ -160,8 +160,7 @@ public class DocumentModifierImpl implements DocumentModifier {
             fileManager.delete(document.getFileSystemName(), document.getContentMd5());
             documentDao.commitTransaction();
         } catch (Exception e) {
-            documentDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, documentDao);
             throw new InternalException();
         }
     }
@@ -175,8 +174,7 @@ public class DocumentModifierImpl implements DocumentModifier {
             documentDao.deleteSessionDocuments(currentUser);
             documentDao.commitTransaction();
         } catch (Exception e) {
-            documentDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, documentDao);
             throw new InternalException();
         }
     }

@@ -17,6 +17,8 @@ import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import java.util.List;
 
+import static pl.edu.pw.elka.pfus.eds.logic.error.handler.ErrorHandler.handle;
+
 public class DirectoryModifierImpl implements DirectoryModifier {
     private static final Logger logger = Logger.getLogger(DirectoryModifierImpl.class);
     private DirectoryDao directoryDao;
@@ -55,8 +57,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
             directoryDao.commitTransaction();
             return directory;
         } catch (Exception e) {
-            directoryDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, directoryDao);
             throw new InternalException();
         }
     }
@@ -88,8 +89,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
             logger.info("removed directory with id " + id + " and name " + directory.getName());
             return parentDirectory;
         } catch (Exception e) {
-            directoryDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, directoryDao);
             throw new InternalException();
         }
     }
@@ -125,8 +125,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
             directoryDao.persist(destinationDirectory);
             directoryDao.commitTransaction();
         } catch (Exception e) {
-            directoryDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, directoryDao);
             throw new InternalException();
         }
     }
@@ -150,8 +149,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
             directoryDao.commitTransaction();
             return directory;
         } catch (Exception e) {
-            directoryDao.rollbackTransaction();
-            logger.error(e.getMessage(), e);
+            handle(e, directoryDao);
             throw new InternalException();
         }
     }
