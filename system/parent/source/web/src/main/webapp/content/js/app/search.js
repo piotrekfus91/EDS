@@ -9,7 +9,6 @@ $(document).ready(function() {
             search_tags_by_name(content_to_search);
         else if($('#radio_names').is(':checked'))
             search_file_names(content_to_search);
-        $('#radio_button_set').buttonset("refresh");
     });
     open_lazy();
 });
@@ -18,6 +17,7 @@ function search_tags_by_name(name) {
     $('#search_results').accordion();
     $('#search_value_input').val(name);
     $('#radio_tags').prop('checked', true);
+    $('#radio_button_set').buttonset("refresh");
     $.ajax({
         type: "GET",
         url: rest('/search/tags/' + name),
@@ -27,7 +27,7 @@ function search_tags_by_name(name) {
         error: function() {
             post_message_now('error', 'Błąd przy wczytywaniu wyników wyszukiwania');
         }
-    })
+    });
 }
 
 function post_tag_search_results(tags) {
@@ -113,13 +113,9 @@ function post_search_result(title, documents) {
     search_results_div.html('');
     append_search_results(search_results_div, title, documents);
     search_results_div.accordion({
-        collapsible: true,
+        collapsible: false,
         heightStyle: "content",
         active: true
-    });
-    $("h3", "#search_results").click(function() {
-        var active_div = $(this).next('div');
-        var active_tag = $(this).find("a").attr("title");
     });
     search_results_div.css('display', 'block');
 }
@@ -135,7 +131,7 @@ function append_search_results(search_results_div, title, documents) {
         append += "<ul>";
             $.each(documents, function() {
                 append += "<li>";
-                    append += "<a href=\"#\">"
+                    append += "<a href=\"" + this.url + "\">"
                         append += this.title;
                     append += "</a>";
                 append += "</li>";

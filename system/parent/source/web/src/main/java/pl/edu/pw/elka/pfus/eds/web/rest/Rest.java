@@ -10,4 +10,8 @@ public class Rest {
     public static Response responseWithContent(String content) {
         return Response.status(Response.Status.OK).entity(content).build();
     }
+
+    public static String downloadUrl(Integer id) {
+        return rest("/documents/download/" + id);
+    }
 }
