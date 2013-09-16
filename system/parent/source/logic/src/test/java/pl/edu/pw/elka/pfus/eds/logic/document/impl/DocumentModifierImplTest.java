@@ -16,6 +16,7 @@ import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidMimeTypeException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
 import pl.edu.pw.elka.pfus.eds.logic.mime.type.detector.MimeTypeDetector;
+import pl.edu.pw.elka.pfus.eds.logic.search.Indexer;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
 import pl.edu.pw.elka.pfus.eds.util.hash.ByteArrayHasher;
@@ -36,6 +37,7 @@ public class DocumentModifierImplTest {
     private SecurityFacade securityFacade;
     private Context context;
     private ByteArrayHasher hasher;
+    private Indexer indexer;
     private FileManager fileManager;
     private User user;
     private MimeType mimeType;
@@ -62,9 +64,10 @@ public class DocumentModifierImplTest {
         securityFacade = getSecurityFacade();
         hasher = getHasher();
         fileManager = getFileManager();
+        indexer = getIndexer();
         context = getContext();
         documentModifier = new DocumentModifierImpl(documentDao, mimeTypeDao, directoryDao, userDao, securityFacade,
-                fileManager, mimeTypeDetector, hasher, context);
+                fileManager, mimeTypeDetector, hasher, indexer, context);
     }
 
     @Test(expectedExceptions = InvalidMimeTypeException.class)
@@ -253,6 +256,10 @@ public class DocumentModifierImplTest {
 
     private FileManager getFileManager() {
         return mock(FileManager.class);
+    }
+
+    private Indexer getIndexer() {
+        return mock(Indexer.class);
     }
 
     private ByteArrayHasher getHasher() {

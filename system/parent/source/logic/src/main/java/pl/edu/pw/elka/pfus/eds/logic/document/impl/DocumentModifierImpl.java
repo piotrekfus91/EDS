@@ -14,6 +14,7 @@ import pl.edu.pw.elka.pfus.eds.logic.document.DocumentModifier;
 import pl.edu.pw.elka.pfus.eds.logic.exception.AlreadyExistsException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.mime.type.detector.MimeTypeDetector;
+import pl.edu.pw.elka.pfus.eds.logic.search.Indexer;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
@@ -33,11 +34,13 @@ public class DocumentModifierImpl implements DocumentModifier {
     private FileManager fileManager;
     private MimeTypeDetector mimeTypeDetector;
     private ByteArrayHasher hasher;
+    private Indexer indexer;
     private Context context;
 
     public DocumentModifierImpl(DocumentDao documentDao, MimeTypeDao mimeTypeDao, DirectoryDao directoryDao,
                                 UserDao userDao, SecurityFacade securityFacade, FileManager fileManager,
-                                MimeTypeDetector mimeTypeDetector, ByteArrayHasher hasher, Context context) {
+                                MimeTypeDetector mimeTypeDetector, ByteArrayHasher hasher, Indexer indexer,
+                                Context context) {
         this.documentDao = documentDao;
         this.mimeTypeDao = mimeTypeDao;
         this.directoryDao = directoryDao;
@@ -46,6 +49,7 @@ public class DocumentModifierImpl implements DocumentModifier {
         this.fileManager = fileManager;
         this.mimeTypeDetector = mimeTypeDetector;
         this.hasher = hasher;
+        this.indexer = indexer;
         this.context = context;
     }
 
@@ -76,6 +80,7 @@ public class DocumentModifierImpl implements DocumentModifier {
             mimeTypeDao.persist(mimeType);
             fileManager.create(input, document.getFileSystemName());
             documentDao.commitTransaction();
+            indexer.index(document);
         } catch (Exception e) {
             handle(e, documentDao);
             fileManager.delete(document.getFileSystemName(), document.getContentMd5());
