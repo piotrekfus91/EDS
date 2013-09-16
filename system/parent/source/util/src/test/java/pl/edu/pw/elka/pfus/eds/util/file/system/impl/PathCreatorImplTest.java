@@ -16,12 +16,14 @@ import static org.fest.assertions.Assertions.assertThat;
 public class PathCreatorImplTest {
     private PathCreatorImpl pathCreator;
     private static final String ROOT_DIR = System.getProperty("java.io.tmpdir") + File.separator + "eds";
+    private static final String INDEX_DIR = System.getProperty("java.io.tmpdir") + File.separator + "eds" + File.separator + "index";
     public static final String SAMPLE_PATH = ROOT_DIR + File.separator + "sample";
 
     @BeforeMethod
     private void setUp() {
         Map<String, String> configMap = new HashMap<>();
         configMap.put("file_system_root", ROOT_DIR);
+        configMap.put("index_dir", INDEX_DIR);
         pathCreator = new PathCreatorImpl(new MapConfig(configMap));
         File file = new File(ROOT_DIR);
         file.mkdir();
