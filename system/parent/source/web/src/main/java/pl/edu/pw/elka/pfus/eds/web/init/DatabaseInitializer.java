@@ -132,7 +132,6 @@ public class DatabaseInitializer implements Startable {
                 polishDocument.setDirectory(documentsDirectory);
                 documentsDirectory.addDocument(polishDocument);
                 saveDocumentToRepository(polishDocument);
-                indexer.index(polishDocument);
 
                 Directory schoolDocumentsDirectory = new Directory();
                 schoolDocumentsDirectory.setName("szkolne");
@@ -154,7 +153,6 @@ public class DatabaseInitializer implements Startable {
                         pdiDirectory.addDocument(thesisDocument);
                         thesisDocument.setDirectory(pdiDirectory);
                         saveDocumentToRepository(thesisDocument);
-                        indexer.index(thesisDocument);
 
                         Document technologiesDocument = new Document();
                         technologiesDocument.setName("technologie.tex");
@@ -170,7 +168,6 @@ public class DatabaseInitializer implements Startable {
                         technologiesDocument.setDirectory(pdiDirectory);
                         pdiDirectory.addDocument(technologiesDocument);
                         saveDocumentToRepository(technologiesDocument);
-                        indexer.index(technologiesDocument);
                         for(int i = 0; i < 7; i++) {
                             Directory semDirectory = new Directory();
                             semDirectory.setName("Semestr " + (i+1));
@@ -196,7 +193,6 @@ public class DatabaseInitializer implements Startable {
                     lfcTag.addDocument(gerrard20);
                     gerrard20.addTag(wallpaperTag);
                     wallpaperTag.addDocument(gerrard20);
-                    indexer.index(gerrard20);
 
                     Document lfc_226410 = new Document();
                     lfc_226410.setName("lfc_226410.jpg");
@@ -224,7 +220,6 @@ public class DatabaseInitializer implements Startable {
                     }
                     lfc_226410.addTag(lfcTag);
                     lfcTag.addDocument(lfc_226410);
-                    indexer.index(lfc_226410);
 
             Directory filesDirectory = new Directory();
             filesDirectory.setName("pliki");
@@ -249,7 +244,6 @@ public class DatabaseInitializer implements Startable {
                 liverpoolWallpaperDocument.setDirectory(lfcDirectory);
                 lfcDirectory.addDocument(liverpoolWallpaperDocument);
                 liverpoolWallpaperDocument.setOwner(johnnyUser);
-                indexer.index(liverpoolWallpaperDocument);
 
             ResourceGroup lfcFansRG = new ResourceGroup();
             lfcFansRG.setFounder(rootUser);
@@ -273,6 +267,13 @@ public class DatabaseInitializer implements Startable {
             directoryDao.commitTransaction();
 
             tagCache.rebuild();
+
+            indexer.index(polishDocument);
+            indexer.index(technologiesDocument);
+            indexer.index(thesisDocument);
+            indexer.index(liverpoolWallpaperDocument);
+            indexer.index(gerrard20);
+            indexer.index(lfc_226410);
         } catch (Exception e) {
             throw new ExceptionInInitializerError(e);
         }

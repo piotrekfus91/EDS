@@ -61,7 +61,7 @@ public class LuceneSearcher implements Searcher {
             logger.info("searching for title: " + title);
             try {
                 List<DocumentSearchDto> searchedDocuments = new LinkedList<>();
-                TopDocs topDocs = getTopDocsForTitle(title);
+                TopDocs topDocs = getTopDocs(title, LuceneConstants.TITLE_FIELD);
                 for(ScoreDoc scoreDoc : topDocs.scoreDocs) {
                     Document document = indexSearcher.doc(scoreDoc.doc);
                     DocumentSearchDto documentSearchDto = getDtoFromDocument(document);
@@ -86,15 +86,15 @@ public class LuceneSearcher implements Searcher {
         return new DocumentSearchDto(docId, docTitle);
     }
 
-    private TopDocs getTopDocsForTitle(String title) throws IOException, ParseException {
-        Iterable<String> splitTitle = Splitter.on(Pattern.compile("\\s+")).omitEmptyStrings().trimResults().split(title);
+    private TopDocs getTopDocs(String value, String field) throws IOException, ParseException {
+        Iterable<String> splitTitle = Splitter.on(Pattern.compile("\\s+")).omitEmptyStrings().trimResults().split(value);
         String titleQuery = Joiner.on("* *").join(splitTitle);
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
-        QueryParser queryParser = new QueryParser(Version.LUCENE_44, LuceneConstants.TITLE_FIELD, analyzer);
+        QueryParser queryParser = new QueryParser(Version.LUCENE_44, field, analyzer);
         queryParser.setDefaultOperator(QueryParser.Operator.OR);
         queryParser.setAllowLeadingWildcard(true);
         Query query = queryParser.parse("*" + titleQuery + "*");
-        logger.info("parsed query for title <" + title + "> is: " + query);
+        logger.info("parsed query for value <" + value + "> is: " + query);
         return indexSearcher.search(query, LuceneConstants.DEFAULT_HITS_NUMBER);
     }
 }
