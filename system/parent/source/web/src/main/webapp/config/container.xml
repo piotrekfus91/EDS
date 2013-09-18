@@ -86,6 +86,10 @@
                class="pl.edu.pw.elka.pfus.eds.logic.search.impl.LuceneIndexer" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.search.Searcher"
                class="pl.edu.pw.elka.pfus.eds.logic.search.impl.LuceneSearcher" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.search.Extractor"
+               class="pl.edu.pw.elka.pfus.eds.logic.search.impl.TikaExtractor" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.search.NationalCharacterReplacer"
+               class="pl.edu.pw.elka.pfus.eds.logic.search.impl.PolishCharacterReplacer" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.search.SearchService"
                class="pl.edu.pw.elka.pfus.eds.logic.search.impl.SearchServiceImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.statistics.Statistics"

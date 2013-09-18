@@ -20,6 +20,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
+import pl.edu.pw.elka.pfus.eds.logic.search.NationalCharacterReplacer;
 import pl.edu.pw.elka.pfus.eds.logic.search.Searcher;
 import pl.edu.pw.elka.pfus.eds.logic.search.dto.DocumentSearchDto;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
@@ -38,15 +39,18 @@ public class LuceneSearcher implements Searcher {
     private IndexReader indexReader;
     private IndexSearcher indexSearcher;
     private Directory directory;
+    private NationalCharacterReplacer characterReplacer;
 
-    public LuceneSearcher(Config config) throws IOException {
+    public LuceneSearcher(Config config, NationalCharacterReplacer characterReplacer) throws IOException {
+        this.characterReplacer = characterReplacer;
         indexDir = config.getString("index_dir");
         indexDir = PathHelper.countFileSystemRoot(indexDir);
         directory = FSDirectory.open(new File(indexDir));
     }
 
-    public LuceneSearcher(Directory directory) {
+    public LuceneSearcher(Directory directory, NationalCharacterReplacer characterReplacer) {
         this.directory = directory;
+        this.characterReplacer = characterReplacer;
     }
 
     private void setupIndexReaderAndSearcher() throws IOException {
@@ -56,18 +60,26 @@ public class LuceneSearcher implements Searcher {
 
     @Override
     public List<DocumentSearchDto> findByTitle(String title) {
+        return findByField(title, LuceneConstants.TITLE_FIELD);
+    }
+
+    @Override
+    public List<DocumentSearchDto> findByContent(String content) {
+        return findByField(content, LuceneConstants.CONTENT_FIELD);
+    }
+
+    private List<DocumentSearchDto> findByField(String value, final String FIELD) {
         try {
             setupIndexReaderAndSearcher();
-            logger.info("searching for title: " + title);
+            value = characterReplacer.replaceAll(value);
             try {
                 List<DocumentSearchDto> searchedDocuments = new LinkedList<>();
-                TopDocs topDocs = getTopDocs(title, LuceneConstants.TITLE_FIELD);
+                TopDocs topDocs = getTopDocs(value, FIELD);
                 for(ScoreDoc scoreDoc : topDocs.scoreDocs) {
                     Document document = indexSearcher.doc(scoreDoc.doc);
                     DocumentSearchDto documentSearchDto = getDtoFromDocument(document);
                     searchedDocuments.add(documentSearchDto);
                 }
-                logger.info("searching for title <" + title + ">, found: " + searchedDocuments);
                 return searchedDocuments;
             } finally {
                 indexReader.close();

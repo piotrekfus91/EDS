@@ -33,6 +33,11 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public List<DocumentSearchDto> findByContent(String content) {
+        return searcher.findByContent(content);
+    }
+
+    @Override
     public List<Tag> findTagsByName(String name) {
         return tagSearcher.findTagsByName(name);
     }

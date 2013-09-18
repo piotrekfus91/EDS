@@ -13,10 +13,7 @@ import pl.edu.pw.elka.pfus.eds.util.file.system.PathHelper;
 import pl.edu.pw.elka.pfus.eds.util.file.system.exception.FileSystemException;
 import pl.edu.pw.elka.pfus.eds.util.hash.ByteArrayHasher;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 public class FileManagerImpl implements FileManager {
     private static final Logger logger = Logger.getLogger(FileManagerImpl.class);
@@ -69,6 +66,11 @@ public class FileManagerImpl implements FileManager {
             logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public InputStream getAsStream(String fileName, String hash) {
+        return new ByteArrayInputStream(getAsByteArray(fileName, hash));
     }
 
     private File createFileFromByteArray(byte[] input, String fullPath) {

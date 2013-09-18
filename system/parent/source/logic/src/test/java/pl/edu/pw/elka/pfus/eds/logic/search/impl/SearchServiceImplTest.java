@@ -5,17 +5,23 @@ import org.apache.lucene.store.RAMDirectory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.logic.search.Extractor;
+import pl.edu.pw.elka.pfus.eds.logic.search.NationalCharacterReplacer;
 import pl.edu.pw.elka.pfus.eds.logic.search.dto.DocumentSearchDto;
 
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class SearchServiceImplTest {
     private PlainJavaTagSearcher tagSearcher;
     private LuceneIndexer indexer;
     private LuceneSearcher searcher;
+    private Extractor extractor;
+    private NationalCharacterReplacer characterReplacer;
     private SearchServiceImpl searchService;
     private Directory directory;
 
@@ -23,9 +29,13 @@ public class SearchServiceImplTest {
     public void setUp() throws Exception {
         directory = new RAMDirectory();
         tagSearcher = mock(PlainJavaTagSearcher.class);
-        indexer = new LuceneIndexer(directory);
-        searcher = new LuceneSearcher(directory);
+        extractor = mock(Extractor.class);
+        characterReplacer = new PolishCharacterReplacer();
+        indexer = new LuceneIndexer(directory, extractor, characterReplacer);
+        searcher = new LuceneSearcher(directory, characterReplacer);
         searchService = new SearchServiceImpl(indexer, searcher, tagSearcher);
+
+        replyMocks();
     }
 
     @Test
@@ -46,6 +56,24 @@ public class SearchServiceImplTest {
 
         searchResult = searchService.findByTitle("second first");
         assertThat(searchResult.size()).isEqualTo(3);
+
+        searchResult = searchService.findByContent("a");
+        assertThat(searchResult.size()).isEqualTo(4);
+
+        searchResult = searchService.findByContent("abcdef");
+        assertThat(searchResult.size()).isEqualTo(1);
+
+        searchResult = searchService.findByContent("zażółć");
+        assertThat(searchResult.size()).isEqualTo(1);
+
+        searchResult = searchService.findByContent("zazolc");
+        assertThat(searchResult.size()).isEqualTo(1);
+
+        searchResult = searchService.findByContent("dw");
+        assertThat(searchResult.size()).isEqualTo(2);
+
+        searchResult = searchService.findByContent("jfdksjfldsf");
+        assertThat(searchResult.size()).isEqualTo(0);
     }
 
     private Document createDocument(int id, String name) {
@@ -53,5 +81,11 @@ public class SearchServiceImplTest {
         document.setId(id);
         document.setName(name);
         return document;
+    }
+
+    private void replyMocks() {
+        when(extractor.extract(any(Document.class))).thenReturn("abcdef")
+                .thenReturn("zażółć gęślą jaźń")
+                .thenReturn("dwa razy");
     }
 }

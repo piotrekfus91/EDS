@@ -47,6 +47,19 @@ public class SearchRest {
     public Response findDocumentsByTitle(@PathParam("title") String title) {
         logger.info("searching for title: " + title);
         List<DocumentSearchDto> searchedDocuments = searchService.findByTitle(title);
+        return responseFromSearchResults(searchedDocuments);
+    }
+
+    @GET
+    @Path("/content/{content}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findDocumentsByContent(@PathParam("content") String content) {
+        logger.info("searching for content: " + content);
+        List<DocumentSearchDto> searchedDocuments = searchService.findByContent(content);
+        return responseFromSearchResults(searchedDocuments);
+    }
+
+    private Response responseFromSearchResults(List<DocumentSearchDto> searchedDocuments) {
         String exported = documentSearchListExporter.exportSuccess(searchedDocuments);
         return responseWithContent(exported);
     }

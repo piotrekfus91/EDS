@@ -4,11 +4,13 @@ $(document).ready(function() {
     $('#search').css('display', 'block');
 
     $('#searcher').click(function() {
-        var content_to_search = $('#search_value_input').val();
+        var value_to_search = $('#search_value_input').val();
         if($('#radio_tags').is(':checked'))
-            search_tags_by_name(content_to_search);
+            search_tags_by_name(value_to_search);
         else if($('#radio_names').is(':checked'))
-            search_file_names(content_to_search);
+            search_files(value_to_search, 'title');
+        else if($('#radio_content').is(':checked'))
+            search_files(value_to_search, 'content');
     });
     open_lazy();
 });
@@ -88,17 +90,17 @@ function load_tag_info(div, tagName) {
     div.append(append);
 }
 
-function search_file_names(title) {
-    if(!title) return;
+function search_files(value, where) {
+    if(!value) return;
 
     $('#search_results').accordion();
 
     $.ajax({
         type: "GET",
-        url: rest("/search/title/" + title),
+        url: rest("/search/" + where + "/" + value),
         async: false,
         success: function(result) {
-            post_search_result(title, result.data);
+            post_search_result(value, result.data);
         },
         error: function() {
             post_message_now('error', 'Błąd przy wczytywaniu wyników wyszukiwania');

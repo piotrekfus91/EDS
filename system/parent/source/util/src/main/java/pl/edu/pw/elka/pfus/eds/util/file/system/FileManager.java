@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.util.file.system;
 
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * Interfejs pozwalający na tworzenie plików w systemie
@@ -23,9 +24,18 @@ public interface FileManager {
      *
      * @param fileName nazwa pliku.
      * @param hash hash pliku.
-     * @return tablicaa bajtów zawartości pliku.
+     * @return tablica bajtów zawartości pliku.
      */
     byte[] getAsByteArray(String fileName, String hash);
+
+    /**
+     * Zwraca plik w postaci strumienia.
+     *
+     * @param fileName nazwa pliku.
+     * @param hash hash pliku.
+     * @return strumień z zawartości pliku.
+     */
+    InputStream getAsStream(String fileName, String hash);
 
     /**
      * Usuwa plik o podanej nazwie z podanej za pomocą skrótu ścieżĸi.

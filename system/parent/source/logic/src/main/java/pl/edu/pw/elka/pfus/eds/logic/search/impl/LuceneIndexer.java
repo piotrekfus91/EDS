@@ -12,7 +12,9 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.logic.search.Extractor;
 import pl.edu.pw.elka.pfus.eds.logic.search.Indexer;
+import pl.edu.pw.elka.pfus.eds.logic.search.NationalCharacterReplacer;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
 import pl.edu.pw.elka.pfus.eds.util.file.system.PathHelper;
 
@@ -25,15 +27,22 @@ public class LuceneIndexer implements Indexer {
     private String indexDir;
     private IndexWriter indexWriter;
     private Directory directory;
+    private Extractor extractor;
+    private NationalCharacterReplacer characterReplacer;
 
-    public LuceneIndexer(Config config) throws IOException {
+    public LuceneIndexer(Config config, Extractor extractor, NationalCharacterReplacer characterReplacer)
+            throws IOException {
+        this.extractor = extractor;
+        this.characterReplacer = characterReplacer;
         indexDir = config.getString("index_dir");
         indexDir = PathHelper.countFileSystemRoot(indexDir);
         directory = FSDirectory.open(new File(indexDir));
     }
 
-    public LuceneIndexer(Directory directory) {
+    public LuceneIndexer(Directory directory, Extractor extractor, NationalCharacterReplacer characterReplacer) {
         this.directory = directory;
+        this.extractor = extractor;
+        this.characterReplacer = characterReplacer;
     }
 
     @Override
@@ -41,8 +50,15 @@ public class LuceneIndexer implements Indexer {
         logger.info("indexing document: " + document.getName());
         setupIndexWriter();
         org.apache.lucene.document.Document luceneDocument = new org.apache.lucene.document.Document();
-        luceneDocument.add(new IntField(LuceneConstants.ID_FIELD, document.getId(), Field.Store.YES));
-        luceneDocument.add(new StringField(LuceneConstants.TITLE_FIELD, document.getName(), Field.Store.YES));
+
+        Integer id = document.getId();
+        String title = document.getName();
+        String content = characterReplacer.replaceAll(extractor.extract(document));
+
+        luceneDocument.add(new IntField(LuceneConstants.ID_FIELD, id, Field.Store.YES));
+        luceneDocument.add(new StringField(LuceneConstants.TITLE_FIELD, title, Field.Store.YES));
+        luceneDocument.add(new StringField(LuceneConstants.CONTENT_FIELD, content, Field.Store.YES));
+
         indexWriter.addDocument(luceneDocument);
         indexWriter.commit();
         indexWriter.close();

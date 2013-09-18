@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface Searcher {
     List<DocumentSearchDto> findByTitle(String title);
+
+    List<DocumentSearchDto> findByContent(String content);
 }
