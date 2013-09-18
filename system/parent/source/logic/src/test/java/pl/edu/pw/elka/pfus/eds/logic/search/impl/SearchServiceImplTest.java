@@ -2,12 +2,15 @@ package pl.edu.pw.elka.pfus.eds.logic.search.impl;
 
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.objectledge.context.Context;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.logic.document.DownloadPrivilegeManager;
 import pl.edu.pw.elka.pfus.eds.logic.search.Extractor;
 import pl.edu.pw.elka.pfus.eds.logic.search.NationalCharacterReplacer;
 import pl.edu.pw.elka.pfus.eds.logic.search.dto.DocumentSearchDto;
+import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 
 import java.util.List;
 
@@ -23,6 +26,9 @@ public class SearchServiceImplTest {
     private Extractor extractor;
     private NationalCharacterReplacer characterReplacer;
     private SearchServiceImpl searchService;
+    private DownloadPrivilegeManager downloadPrivilegeManager;
+    private SecurityFacade securityFacade;
+    private Context context;
     private Directory directory;
 
     @BeforeMethod
@@ -30,9 +36,12 @@ public class SearchServiceImplTest {
         directory = new RAMDirectory();
         tagSearcher = mock(PlainJavaTagSearcher.class);
         extractor = mock(Extractor.class);
+        downloadPrivilegeManager = mock(DownloadPrivilegeManager.class);
+        securityFacade = mock(SecurityFacade.class);
+        context = mock(Context.class);
         characterReplacer = new PolishCharacterReplacer();
         indexer = new LuceneIndexer(directory, extractor, characterReplacer);
-        searcher = new LuceneSearcher(directory, characterReplacer);
+        searcher = new LuceneSearcher(directory, characterReplacer, downloadPrivilegeManager, securityFacade, context);
         searchService = new SearchServiceImpl(indexer, searcher, tagSearcher);
 
         replyMocks();

@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.pfus.eds.logic.document.impl;
 
+import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
@@ -13,9 +14,11 @@ import java.util.Set;
 
 public class DownloadPrivilegeManagerImpl implements DownloadPrivilegeManager {
     private PrivilegeService privilegeService;
+    private DocumentDao documentDao;
 
-    public DownloadPrivilegeManagerImpl(PrivilegeService privilegeService) {
+    public DownloadPrivilegeManagerImpl(PrivilegeService privilegeService, DocumentDao documentDao) {
         this.privilegeService = privilegeService;
+        this.documentDao = documentDao;
     }
 
     @Override
@@ -27,6 +30,12 @@ public class DownloadPrivilegeManagerImpl implements DownloadPrivilegeManager {
             return true;
 
         return false;
+    }
+
+    @Override
+    public boolean canDownload(User user, int documentId) {
+        Document document = documentDao.findById(documentId);
+        return canDownload(user, document);
     }
 
     @Override

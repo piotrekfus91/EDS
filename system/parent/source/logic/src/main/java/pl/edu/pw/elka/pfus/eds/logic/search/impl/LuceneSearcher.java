@@ -19,10 +19,14 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.objectledge.context.Context;
+import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.logic.document.DownloadPrivilegeManager;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.search.NationalCharacterReplacer;
 import pl.edu.pw.elka.pfus.eds.logic.search.Searcher;
 import pl.edu.pw.elka.pfus.eds.logic.search.dto.DocumentSearchDto;
+import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
 import pl.edu.pw.elka.pfus.eds.util.file.system.PathHelper;
 
@@ -40,17 +44,30 @@ public class LuceneSearcher implements Searcher {
     private IndexSearcher indexSearcher;
     private Directory directory;
     private NationalCharacterReplacer characterReplacer;
+    private DownloadPrivilegeManager downloadPrivilegeManager;
+    private SecurityFacade securityFacade;
+    private Context context;
 
-    public LuceneSearcher(Config config, NationalCharacterReplacer characterReplacer) throws IOException {
+    public LuceneSearcher(Config config, NationalCharacterReplacer characterReplacer,
+                          DownloadPrivilegeManager downloadPrivilegeManager,
+                          SecurityFacade securityFacade, Context context) throws IOException {
         this.characterReplacer = characterReplacer;
+        this.downloadPrivilegeManager = downloadPrivilegeManager;
+        this.securityFacade = securityFacade;
+        this.context = context;
         indexDir = config.getString("index_dir");
         indexDir = PathHelper.countFileSystemRoot(indexDir);
         directory = FSDirectory.open(new File(indexDir));
     }
 
-    public LuceneSearcher(Directory directory, NationalCharacterReplacer characterReplacer) {
+    public LuceneSearcher(Directory directory, NationalCharacterReplacer characterReplacer,
+                          DownloadPrivilegeManager downloadPrivilegeManager, SecurityFacade securityFacade,
+                          Context context) {
         this.directory = directory;
         this.characterReplacer = characterReplacer;
+        this.downloadPrivilegeManager = downloadPrivilegeManager;
+        this.securityFacade = securityFacade;
+        this.context = context;
     }
 
     private void setupIndexReaderAndSearcher() throws IOException {
@@ -69,6 +86,8 @@ public class LuceneSearcher implements Searcher {
     }
 
     private List<DocumentSearchDto> findByField(String value, final String FIELD) {
+        User currentUser = securityFacade.getCurrentUser(context);
+
         try {
             setupIndexReaderAndSearcher();
             value = characterReplacer.replaceAll(value);
@@ -77,8 +96,12 @@ public class LuceneSearcher implements Searcher {
                 TopDocs topDocs = getTopDocs(value, FIELD);
                 for(ScoreDoc scoreDoc : topDocs.scoreDocs) {
                     Document document = indexSearcher.doc(scoreDoc.doc);
-                    DocumentSearchDto documentSearchDto = getDtoFromDocument(document);
-                    searchedDocuments.add(documentSearchDto);
+                    StoredField idField = (StoredField) document.getField(LuceneConstants.ID_FIELD);
+                    int docId = idField.numericValue().intValue();
+                    if(downloadPrivilegeManager.canDownload(currentUser, docId)) {
+                        DocumentSearchDto documentSearchDto = getDtoFromDocument(document);
+                        searchedDocuments.add(documentSearchDto);
+                    }
                 }
                 return searchedDocuments;
             } finally {

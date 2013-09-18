@@ -19,6 +19,15 @@ public interface DownloadPrivilegeManager {
     boolean canDownload(User user, Document document);
 
     /**
+     * Zwraca informację, czy użytkownik może sciągąć dokument.
+     *
+     * @param user użytkownik.
+     * @param documentId id dokumentu.
+     * @return czy użytkownik może pobrać dokument.
+     */
+    boolean canDownload(User user, int documentId);
+
+    /**
      * Filtruje dokumenty na podstawie dostępności dla danego użytkownika.
      * Zwraca listę tylko tych dostępnych.
      *
