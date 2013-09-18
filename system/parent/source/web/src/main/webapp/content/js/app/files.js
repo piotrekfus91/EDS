@@ -38,15 +38,20 @@ function init_tree(root) {
             bind_context_menu_for_file_system_entries(span);
         },
         onLazyRead: function (node) {
-            var children = get_children(node.data.key);
-            if(children.length > 0) {
-                $.each(children, function() {
-                    node.addChild(this);
-                });
-                node.sortChildren(compare_nodes_by_title, false);
+            if(node.data.isFolder) {
+                var children = get_children(node.data.key);
+                if(children.length > 0) {
+                    $.each(children, function() {
+                        node.addChild(this);
+                    });
+                    node.sortChildren(compare_nodes_by_title, false);
+                } else {
+                    // myk na zablokowanie "koleczka wczytywania ajax"
+                    node.expand(false);
+                    node.expand(true);
+                }
             } else {
                 node.expand(false);
-                node.expand(true);
             }
         },
         onPostInit: function (isReloading, isError) {
@@ -59,10 +64,11 @@ function init_tree(root) {
         },
         onActivate: function (node) {
             currentNode = node;
-            if(node.data.isFolder)
+            if(node.data.isFolder) {
                 update_directory_info(node.data.key);
-            else
+            } else {
                 update_document_info(node.data.key);
+            }
         },
         dnd: {
             onDragStart: function () {

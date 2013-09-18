@@ -6,6 +6,7 @@ import org.objectledge.context.Context;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
+import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.document.DownloadPrivilegeManager;
 import pl.edu.pw.elka.pfus.eds.logic.search.Extractor;
 import pl.edu.pw.elka.pfus.eds.logic.search.NationalCharacterReplacer;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -96,5 +98,6 @@ public class SearchServiceImplTest {
         when(extractor.extract(any(Document.class))).thenReturn("abcdef")
                 .thenReturn("zażółć gęślą jaźń")
                 .thenReturn("dwa razy");
+        when(downloadPrivilegeManager.canDownload(any(User.class), anyInt())).thenReturn(true);
     }
 }
