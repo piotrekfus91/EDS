@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pfus.eds.web.rest;
 
 import org.apache.log4j.Logger;
+import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.logic.search.SearchService;
 import pl.edu.pw.elka.pfus.eds.logic.search.dto.DocumentSearchDto;
 import pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDocumentSearchListExporter;
@@ -46,8 +47,12 @@ public class SearchRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Response findDocumentsByTitle(@PathParam("title") String title) {
         logger.info("searching for title: " + title);
-        List<DocumentSearchDto> searchedDocuments = searchService.findByTitle(title);
-        return responseFromSearchResults(searchedDocuments);
+        try {
+            List<DocumentSearchDto> searchedDocuments = searchService.findByTitle(title);
+            return responseFromSearchResults(searchedDocuments);
+        } catch (LogicException e) {
+            return responseWithContent(documentSearchListExporter.exportFailure(e));
+        }
     }
 
     @GET
@@ -55,8 +60,12 @@ public class SearchRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Response findDocumentsByContent(@PathParam("content") String content) {
         logger.info("searching for content: " + content);
-        List<DocumentSearchDto> searchedDocuments = searchService.findByContent(content);
-        return responseFromSearchResults(searchedDocuments);
+        try {
+            List<DocumentSearchDto> searchedDocuments = searchService.findByContent(content);
+            return responseFromSearchResults(searchedDocuments);
+        } catch (LogicException e) {
+            return responseWithContent(documentSearchListExporter.exportFailure(e));
+        }
     }
 
     private Response responseFromSearchResults(List<DocumentSearchDto> searchedDocuments) {

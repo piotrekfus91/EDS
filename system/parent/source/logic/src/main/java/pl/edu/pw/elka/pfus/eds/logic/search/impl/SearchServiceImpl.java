@@ -28,6 +28,16 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public void updateIndex(Document document) throws IOException {
+        indexer.updateIndex(document);
+    }
+
+    @Override
+    public void deleteFromIndex(int documentId) throws IOException {
+        indexer.deleteFromIndex(documentId);
+    }
+
+    @Override
     public List<DocumentSearchDto> findByTitle(String title) {
         return searcher.findByTitle(title);
     }

@@ -100,7 +100,10 @@ function search_files(value, where) {
         url: rest("/search/" + where + "/" + value),
         async: false,
         success: function(result) {
-            post_search_result(value, result.data);
+            if(is_success(result))
+                post_search_result(value, result.data);
+            else
+                post_error_from_result(result);
         },
         error: function() {
             post_message_now('error', 'Błąd przy wczytywaniu wyników wyszukiwania');

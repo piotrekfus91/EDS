@@ -22,6 +22,7 @@ import org.apache.lucene.util.Version;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.document.DownloadPrivilegeManager;
+import pl.edu.pw.elka.pfus.eds.logic.exception.DocumentNotExistsException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.search.NationalCharacterReplacer;
 import pl.edu.pw.elka.pfus.eds.logic.search.Searcher;
@@ -35,6 +36,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static pl.edu.pw.elka.pfus.eds.logic.error.handler.ErrorHandler.handle;
 
 public class LuceneSearcher implements Searcher {
     private static final Logger logger = Logger.getLogger(LuceneSearcher.class);
@@ -70,7 +73,7 @@ public class LuceneSearcher implements Searcher {
         this.context = context;
     }
 
-    private void setupIndexReaderAndSearcher() throws IOException {
+    private void setupSearcher() throws IOException {
         indexReader = DirectoryReader.open(directory);
         indexSearcher = new IndexSearcher(indexReader);
     }
@@ -85,30 +88,34 @@ public class LuceneSearcher implements Searcher {
         return findByField(content, LuceneConstants.CONTENT_FIELD);
     }
 
-    private List<DocumentSearchDto> findByField(String value, final String FIELD) {
+    private List<DocumentSearchDto> findByField(String value, final String field) {
         User currentUser = securityFacade.getCurrentUser(context);
 
         try {
-            setupIndexReaderAndSearcher();
+            setupSearcher();
             value = characterReplacer.replaceAll(value);
             try {
                 List<DocumentSearchDto> searchedDocuments = new LinkedList<>();
-                TopDocs topDocs = getTopDocs(value, FIELD);
+                TopDocs topDocs = getTopDocs(value, field);
                 for(ScoreDoc scoreDoc : topDocs.scoreDocs) {
                     Document document = indexSearcher.doc(scoreDoc.doc);
                     StoredField idField = (StoredField) document.getField(LuceneConstants.ID_FIELD);
                     int docId = idField.numericValue().intValue();
-                    if(downloadPrivilegeManager.canDownload(currentUser, docId)) {
-                        DocumentSearchDto documentSearchDto = getDtoFromDocument(document);
-                        searchedDocuments.add(documentSearchDto);
+                    try {
+                        if(downloadPrivilegeManager.canDownload(currentUser, docId)) {
+                            DocumentSearchDto documentSearchDto = getDtoFromDocument(document);
+                            searchedDocuments.add(documentSearchDto);
+                        }
+                    } catch (DocumentNotExistsException e) {
+                        logger.info("document has been removed: " + docId);
                     }
                 }
                 return searchedDocuments;
             } finally {
                 indexReader.close();
             }
-        } catch (IOException | ParseException e) {
-            logger.error(e.getMessage(), e);
+        } catch (Exception e) {
+            handle(e);
             throw new InternalException();
         }
     }

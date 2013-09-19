@@ -5,6 +5,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.document.DownloadPrivilegeManager;
+import pl.edu.pw.elka.pfus.eds.logic.exception.DocumentNotExistsException;
 import pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeService;
 import pl.edu.pw.elka.pfus.eds.security.privilege.Privileges;
 
@@ -35,6 +36,8 @@ public class DownloadPrivilegeManagerImpl implements DownloadPrivilegeManager {
     @Override
     public boolean canDownload(User user, int documentId) {
         Document document = documentDao.findById(documentId);
+        if(document == null)
+            throw new DocumentNotExistsException();
         return canDownload(user, document);
     }
 
