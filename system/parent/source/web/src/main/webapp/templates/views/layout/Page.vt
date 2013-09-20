@@ -24,6 +24,7 @@ $pageTool.insertTitlePrefix('EDS')
     <script src="$link.content('js/contextMenu/jquery.ui.position.js')"></script>
     <script src="$link.content('js/dynatree/jquery.dynatree.js')"></script>
     <script src="$link.content('js/eds.js')"></script>
+    <script src="$link.content('js/app/comments.js')"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             make_tabs();

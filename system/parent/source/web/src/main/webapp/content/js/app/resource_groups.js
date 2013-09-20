@@ -330,7 +330,8 @@ function prepare_comment_dialog(title, has_privilege, document_id) {
 
     if(has_privilege) {
         buttons.Zapisz = function() {
-
+            var content = comments_div.find('#comments_textarea').val();
+            add_comment(document_id, content, comments_div);
         };
         comments_div.find('#comments_textarea').css('display', 'block');
     }

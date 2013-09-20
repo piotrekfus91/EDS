@@ -19,3 +19,23 @@ function post_comments(comments, div) {
         div.append(commentBody);
     });
 }
+
+function add_comment(documentId, content, div) {
+    $.ajax({
+        type: "POST",
+        url: rest('/comments/create/' + documentId),
+        data: content,
+        success: function(result) {
+            if(is_success(result)) {
+                post_message_now('success', 'Komentarz dodany');
+                if(typeof div !== 'undefined')
+                    div.dialog("close");
+            } else {
+                post_error_from_result(result);
+            }
+        },
+        error: function() {
+            post_message_now('error', 'Błąd przy dodawaniu komentarza');
+        }
+    });
+}

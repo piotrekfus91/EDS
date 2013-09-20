@@ -20,4 +20,9 @@ public class CommentServiceImpl implements CommentService {
     public List<Comment> getCommentsForDocument(int documentId) {
         return commentFinder.getCommentsForDocument(documentId);
     }
+
+    @Override
+    public void addComment(int documentId, String content) {
+        commentModifier.addComment(documentId, content);
+    }
 }
