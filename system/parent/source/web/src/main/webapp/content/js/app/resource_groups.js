@@ -167,20 +167,27 @@ function post_resource_group_info(div, data) {
                     content += this.created;
                 content += "</td>";
                 content += "<td>";
-                    if(has_privilege(privilegesStatus, 'download_files')) {
-                        content += "<a href=\"";
-                                content += this.url;
-                                content += "\">";
-                            content += "Pobierz";
-                        content += "</a>";
-                    }
+                    content += "<div class=\"resource_group_buttons\">";
+                        if(has_privilege(privilegesStatus, 'download_files')) {
+                            content += "<a href=\"";
+                                    content += this.url;
+                                    content += "\">";
+                                content += "Pobierz";
+                            content += "</a>";
+                        }
+                        content += "<a href=\"javascript:prepare_comment_dialog('"
+                            + this.title + "', "
+                            + has_privilege(privilegesStatus, 'comment') + ", "
+                            + this.key
+                            + ")\">Komentarze</a>";
+                    content += "</div>";
                 content += "</td>";
             content += "</tr>";
         });
     }
     content += "</table>";
     div.html(content);
-    div.find('#resource_group_buttons').buttonset();
+    div.find('.resource_group_buttons').buttonset();
     div.find('a, button').button();
 }
 
@@ -251,6 +258,46 @@ function show_roles(roles) {
     user_roles_roles_div.buttonset();
 }
 
+function prepare_comments(document_id) {
+    $.ajax({
+        type: "GET",
+        url: rest('/comments/document/' + document_id),
+        success: function(result) {
+            if(is_success(result)) {
+                post_comments(result.data);
+                $('#comments_div').dialog("open");
+            } else {
+                post_error_from_result(result);
+            }
+        },
+        error: function() {
+            post_message_now('error', 'Błąd podczas wczytywania komentarzy');
+        }
+    });
+}
+
+function post_comments(comments) {
+    var comments_div = $('#comments_comments_div');
+    $.each(comments, function(index) {
+        var comment_div_class = index % 2 == 0 ? 'files_comment_even' : 'files_comment_odd';
+        var content = "";
+        content += "<div class=\"" + comment_div_class + "\">";
+            content += "<div class=\"files_comment_content\">";
+                content += this.content;
+            content += "</div>";
+            content += "<div class=\"files_comment_footer\">";
+                content += "<span class=\"files_comment_author\">";
+                content += this.user;
+                content += "</span>,&nbsp;";
+                content += "<span class=\"files_comment_date\">";
+                content += this.created;
+                content += "</span>";
+            content += "</div>";
+        content += "</div>";
+        comments_div.append(content);
+    });
+}
+
 $('#resource_group_div').dialog({
     autoOpen: false,
     width: 'auto',
@@ -297,6 +344,34 @@ $('#resource_group_div').dialog({
     }
 });
 
+function prepare_comment_dialog(title, has_privilege, document_id) {
+    var comments_div = $('#comments_div');
+    comments_div.attr('title', title);
+
+    var buttons = {};
+
+    if(has_privilege) {
+        buttons.Zapisz = function() {
+
+        };
+        comments_div.find('#comments_textarea').css('display', 'block');
+    }
+
+    buttons.Anuluj = function() {
+        clear_and_close_comments_dialog();
+    }
+
+    comments_div.dialog({
+        autoOpen: false,
+        modal: true,
+        width: 600,
+        height: 400,
+        buttons: buttons
+    });
+
+    prepare_comments(document_id);
+}
+
 $('#user_roles_div').dialog({
     autoOpen: false,
     modal: true,
@@ -330,6 +405,11 @@ $('#user_roles_div').dialog({
         }
     }
 });
+
+function clear_and_close_comments_dialog() {
+    var comments_div = $('#comments_div');
+    comments_div.dialog('close');
+}
 
 function clear_and_close_resource_group_div() {
     var resource_group_div = $('#resource_group_div');

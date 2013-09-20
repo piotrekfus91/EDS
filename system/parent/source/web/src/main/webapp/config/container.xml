@@ -71,6 +71,12 @@
                class="pl.edu.pw.elka.pfus.eds.logic.resource.group.impl.ResourceGroupModifierImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupService"
                class="pl.edu.pw.elka.pfus.eds.logic.resource.group.impl.ResourceGroupServiceImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.comment.CommentFinder"
+               class="pl.edu.pw.elka.pfus.eds.logic.comment.impl.CommentFinderImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.comment.CommentModifier"
+               class="pl.edu.pw.elka.pfus.eds.logic.comment.impl.CommentModifierImpl" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.logic.comment.CommentService"
+               class="pl.edu.pw.elka.pfus.eds.logic.comment.impl.CommentServiceImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.tag.TagFinder"
                class="pl.edu.pw.elka.pfus.eds.logic.tag.impl.TagFinderImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.logic.tag.TagModifier"
@@ -99,6 +105,8 @@
 
     <!-- web -->
     <component class="pl.edu.pw.elka.pfus.eds.web.init.DatabaseInitializer" />
+    <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonCommentListExporter"
+               class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonCommentListExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonFileSystemEntryListExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonFileSystemEntryListExporterImpl" />
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDirectoryExporter"
