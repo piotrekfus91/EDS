@@ -268,7 +268,7 @@ function update_document_info(documentId) {
                 $('#files_mime').text(info.mime);
                 update_tags(info.tags);
                 clear_comments();
-                add_comments(info.comments);
+                post_comments(info.comments, $('#files_comments'));
             } else {
                 post_error_from_result(result);
             }
@@ -397,27 +397,6 @@ function delete_document(documentId) {
         error: function() {
             post_message_now('error', 'Błąd przy usuwaniu pliku');
         }
-    });
-}
-
-function add_comments(comments) {
-    var comments_div = $('#files_comments');
-    $.each(comments, function(index) {
-        var comment_div_class = index % 2 == 0 ? 'files_comment_even' : 'files_comment_odd';
-        var commentBody = "<div class=\"" + comment_div_class + "\">";
-            commentBody += "<div class=\"files_comment_content\">";
-                commentBody += this.content;
-            commentBody += "</div>";
-            commentBody += "<div class=\"files_comment_footer\">";
-                commentBody += "<span class=\"files_comment_author\">";
-                    commentBody += this.user;
-                commentBody += "</span>,&nbsp;";
-                commentBody += "<span class=\"files_comment_date\">";
-                    commentBody += this.created;
-                commentBody += "</span>";
-            commentBody += "</div>";
-        commentBody += "</div>";
-        comments_div.append(commentBody);
     });
 }
 

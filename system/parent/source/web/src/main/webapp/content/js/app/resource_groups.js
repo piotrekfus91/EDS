@@ -264,7 +264,7 @@ function prepare_comments(document_id) {
         url: rest('/comments/document/' + document_id),
         success: function(result) {
             if(is_success(result)) {
-                post_comments(result.data);
+                post_comments(result.data, $('#comments_comments_div'));
                 $('#comments_div').dialog("open");
             } else {
                 post_error_from_result(result);
@@ -273,28 +273,6 @@ function prepare_comments(document_id) {
         error: function() {
             post_message_now('error', 'Błąd podczas wczytywania komentarzy');
         }
-    });
-}
-
-function post_comments(comments) {
-    var comments_div = $('#comments_comments_div');
-    $.each(comments, function(index) {
-        var comment_div_class = index % 2 == 0 ? 'files_comment_even' : 'files_comment_odd';
-        var content = "";
-        content += "<div class=\"" + comment_div_class + "\">";
-            content += "<div class=\"files_comment_content\">";
-                content += this.content;
-            content += "</div>";
-            content += "<div class=\"files_comment_footer\">";
-                content += "<span class=\"files_comment_author\">";
-                content += this.user;
-                content += "</span>,&nbsp;";
-                content += "<span class=\"files_comment_date\">";
-                content += this.created;
-                content += "</span>";
-            content += "</div>";
-        content += "</div>";
-        comments_div.append(content);
     });
 }
 
