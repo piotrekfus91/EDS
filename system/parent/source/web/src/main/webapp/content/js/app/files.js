@@ -66,8 +66,10 @@ function init_tree(root) {
             currentNode = node;
             if(node.data.isFolder) {
                 update_directory_info(node.data.key);
+                hide_comments_button();
             } else {
                 update_document_info(node.data.key);
+                show_comments_button();
             }
         },
         dnd: {
@@ -99,6 +101,20 @@ function init_tree(root) {
         }
     });
     $('#files_tree .dynatree-container').css('border', '0px solid white');
+}
+
+function show_comments_button() {
+    var comments_button = $('#comments_button');
+    comments_button.button();
+    comments_button.click(function() {
+        prepare_comment_dialog(currentNode.data.title, true, currentNode.data.key, 'comments_div');
+    });
+    comments_button.show();
+}
+
+function hide_comments_button() {
+    var comments_button = $('#comments_button');
+    comments_button.hide();
 }
 
 function get_children(key) {

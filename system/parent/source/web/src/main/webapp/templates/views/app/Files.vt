@@ -38,10 +38,12 @@ $viewEnclosureTool.top()
                         <td class="info_key">Tagi</td>
                         <td class="info_value" id="files_tags"></td>
                     </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center">
+                            <button id="comments_button" style="display: none; width: 200px; margin: auto">Komentarze</button>
+                        </td>
+                    </tr>
                 </table>
-                <div id="files_comments">
-
-                </div>
             </div>
         </td>
     </tr>
@@ -106,5 +108,16 @@ $viewEnclosureTool.top()
         <div id="shared_resource_groups">
 
         </div>
+    </form>
+</div>
+
+<div id="comments_div" title="Komentarze" style="display: none">
+    <form onsubmit="return false;">
+        <div id="comments_comments_div">
+
+        </div>
+        <textarea id="comments_textarea" style="display: none; width: 100%; height: 20%; overflow: auto">
+
+        </textarea>
     </form>
 </div>

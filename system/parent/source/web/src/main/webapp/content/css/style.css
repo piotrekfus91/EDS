@@ -56,6 +56,7 @@ html, body {
 .info_value {
     font-style: italic;
     vertical-align: top;
+    text-align: right;
 }
 
 .files_comments {
