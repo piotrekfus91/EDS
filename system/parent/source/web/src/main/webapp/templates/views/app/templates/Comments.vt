@@ -1,0 +1,20 @@
+$viewEnclosureTool.top()
+{{#each comments}}
+    {{#moduloIf @index 2}}
+    <div class="files_comment_even">
+    {{else}}
+    <div class="files_comment_odd">
+    {{/moduloIf}}
+        <div class="files_comment_content">
+            {{content}}
+        </div>
+        <div class="files_comment_footer">
+            <span class="files_comment_author">
+                {{user}}
+            </span>
+            <span class="files_comment_date">
+                {{created}}
+            </span>
+        </div>
+    </div>
+{{/each}}

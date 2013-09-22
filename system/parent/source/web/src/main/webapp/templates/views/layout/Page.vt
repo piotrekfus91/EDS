@@ -16,6 +16,7 @@ $pageTool.insertTitlePrefix('EDS')
     <script src="$link.content('js/jchartfx/jchartfx.coreVector.js')"></script>
     <script src="$link.content('js/jchartfx/jchartfx.advanced.js')"></script>
     <script src="$link.content('js/jchartfx/jchartfx.animation.js')"></script>
+    <script src="$link.content('js/handlebars/handlebars.js')"></script>
     <script src="$link.content('js/common/noty/jquery.noty.js')"></script>
     <script src="$link.content('js/common/noty/topRight.js')"></script>
     <script src="$link.content('js/common/noty/default.js')"></script>

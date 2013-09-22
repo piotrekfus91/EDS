@@ -8,8 +8,7 @@ var privilegesStatus = {};
 
 $(document).ready(function() {
     $('#resource_groups').accordion();
-    $('#create_new_resource_group_button').button();
-    $('#create_new_resource_group_button').click(create_new_resource_group_button_click);
+    $('#create_new_resource_group_button').button().click(create_new_resource_group_button_click);
 
     reload_resource_groups();
 });
@@ -36,9 +35,10 @@ function post_resource_groups(resource_groups) {
     resource_groups_div.css('display', 'none');
     resource_groups_div.accordion("destroy");
     resource_groups_div.html('');
-    $.each(resource_groups, function() {
-        append_resource_group(resource_groups_div, this);
+    run_template('ResourceGroups', resource_groups_div, {
+        resource_groups: resource_groups
     });
+    console.log(resource_groups_div.html());
     resource_groups_div.accordion({
         collapsible: true,
         heightStyle: "content",
@@ -50,19 +50,6 @@ function post_resource_groups(resource_groups) {
         load_resource_group_info(activeDiv, active_resource_group);
     });
     resource_groups_div.css('display', 'block');
-}
-
-function append_resource_group(div, resourceGroup) {
-    var content = "";
-    content += "<h3>";
-        content += "<a href=\"#\" title=\"" + resourceGroup.name + "\">";
-            content += resourceGroup.name;
-        content += "</a>";
-    content += "</h3>";
-    content += "<div>";
-        content += "";
-    content += "</div>";
-    div.append(content);
 }
 
 function load_resource_group_info(div, resourceGroupName) {
@@ -84,109 +71,20 @@ function load_resource_group_info(div, resourceGroupName) {
 }
 
 function post_resource_group_info(div, data) {
-    var resource_group = data.resourceGroup;
-    var users = data.users;
-    groupName = resource_group.name;
+    groupName = data.resourceGroup.name;
     privilegesStatus = data.privilegesStatus;
     div.removeAttr('height');
-    var content = "";
-    div.html('');
-    content += "<div>";
-        content += "Założyciel: ";
-        content += resource_group.founder;
-    content += "</div>";
-    content += "<div id=\"resource_group_description\">";
-        content += resource_group.description;
-    content += "</div>";
-    content += "<div id=\"resource_group_buttons\">";
-        content += "<button onclick=\"\"";
-                if(!has_privilege(privilegesStatus, "manage_roles")) content += " disabled=\"disabled\"";
-                content += ">";
-            content += "Dodaj nowego użytkownika";
-        content += "</button>";
-        content += "<button onclick=\"javascript:edit_resource_group_button_click('" + resource_group.name + "')\"";
-                if(!has_privilege(privilegesStatus, 'update_info')) content += " disabled=\"disabled\""
-                content += ">";
-            content += "Edytuj informacje o grupie";
-        content += "</button>";
-        content += "<button onclick=\"javascript:delete_resource_group('" + resource_group.name + "')\"";
-                if(!has_privilege(privilegesStatus, 'delete')) content += " disabled=\"disabled\"";
-                content += ">";
-            content += "Usuń grupę zasobów";
-        content += "</button>";
-    content += "</div>";
-    content += "<br />";
-    content += "<table class=\"resource_group_table resource_group_users_table\">";
-    $.each(users, function() {
-        content += "<tr>";
-            content += "<td>";
-                content += this.friendlyName;
-            content += "</td>";
-            content += "<td>";
-                content += "<button onclick=\"javascript:show_user_roles_dialog('" + this.name + "', '" + this.friendlyName + "')\"";
-                        if(!has_privilege(privilegesStatus, 'manage_roles')) content += " disabled=\"disabled\"";
-                        content += ">";
-                    content += "Edytuj role";
-                content += "</button>";
-            content += "</td>";
-        content += "</tr>";
+    run_template('ResourceGroup', div, {
+        resource_group: data.resourceGroup,
+        users: data.users,
+        manage_roles: has_privilege(privilegesStatus, 'manage_roles'),
+        update_info: has_privilege(privilegesStatus, 'update_info'),
+        delete: has_privilege(privilegesStatus, 'delete'),
+        list_files: has_privilege(privilegesStatus, 'list_files'),
+        download_files: has_privilege(privilegesStatus, 'download_files'),
+        comment: has_privilege(privilegesStatus, 'comment'),
+        comments_div: 'comments_div'
     });
-    content += "</table>";
-    content += "<table class=\"resource_group_table resource_group_documents_table\">";
-    content += "<tr>";
-            content += "<th>";
-                content += "Nazwa";
-            content += "</th>";
-            content += "<th>";
-                content += "Właściciel";
-            content += "</th>";
-            content += "<th>";
-                content += "MIME";
-            content += "</th>";
-            content += "<th>";
-                content += "Utworzony";
-            content += "</th>";
-            content += "<th>";
-                content += "";
-            content += "</th>";
-        content += "</tr>"
-    if(has_privilege(privilegesStatus, 'list_files')) {
-        $.each(resource_group.documents, function() {
-            content += "<tr>";
-                content += "<td>";
-                    content += this.title;
-                content += "</td>";
-                content += "<td>";
-                    content += this.owner;
-                content += "</td>";
-                content += "<td>";
-                    content += this.mime;
-                content += "</td>";
-                content += "<td>";
-                    content += this.created;
-                content += "</td>";
-                content += "<td>";
-                    content += "<div class=\"resource_group_buttons\">";
-                        if(has_privilege(privilegesStatus, 'download_files')) {
-                            content += "<a href=\"";
-                                    content += this.url;
-                                    content += "\">";
-                                content += "Pobierz";
-                            content += "</a>";
-                        }
-                        content += "<a href=\"javascript:prepare_comment_dialog('"
-                            + this.title + "', "
-                            + has_privilege(privilegesStatus, 'comment') + ", "
-                            + this.key + ", "
-                            + "'comments_div'"
-                            + ")\">Komentarze</a>";
-                    content += "</div>";
-                content += "</td>";
-            content += "</tr>";
-        });
-    }
-    content += "</table>";
-    div.html(content);
     div.find('.resource_group_buttons').buttonset();
     div.find('a, button').button();
 }
@@ -259,24 +157,6 @@ function show_roles(roles) {
     var user_roles_roles_div = $('#user_roles_roles_div');
     user_roles_roles_div.html(content);
     user_roles_roles_div.buttonset();
-}
-
-function prepare_comments(document_id) {
-    $.ajax({
-        type: "GET",
-        url: rest('/comments/document/' + document_id),
-        success: function(result) {
-            if(is_success(result)) {
-                post_comments(result.data, $('#comments_comments_div'));
-                $('#comments_div').dialog("open");
-            } else {
-                post_error_from_result(result);
-            }
-        },
-        error: function() {
-            post_message_now('error', 'Błąd podczas wczytywania komentarzy');
-        }
-    });
 }
 
 $('#resource_group_div').dialog(
@@ -354,11 +234,6 @@ $('#user_roles_div').dialog(
         }
     })
 );
-
-function clear_and_close_comments_dialog() {
-    var comments_div = $('#comments_div');
-    comments_div.dialog('close');
-}
 
 function clear_and_close_resource_group_div() {
     var resource_group_div = $('#resource_group_div');

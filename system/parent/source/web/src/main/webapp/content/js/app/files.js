@@ -103,7 +103,7 @@ function init_tree(root) {
 }
 
 function show_comments_button() {
-    var comments_button = $('#comments_button');
+    var comments_button = $('.comments_button');
     comments_button.button();
     comments_button.click(function() {
         prepare_comment_dialog(currentNode.data.title, true, currentNode.data.key, 'comments_div');

@@ -1,0 +1,11 @@
+$viewEnclosureTool.top()
+{{#each resource_groups}}
+    <h3>
+        <a href="#" title="{{name}}">
+            {{name}}
+        </a>
+    </h3>
+    <div>
+
+    </div>
+{{/each}}

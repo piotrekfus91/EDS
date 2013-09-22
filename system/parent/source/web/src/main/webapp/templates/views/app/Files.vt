@@ -40,7 +40,7 @@ $viewEnclosureTool.top()
                     </tr>
                     <tr>
                         <td colspan="2" style="text-align: center">
-                            <button id="comments_button" style="display: none; width: 200px; margin: auto">Komentarze</button>
+                            <button class="comments_button" style="display: none; width: 200px; margin: auto">Komentarze</button>
                         </td>
                     </tr>
                 </table>

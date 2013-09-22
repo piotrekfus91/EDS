@@ -25,15 +25,33 @@ var dialogDefaults = {
 function make_tabs() {
     var tabs = $('#tabs');
     tabs.tabs({
-        heightStyle: 'fill',
-        fx: {
-            height: 'toggle',
-            opacity: 'toggle',
-            duration: 5000
-        }
+        heightStyle: 'fill'
     });
     // wylaczamy link z tabów, żeby otworzył się jako czysty GET
     tabs.find('#logout_link').unbind('click');
+}
+
+Handlebars.registerHelper("moduloIf", function(index_count,mod,block) {
+    if(parseInt(index_count)%(mod)=== 0){
+        return block.fn(this);
+    }
+});
+
+function run_template(templateName, div, context) {
+    div.html('');
+    $.ajax({
+        type: "GET",
+        url: 'eds/v/app.templates.' + templateName,
+        async: false,
+        success: function(source) {
+            var template = Handlebars.compile(source);
+            var html = template(context);
+            div.html(html);
+        },
+        error: function() {
+            post_message_now('error', 'Błąd wewnętrzny');
+        }
+    });
 }
 
 function activate_tab(index) {

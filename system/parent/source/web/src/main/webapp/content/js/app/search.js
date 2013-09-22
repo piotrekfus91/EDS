@@ -36,9 +36,7 @@ function post_tag_search_results(tags) {
     search_results_div.css('display', 'none');
     search_results_div.accordion("destroy");
     search_results_div.html('');
-    $.each(tags, function() {
-        append_tag(search_results_div, this);
-    });
+    append_tags(search_results_div, tags);
     search_results_div.accordion({
         collapsible: true,
         heightStyle: "content",
@@ -52,41 +50,24 @@ function post_tag_search_results(tags) {
     search_results_div.css('display', 'block');
 }
 
-function append_tag(search_results_div, tag) {
-    var append = "";
-    append += "<h3>"
-        append += "<a href=\"#\" title=\"" + tag.label + "\">";
-            append += tag.label;
-        append += "</a>";
-    append += "</h3>";
-    append += "<div>";
-    append += "</div>";
-    search_results_div.append(append);
+function append_tags(search_results_div, tags) {
+    run_template('Tag', search_results_div, {
+        tags: tags
+    });
 }
 
 function load_tag_info(div, tagName) {
     div.removeAttr('height');
-    var append = "";
-    div.html('');
     $.ajax({
         type: "GET",
         url: rest("/tags/name/" + tagName),
         async: false,
         success: function(result) {
-            append += "<ul>";
-            $.each(result.docs, function() {
-                append += "<li>";
-                    append += "<a href=\"";
-                            append += this.url;
-                            append += "\">";
-                        append += this.title;
-                    append += "</a>";
-                append += "</li>";
+            run_template('TagSearches', div, {
+                search_results: result.docs
             });
-            append += "</ul>";
         }
     });
-    div.append(append);
 }
 
 function search_files(value, where) {
@@ -125,22 +106,8 @@ function post_search_result(title, documents) {
 }
 
 function append_search_results(search_results_div, title, documents) {
-    var append = "";
-    append += "<h3>"
-        append += "<a href=\"#\" title=\"" + title + "\">";
-    append += title;
-    append += "</a>";
-    append += "</h3>";
-    append += "<div>";
-        append += "<ul>";
-            $.each(documents, function() {
-                append += "<li>";
-                    append += "<a href=\"" + this.url + "\">"
-                        append += this.title;
-                    append += "</a>";
-                append += "</li>";
-            });
-        append += "</ul>";
-    append += "</div>";
-    search_results_div.append(append);
+    run_template('DocumentSearches', search_results_div, {
+        title: title,
+        documents: documents
+    });
 }

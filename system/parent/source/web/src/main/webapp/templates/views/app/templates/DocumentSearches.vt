@@ -1,0 +1,17 @@
+$viewEnclosureTool.top()
+<h3>
+    <a href="#" title="{{title}}">
+        {{title}}
+    </a>
+</h3>
+<div>
+    <ul>
+        {{#each documents}}
+            <li>
+                <a href="{{url}}">
+                    {{title}}
+                </a>
+            </li>
+        {{/each}}
+    </ul>
+</div>

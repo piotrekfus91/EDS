@@ -1,0 +1,98 @@
+$viewEnclosureTool.top()
+<div>
+    Założyciel: {{resouce_group.founder}}
+</div>
+<div id="resource_group_description">
+    {{resource_group.description}}
+</div>
+<div class="resource_group_buttons">
+    <button
+        {{#unless manage_roles}}
+            disabled="disabled"
+        {{/unless}}
+    >
+        Dodaj nowego użytkownika
+    </button>
+    <button onclick="javascript:edit_resource_group_button_click('{{resource_group.name}}')"
+        {{#unless update_info}}
+            disabled="disabled"
+        {{/unless}}
+    >
+        Edytuj informacje o grupie
+    </button>
+    <button onclick="javascript:delete_resource_group('{{resource_group.name}}')"
+        {{#unless delete}}
+            disabled="disabled"
+        {{/unless}}
+    >
+        Usuń grupę zasobów
+    </button>
+</div>
+<br />
+<table class="resource_group_table resource_group_users_table">
+    {{#each users}}
+        <tr>
+            <td>
+                {{friendlyName}}
+            </td>
+            <td>
+                <button onclick="javascript:show_user_roles_dialog('{{name}}', '{{friendlyName}}')"
+                    {{#unless ../manage_roles}}
+                        disabled="disabled"
+                    {{/unless}}
+                >
+                    Edytuj role
+                </button>
+            </td>
+        </tr>
+    {{/each}}
+</table>
+<table class="resource_group_table resource_group_documents_table">
+    <tr>
+        <th>
+            Nazwa
+        </th>
+        <th>
+            Właściciel
+        </th>
+        <th>
+            MIME
+        </th>
+        <th>
+            Utworzony
+        </th>
+        <th>
+
+        </th>
+    </tr>
+    {{\#if list_files}}
+        {{#each resource_group.documents}}
+            <tr>
+                <td>
+                    {{title}}
+                </td>
+                <td>
+                    {{owner}}
+                </td>
+                <td>
+                    {{mime}}
+                </td>
+                <td>
+                    {{created}}
+                </td>
+                <td>
+                    <div class="resource_group_buttons">
+                        {{\#if ../download_files}}
+                            <a href="{{url}}">
+                                Pobierz
+                            </a>
+                        {{/if}}
+                        <a href="javascript:prepare_comment_dialog('{{title}}', {{../comment}}, {{key}}, '{{../comments_div}}')">
+                            Komentarze
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {{/each}}
+    {{/if}}
+</table>
