@@ -53,7 +53,6 @@ public class UserManagerImpl implements UserManager {
     public User logIn(Context context, String login, String password) {
         try {
             SecurityUser user = dataBackend.getUserByName(login);
-            logger.info("found user: " + user.getName());
             verifyPassword(user, password);
 
             User candidate = userDao.findByName(login);
@@ -96,7 +95,7 @@ public class UserManagerImpl implements UserManager {
 
     private void verifyPassword(SecurityUser user, String password) throws AuthenticationException {
         String passwordDigest = passwordDigester.digestPassword(password);
-        if(user.getPassword().equals(passwordDigest))
+        if(!user.getPassword().equals(passwordDigest))
             throw new InvalidLoginOrPasswordException();
     }
 

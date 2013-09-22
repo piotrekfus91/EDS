@@ -1,9 +1,9 @@
 ﻿INSERT INTO SECURITY_RESOURCE_GROUP (RESOURCE_GROUP_ID, RESOURCE_GROUP_NAME) VALUES (1,'global');
 INSERT INTO SECURITY_RESOURCE_GROUP (RESOURCE_GROUP_ID, RESOURCE_GROUP_NAME) VALUES (2, 'resource_group_security');
 -- INSERT INTO SECURITY_ROLE (ROLE_ID, ROLE_NAME) VALUES (1, 'security_root');
-INSERT INTO SECURITY_USER (USER_ID, LOGIN_NAME, PASSWORD_VALUE, FIRST_NAME, LAST_NAME, locked, confirmed, access_counter, max_inactive_interval) VALUES (1, 'root', '{md5}Y6nw6nu5gFB5a2SehUgYRQ==', 'Super', 'User', false, true, 0, 0);
-INSERT INTO SECURITY_USER (USER_ID, LOGIN_NAME, PASSWORD_VALUE, FIRST_NAME, LAST_NAME, locked, confirmed, access_counter, max_inactive_interval) VALUES (2, 'johnny', '{md5}Y6nw6nu5gFB5a2SehUgYRQ==', 'Super', 'User', false, true, 0, 0);
-INSERT INTO SECURITY_USER (USER_ID, LOGIN_NAME, PASSWORD_VALUE, FIRST_NAME, LAST_NAME, locked, confirmed, access_counter, max_inactive_interval) VALUES (3, 'jerry', '{md5}Y6nw6nu5gFB5a2SehUgYRQ==', 'Super', 'User', false, true, 0, 0);
+INSERT INTO SECURITY_USER (USER_ID, LOGIN_NAME, PASSWORD_VALUE, FIRST_NAME, LAST_NAME, locked, confirmed, access_counter, max_inactive_interval) VALUES (1, 'root', '{md5}kS7IA7LOSeSlQQaNSVq1cA==', 'Super', 'User', false, true, 0, 0);
+INSERT INTO SECURITY_USER (USER_ID, LOGIN_NAME, PASSWORD_VALUE, FIRST_NAME, LAST_NAME, locked, confirmed, access_counter, max_inactive_interval) VALUES (2, 'johnny', '{md5}kS7IA7LOSeSlQQaNSVq1cA==', 'Super', 'User', false, true, 0, 0);
+INSERT INTO SECURITY_USER (USER_ID, LOGIN_NAME, PASSWORD_VALUE, FIRST_NAME, LAST_NAME, locked, confirmed, access_counter, max_inactive_interval) VALUES (3, 'jerry', '{md5}kS7IA7LOSeSlQQaNSVq1cA==', 'Super', 'User', false, true, 0, 0);
 INSERT INTO SECURITY_USER (USER_ID, LOGIN_NAME, PASSWORD_VALUE, FIRST_NAME, LAST_NAME, locked, confirmed, access_counter, max_inactive_interval) VALUES (8, 'anonymous', 'x', 'Anonymous', 'User', false, true, 0, 0);
 INSERT INTO SECURITY_USER_RESOURCE_GROUP_ROLE ( USER_ID, RESOURCE_GROUP_ID, ROLE_ID )
 SELECT SECURITY_USER.USER_ID, SECURITY_RESOURCE_GROUP.RESOURCE_GROUP_ID, SECURITY_ROLE.ROLE_ID from 

@@ -6,13 +6,6 @@ $viewEnclosureTool.top()
     {{resource_group.description}}
 </div>
 <div class="resource_group_buttons">
-    <button
-        {{#unless manage_roles}}
-            disabled="disabled"
-        {{/unless}}
-    >
-        Dodaj nowego użytkownika
-    </button>
     <button onclick="javascript:edit_resource_group_button_click('{{resource_group.name}}')"
         {{#unless update_info}}
             disabled="disabled"
