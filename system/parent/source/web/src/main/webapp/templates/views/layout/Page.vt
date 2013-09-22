@@ -32,7 +32,6 @@ $pageTool.insertTitlePrefix('EDS')
             #foreach($message in $messages)
                 post_message('$message.type', '$message.text', '$message.date');
             #end
-            open_lazy();
         });
     </script>
     <title>$pageTool.title</title>

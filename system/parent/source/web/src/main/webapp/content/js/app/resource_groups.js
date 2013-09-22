@@ -12,7 +12,6 @@ $(document).ready(function() {
     $('#create_new_resource_group_button').click(create_new_resource_group_button_click);
 
     reload_resource_groups();
-    open_lazy();
 });
 
 function reload_resource_groups() {
@@ -194,7 +193,10 @@ function post_resource_group_info(div, data) {
 
 function create_new_resource_group_button_click() {
     saveMode = "add";
-    $('#resource_group_div').dialog("open");
+    var resource_group_div = $('#resource_group_div');
+    resource_group_div.find('#resource_group_name_input').val('');
+    resource_group_div.find('#resource_group_description_textarea').val('');
+    resource_group_div.dialog("open");
 }
 
 function edit_resource_group_button_click(name) {
@@ -277,85 +279,81 @@ function prepare_comments(document_id) {
     });
 }
 
-$('#resource_group_div').dialog({
-    autoOpen: false,
-    width: 'auto',
-    height: 'auto',
-    modal: true,
-    buttons: {
-        "Zapisz": function() {
-            var resource_group_div = $('#resource_group_div');
-            var name = resource_group_div.find('#resource_group_name_input').val();
-            var description = resource_group_div.find('#resource_group_description_textarea').val();
-            var restUrl = "";
-            var method = "";
-            if(saveMode == "add") {
-                method = "POST";
-                restUrl = rest("/resourceGroups/create");
-            } else if(saveMode == "edit") {
-                method = "PUT";
-                restUrl = rest("/resourceGroups/update/" + editModeResourceGroupName);
+$('#resource_group_div').dialog(
+    $.extend({}, dialogDefaults, {
+        buttons: {
+            "Zapisz": function() {
+                var resource_group_div = $('#resource_group_div');
+                var name = resource_group_div.find('#resource_group_name_input').val();
+                var description = resource_group_div.find('#resource_group_description_textarea').val();
+                var restUrl = "";
+                var method = "";
+                if(saveMode == "add") {
+                    method = "POST";
+                    restUrl = rest("/resourceGroups/create");
+                } else if(saveMode == "edit") {
+                    method = "PUT";
+                    restUrl = rest("/resourceGroups/update/" + editModeResourceGroupName);
+                }
+                var data = get_resource_group_string(name, description);
+                $.ajax({
+                    type: method,
+                    url: restUrl,
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: data,
+                    success: function(result) {
+                        if(is_success(result)) {
+                            post_message_now('success', 'Zapisano grupę ' + name);
+                            reload_resource_groups();
+                            clear_and_close_resource_group_div();
+                        } else {
+                            post_error_from_result(result);
+                        }
+                    },
+                    error: function() {
+                        post_message_now('error', 'Błąd podczas zapisywania grupy ' + name);
+                    }
+                })
+            },
+            "Anuluj": function() {
+                clear_and_close_resource_group_div();
             }
-            var data = get_resource_group_string(name, description);
-            $.ajax({
-                type: method,
-                url: restUrl,
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                data: data,
-                success: function(result) {
-                    if(is_success(result)) {
-                        post_message_now('success', 'Zapisano grupę ' + name);
-                        reload_resource_groups();
-                        clear_and_close_resource_group_div();
-                    } else {
-                        post_error_from_result(result);
-                    }
-                },
-                error: function() {
-                    post_message_now('error', 'Błąd podczas zapisywania grupy ' + name);
-                }
-            })
-        },
-        "Anuluj": function() {
-            clear_and_close_resource_group_div();
         }
-    }
-});
+    })
+);
 
-$('#user_roles_div').dialog({
-    autoOpen: false,
-    modal: true,
-    width: 'auto',
-    height: 'auto',
-    buttons: {
-        "Zapisz": function() {
-            var data = serialize_form('user_roles_form');
-            $.ajax({
-                type: "PUT",
-                url: rest('/resourceGroups/roles/group/' + groupName + '/user/' + userName),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                data: data,
-                success: function(result) {
-                    if(is_success(result)) {
-                        post_message_now('success', 'Role zostały zaktualizowane');
-                        clear_and_close_user_roles_div();
-                        load_resource_group_info(activeDiv, groupName);
-                    } else {
-                        post_error_from_result(result);
+$('#user_roles_div').dialog(
+    $.extend({}, dialogDefaults, {
+        buttons: {
+            "Zapisz": function() {
+                var data = serialize_form('user_roles_form');
+                $.ajax({
+                    type: "PUT",
+                    url: rest('/resourceGroups/roles/group/' + groupName + '/user/' + userName),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: data,
+                    success: function(result) {
+                        if(is_success(result)) {
+                            post_message_now('success', 'Role zostały zaktualizowane');
+                            clear_and_close_user_roles_div();
+                            load_resource_group_info(activeDiv, groupName);
+                        } else {
+                            post_error_from_result(result);
+                        }
+                    },
+                    error: function() {
+                        post_message_now('error', 'Błąd przy aktualizacji ról');
                     }
-                },
-                error: function() {
-                    post_message_now('error', 'Błąd przy aktualizacji ról');
-                }
-            });
-        },
-        "Anuluj": function() {
-            clear_and_close_user_roles_div();
+                });
+            },
+            "Anuluj": function() {
+                clear_and_close_user_roles_div();
+            }
         }
-    }
-});
+    })
+);
 
 function clear_and_close_comments_dialog() {
     var comments_div = $('#comments_div');

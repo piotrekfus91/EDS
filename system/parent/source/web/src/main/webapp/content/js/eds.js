@@ -7,6 +7,21 @@ $(document).ready(function() {
 
 });
 
+var dialogDefaults = {
+    autoOpen: false,
+    modal: true,
+    width: 'auto',
+    height: 'auto',
+    show: {
+        effect: 'blind',
+        duration: 500
+    },
+    hide: {
+        effect: 'blind',
+        duration: 500
+    }
+};
+
 function make_tabs() {
     var tabs = $('#tabs');
     tabs.tabs({
@@ -44,13 +59,4 @@ function has_privilege(privilegeStatus, privilegeName) {
     } else {
         return false;
     }
-}
-
-function open_lazy() {
-//    console.log("opening");
-//    $('.lazy_open').effect(
-//        "slide",
-//        {},
-//        5000
-//    );
 }

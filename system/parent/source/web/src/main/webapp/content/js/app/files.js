@@ -9,7 +9,6 @@ $(document).ready(function() {
     $('#info_td').accordion(files_accordion_props);
     var height = $('#files_tree_td').height() - 100;
     $('.lazy_fill_height').height(height);
-    open_lazy();
     $.ajax({
         type: "GET",
         url: rest('/directories/root'),
@@ -468,95 +467,95 @@ function post_sharable_groups_and_open_dialog(resource_groups) {
     shared_resource_groups_div.dialog("open");
 }
 
-$('#add_directory').dialog({
-    autoOpen: false,
-    height: 150,
-    width: 400,
-    modal: true,
-    buttons: {
-        "Dodaj katalog": function() {
-            var parentDirectoryId = currentNode.data.key;
-            var name = $('#add_directory_value').val();
-            add_directory(parentDirectoryId, name);
-        },
-        "Anuluj": function() {
-            clear_and_close_add_directory_div();
+$('#add_directory').dialog(
+    $.extend({}, dialogDefaults, {
+        height: 300,
+        width: 400,
+        buttons: {
+            "Dodaj katalog": function() {
+                var parentDirectoryId = currentNode.data.key;
+                var name = $('#add_directory_value').val();
+                add_directory(parentDirectoryId, name);
+            },
+            "Anuluj": function() {
+                clear_and_close_add_directory_div();
+            }
         }
-    }
-});
+    })
+);
 
-$('#rename_div').dialog({
-    autoOpen: false,
-    height: 300,
-    width: 400,
-    modal: true,
-    buttons: {
-        "Zmień nazwę": function() {
-            var id = currentNode.data.key;
-            var newName = $('#rename_new_name').val();
-            if(currentNode.data.isFolder)
-                rename_directory(id, newName);
-            else
-                rename_document(id, newName);
-        },
-        "Anuluj": function() {
-            clear_and_close_rename_div();
+$('#rename_div').dialog(
+    $.extend({}, dialogDefaults, {
+        height: 300,
+        width: 400,
+        buttons: {
+            "Zmień nazwę": function() {
+                var id = currentNode.data.key;
+                var newName = $('#rename_new_name').val();
+                if(currentNode.data.isFolder)
+                    rename_directory(id, newName);
+                else
+                    rename_document(id, newName);
+            },
+            "Anuluj": function() {
+                clear_and_close_rename_div();
+            }
         }
-    }
-});
+    })
+);
 
-$('#tag_list_div').dialog({
-    autoOpen: false,
-    height: 200,
-    width: 400,
-    modal: true,
-    buttons: {
-        "Aktualizuj listę tagów": function() {
-            var id = currentNode.data.key;
-            var tagList = $('#tag_list_input').val();
-            update_tags_of_document(id, tagList);
-            clear_and_close_tag_list_div();
-        },
-        "Anuluj": function() {
-            clear_and_close_tag_list_div();
+$('#tag_list_div').dialog(
+    $.extend({}, dialogDefaults, {
+        height: 200,
+        width: 400,
+        buttons: {
+            "Aktualizuj listę tagów": function() {
+                var id = currentNode.data.key;
+                var tagList = $('#tag_list_input').val();
+                update_tags_of_document(id, tagList);
+                clear_and_close_tag_list_div();
+            },
+            "Anuluj": function() {
+                clear_and_close_tag_list_div();
+            }
         }
-    }
-});
+    })
+);
 
-$('#shared_resource_groups_div').dialog({
-    autoOpen: false,
-    height: 'auto',
-    width: 'auto',
-    modal: true,
-    buttons: {
-        "Zapisz": function() {
-            var docOrDir = currentNode.data.isFolder ? "directory" : "document";
-            var data = serialize_form('shared_resource_groups_form');
-            $.ajax({
-                type: "PUT",
-                url: rest('/resourceGroups/share/' + docOrDir + '/' + currentNode.data.key),
-                dataType: "json",
-                async: false,
-                contentType: "application/json; charset=utf-8",
-                data: data,
-                success: function(result) {
-                    if(is_success(result)) {
-                        post_message_now('success', 'Zaktualizowano publikowanie pliku/dokumentu');
-                    } else {
-                        post_error_from_result(result);
+$('#shared_resource_groups_div').dialog(
+    $.extend({}, dialogDefaults, {
+        height: 'auto',
+        width: 'auto',
+        buttons: {
+            "Zapisz": function() {
+                var docOrDir = currentNode.data.isFolder ? "directory" : "document";
+                var data = serialize_form('shared_resource_groups_form');
+                $.ajax({
+                    type: "PUT",
+                    url: rest('/resourceGroups/share/' + docOrDir + '/' + currentNode.data.key),
+                    dataType: "json",
+                    async: false,
+                    contentType: "application/json; charset=utf-8",
+                    data: data,
+                    success: function(result) {
+                        if(is_success(result)) {
+                            post_message_now('success', 'Zaktualizowano publikowanie pliku/dokumentu');
+                        } else {
+                            post_error_from_result(result);
+                        }
+                    },
+                    error: function() {
+                        post_message_now('error', 'Błąd podczas publikowania pliku/dokumentu');
                     }
-                },
-                error: function() {
-                    post_message_now('error', 'Błąd podczas publikowania pliku/dokumentu');
-                }
-            });
-            clear_and_close_shared_resource_group_div();
-        },
-        "Anuluj": function() {
-            clear_and_close_shared_resource_group_div();
+                });
+                clear_and_close_shared_resource_group_div();
+            },
+            "Anuluj": function() {
+                clear_and_close_shared_resource_group_div();
+            }
         }
-    }
-});
+    })
+);
 
 function clear_and_close_add_directory_div() {
     var add_directory_div = $('#add_directory');

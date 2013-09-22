@@ -4,5 +4,4 @@ $(document).ready(function() {
         url: rest('/upload'),
         unique_names: true
     });
-    open_lazy();
 });

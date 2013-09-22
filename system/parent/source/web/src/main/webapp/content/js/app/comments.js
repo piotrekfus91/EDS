@@ -46,36 +46,7 @@ function prepare_comment_dialog(title, has_privilege, document_id, comments_div_
 
     var buttons = {};
 
-    if(has_privilege) {
-        buttons.Zapisz = function() {
-            var content = comments_div.find('#comments_textarea').val();
-            add_comment(document_id, content, comments_div);
-        };
-        comments_div.find('#comments_textarea').css('display', 'block');
-    }
-
-    buttons.Anuluj = function() {
-        clear_and_close_comments_dialog();
-    }
-
-    comments_div.dialog({
-        autoOpen: false,
-        modal: true,
-        width: 600,
-        height: 400,
-        buttons: buttons
-    });
-
-    prepare_comments(document_id);
-}
-
-function prepare_comment_dialog(title, has_privilege, document_id, comments_div_id) {
-    var comments_div = $('#' + comments_div_id);
-    comments_div.attr('title', title);
-
-    var buttons = {};
-
-    comments_div.find('#comments_textarea').css('display', 'block').val('');
+    comments_div.find('#comments_textarea').val('');
     if(has_privilege) {
         buttons.Zapisz = function() {
             var content = comments_div.find('#comments_textarea').val();
@@ -87,13 +58,11 @@ function prepare_comment_dialog(title, has_privilege, document_id, comments_div_
         clear_and_close_comments_dialog();
     }
 
-    comments_div.dialog({
-        autoOpen: false,
-        modal: true,
-        width: 600,
-        height: 400,
-        buttons: buttons
-    });
+    comments_div.dialog(
+        $.extend({}, dialogDefaults, {
+            buttons: buttons
+        })
+    );
 
     prepare_comments(document_id);
 }

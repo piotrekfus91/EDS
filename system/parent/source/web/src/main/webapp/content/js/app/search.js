@@ -12,7 +12,6 @@ $(document).ready(function() {
         else if($('#radio_content').is(':checked'))
             search_files(value_to_search, 'content');
     });
-    open_lazy();
 });
 
 function search_tags_by_name(name) {
