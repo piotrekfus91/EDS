@@ -12,19 +12,23 @@ public class JsonSharedResourceGroupListExporterImpl extends AbstractSuccessFail
         implements JsonSharedResourceGroupListExporter {
     @Override
     public String exportSuccess(List<SharedResourceGroupDto> sharedResourceGroupDtos) {
-        List<SharedResourceGroupJsonDto> dtos = new LinkedList<>();
-        for(SharedResourceGroupDto sharedResourceGroupDto : sharedResourceGroupDtos) {
-            dtos.add(SharedResourceGroupJsonDto.from(sharedResourceGroupDto));
-        }
+        List<SharedResourceGroupJsonDto> dtos = getDtos(sharedResourceGroupDtos);
         return success(dtos);
     }
 
     @Override
     public String exportFailure(String errorMessage, List<SharedResourceGroupDto> sharedResourceGroupDtos) {
-        List<SharedResourceGroupJsonDto> dtos = new LinkedList<>();
-        for(SharedResourceGroupDto sharedResourceGroupDto : sharedResourceGroupDtos) {
-            dtos.add(SharedResourceGroupJsonDto.from(sharedResourceGroupDto));
-        }
+        List<SharedResourceGroupJsonDto> dtos = getDtos(sharedResourceGroupDtos);
         return failure(errorMessage, dtos);
+    }
+
+    private List<SharedResourceGroupJsonDto> getDtos(List<SharedResourceGroupDto> sharedResourceGroupDtos) {
+        List<SharedResourceGroupJsonDto> dtos = new LinkedList<>();
+        if(sharedResourceGroupDtos != null) {
+            for (SharedResourceGroupDto sharedResourceGroupDto : sharedResourceGroupDtos) {
+                dtos.add(SharedResourceGroupJsonDto.from(sharedResourceGroupDto));
+            }
+        }
+        return dtos;
     }
 }

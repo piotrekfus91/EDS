@@ -11,21 +11,22 @@ import java.util.List;
 public class JsonCommentListExporterImpl extends AbstractSuccessFailureJsonExporter implements JsonCommentListExporter {
     @Override
     public String exportSuccess(List<Comment> list) {
-        List<CommentJsonDto> dtos = new LinkedList<>();
-        for(Comment comment : list) {
-            CommentJsonDto dto = CommentJsonDto.from(comment);
-            dtos.add(dto);
-        }
+        List<CommentJsonDto> dtos = getCommentJsonDtos(list);
         return success(dtos);
     }
 
     @Override
     public String exportFailure(String errorMessage, List<Comment> list) {
+        List<CommentJsonDto> dtos = getCommentJsonDtos(list);
+        return failure(errorMessage, dtos);
+    }
+
+    private List<CommentJsonDto> getCommentJsonDtos(List<Comment> list) {
         List<CommentJsonDto> dtos = new LinkedList<>();
         for(Comment comment : list) {
             CommentJsonDto dto = CommentJsonDto.from(comment);
             dtos.add(dto);
         }
-        return failure(errorMessage, dtos);
+        return dtos;
     }
 }

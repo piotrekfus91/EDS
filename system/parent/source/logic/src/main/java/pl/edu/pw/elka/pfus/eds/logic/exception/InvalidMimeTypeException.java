@@ -1,5 +1,8 @@
 package pl.edu.pw.elka.pfus.eds.logic.exception;
 
+/**
+ * Wyjątek oznaczający niepoprawność typu MIME, np. jego niedostępność.
+ */
 public class InvalidMimeTypeException extends LogicException {
     private static final String DEFAULT_MESSAGE = "Niedozwolony typ MIME ";
 

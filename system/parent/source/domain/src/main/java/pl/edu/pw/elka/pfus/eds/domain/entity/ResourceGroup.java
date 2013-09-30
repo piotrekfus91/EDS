@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -72,6 +73,7 @@ public class ResourceGroup extends IdentifableEntity implements Named, Versionab
         documents.clear();
     }
 
+    @Transient
     public Set<Document> getAllDocuments() {
         Set<Document> allDocuments = new HashSet<>();
         allDocuments.addAll(documents);

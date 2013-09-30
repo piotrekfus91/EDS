@@ -7,7 +7,9 @@ import org.objectledge.authentication.UserUnknownException;
 
 import java.security.Principal;
 
-// TODO DummyUserManagementParticipant
+/**
+ * Potrzebne dla PicoContainera.
+ */
 public class DummyUserManagementParticipant implements UserManagementParticipant {
     @Override
     public boolean supportsRemoval() {

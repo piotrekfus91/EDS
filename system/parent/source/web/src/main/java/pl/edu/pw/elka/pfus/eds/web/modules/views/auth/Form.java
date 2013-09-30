@@ -41,10 +41,6 @@ public class Form extends AbstractView {
         return super.build(template, embeddedBuildResults);
     }
 
-    private boolean isAuthenticated() {
-        return securityFacade.isLogged(context);
-    }
-
     private void putLoginFormFieldNames( ) {
         putInTemplatingContext("loginName", config.getString("login_name"));
         putInTemplatingContext("passwordValue", config.getString("password_value"));

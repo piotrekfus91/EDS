@@ -29,7 +29,8 @@ public interface Dao<T extends GenericEntity> {
     void delete(T entity);
 
     /**
-     * Scala encję z sesją, to znaczy, że przestawia ją w tryb {@code attached}.
+     * Scala encję z sesją, tzn. robi update bazy na podstawie zmian wykonanych
+     * przed scaleniem.
      *
      * @param entity encja do scalenia.
      * @return scalona encja.

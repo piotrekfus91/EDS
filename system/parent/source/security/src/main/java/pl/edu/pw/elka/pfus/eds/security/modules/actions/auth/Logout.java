@@ -7,6 +7,9 @@ import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.security.ledge.SecurityAction;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
 
+/**
+ * Akcja uruchamiana przy wylogowaniu użytkownika.
+ */
 public class Logout extends SecurityAction {
     private static final Logger logger = Logger.getLogger(Logout.class);
     private Config config;

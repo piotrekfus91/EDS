@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
@@ -66,6 +67,7 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
      *
      * @return nazwa w systemie plikół.
      */
+    @Transient
     public String getFileSystemName() {
         return "" + created.getTime();
     }
@@ -78,10 +80,12 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
      *
      * @return czy jest dokument sesyjny.
      */
+    @Transient
     public boolean isSessionDocument() {
         return directory == null;
     }
 
+    @Transient
     @Override
     public String getStringPath() {
         String fileNameWithPath = FileSystemEntry.PATH_SEPARATOR + name;
@@ -97,12 +101,12 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
             if(resourceGroup.getDocuments().contains(this))
                 resourceGroup.removeDocument(this);
         }
-        resourceGroups.clear();
+//        resourceGroups.clear();
         for(Tag tag : tags) {
             if(tag.getDocuments().contains(this))
                 tag.removeDocument(this);
         }
-        tags.clear();
+//        tags.clear();
         mimeType.removeDocument(this);
         owner.removeDocument(this);
     }
@@ -143,6 +147,7 @@ public class Document extends IdentifableEntity implements Versionable, FileSyst
         return ImmutableList.copyOf(resourceGroups);
     }
 
+    @Transient
     public Set<ResourceGroup> getAllResourceGroups() {
         Set<ResourceGroup> allResourceGroups = new HashSet();
         allResourceGroups.addAll(resourceGroups);

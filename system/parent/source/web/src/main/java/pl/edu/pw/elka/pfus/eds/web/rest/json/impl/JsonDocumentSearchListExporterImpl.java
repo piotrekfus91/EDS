@@ -12,19 +12,23 @@ public class JsonDocumentSearchListExporterImpl extends AbstractSuccessFailureJs
         implements JsonDocumentSearchListExporter {
     @Override
     public String exportSuccess(List<DocumentSearchDto> list) {
-        List<DownloadableDocumentSearchDto> dtos = new LinkedList<>();
-        for(DocumentSearchDto documentSearchDto : list) {
-            dtos.add(DownloadableDocumentSearchDto.from(documentSearchDto));
-        }
+        List<DownloadableDocumentSearchDto> dtos = getDtos(list);
         return success(dtos);
     }
 
     @Override
     public String exportFailure(String errorMessage, List<DocumentSearchDto> list) {
-        List<DownloadableDocumentSearchDto> dtos = new LinkedList<>();
-        for(DocumentSearchDto documentSearchDto : list) {
-            dtos.add(DownloadableDocumentSearchDto.from(documentSearchDto));
-        }
+        List<DownloadableDocumentSearchDto> dtos = getDtos(list);
         return failure(errorMessage, dtos);
+    }
+
+    private List<DownloadableDocumentSearchDto> getDtos(List<DocumentSearchDto> list) {
+        List<DownloadableDocumentSearchDto> dtos = new LinkedList<>();
+        if(list != null) {
+            for (DocumentSearchDto documentSearchDto : list) {
+                dtos.add(DownloadableDocumentSearchDto.from(documentSearchDto));
+            }
+        }
+        return dtos;
     }
 }

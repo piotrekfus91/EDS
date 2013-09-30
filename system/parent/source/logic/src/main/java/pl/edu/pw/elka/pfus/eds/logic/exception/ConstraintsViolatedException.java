@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Wyjątek oznaczający, że dane wpisane przez użytkownika są nieprawidłowe.
+ */
 public class ConstraintsViolatedException extends LogicException {
     private static final String ERROR_MESSAGE = "Wpisane dane są niepoprawne";
 

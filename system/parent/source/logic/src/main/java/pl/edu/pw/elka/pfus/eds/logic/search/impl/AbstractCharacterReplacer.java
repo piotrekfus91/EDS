@@ -5,6 +5,11 @@ import pl.edu.pw.elka.pfus.eds.logic.search.NationalCharacterReplacer;
 import java.util.Map;
 
 public abstract class AbstractCharacterReplacer implements NationalCharacterReplacer {
+    /**
+     * Metoda powinna zwracać mapę par: znak do zastąpienia - znak zastępujący.
+     *
+     * @return mapa znaków do zmiany.
+     */
     protected abstract Map<Character, Character> getReplacementsMap();
 
     @Override

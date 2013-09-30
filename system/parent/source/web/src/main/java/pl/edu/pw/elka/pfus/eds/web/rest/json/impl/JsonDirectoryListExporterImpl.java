@@ -11,22 +11,23 @@ import java.util.List;
 public class JsonDirectoryListExporterImpl extends AbstractSuccessFailureJsonExporter implements JsonDirectoryListExporter {
     @Override
     public String exportSuccess(List<Directory> directories) {
-        List<DirectoryJsonDto> exportedDirectories = new LinkedList<>();
-        for(Directory directory : directories) {
-            exportedDirectories.add(DirectoryJsonDto.from(directory));
-        }
+        List<DirectoryJsonDto> exportedDirectories = getDtos(directories);
         return success(exportedDirectories);
     }
 
     @Override
-    public String exportFailure(String errorMessage, List<Directory> object) {
-        List<DirectoryJsonDto> exportedDirectories = null;
-        if (object != null) {
-            exportedDirectories = new LinkedList<>();
-            for (Directory directory : object) {
+    public String exportFailure(String errorMessage, List<Directory> directories) {
+        List<DirectoryJsonDto> exportedDirectories = getDtos(directories);
+        return failure(errorMessage, exportedDirectories);
+    }
+
+    private List<DirectoryJsonDto> getDtos(List<Directory> directories) {
+        List<DirectoryJsonDto> exportedDirectories = new LinkedList<>();
+        if(directories != null) {
+            for (Directory directory : directories) {
                 exportedDirectories.add(DirectoryJsonDto.from(directory));
             }
         }
-        return failure(errorMessage, exportedDirectories);
+        return exportedDirectories;
     }
 }

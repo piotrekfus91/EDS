@@ -73,7 +73,7 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
         ResourceGroup resourceGroup = resourceGroupDao.findById(groupId);
         LogicValidator.validateExistence(resourceGroup);
 
-        resourceGroup.getAllDocuments();
+        resourceGroup.getAllDocuments().size(); // lazy loading
 
         List<User> users = new LinkedList<>();
         List<SecurityUser> securityUsers = securityFacade.getAllUsersWithAnyPrivilegeOnResourceGroup(name);

@@ -27,10 +27,8 @@ public class DownloadPrivilegeManagerImpl implements DownloadPrivilegeManager {
         if(user.isOwnerOfDocument(document))
             return true;
 
-        if (isAccessibleByAnyGroup(user, document))
-            return true;
+        return isAccessibleByAnyGroup(user, document);
 
-        return false;
     }
 
     @Override

@@ -4,6 +4,9 @@ import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
 import org.objectledge.context.Context;
 
+/**
+ * Mock w main? Tak - potrzebny też w logice.
+ */
 public class MockSessionFactory implements SessionFactory {
     @Override
     public Session getSession(Context context) {

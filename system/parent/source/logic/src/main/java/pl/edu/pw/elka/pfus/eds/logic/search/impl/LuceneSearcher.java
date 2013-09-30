@@ -95,22 +95,7 @@ public class LuceneSearcher implements Searcher {
             setupSearcher();
             value = characterReplacer.replaceAll(value);
             try {
-                List<DocumentSearchDto> searchedDocuments = new LinkedList<>();
-                TopDocs topDocs = getTopDocs(value, field);
-                for(ScoreDoc scoreDoc : topDocs.scoreDocs) {
-                    Document document = indexSearcher.doc(scoreDoc.doc);
-                    StoredField idField = (StoredField) document.getField(LuceneConstants.ID_FIELD);
-                    int docId = idField.numericValue().intValue();
-                    try {
-                        if(downloadPrivilegeManager.canDownload(currentUser, docId)) {
-                            DocumentSearchDto documentSearchDto = getDtoFromDocument(document);
-                            searchedDocuments.add(documentSearchDto);
-                        }
-                    } catch (DocumentNotExistsException e) {
-                        logger.info("document has been removed: " + docId);
-                    }
-                }
-                return searchedDocuments;
+                return getSearchedDocuments(value, field, currentUser);
             } finally {
                 indexReader.close();
             }
@@ -118,6 +103,25 @@ public class LuceneSearcher implements Searcher {
             handle(e);
             throw new InternalException();
         }
+    }
+
+    private List<DocumentSearchDto> getSearchedDocuments(String value, String field, User currentUser) throws IOException, ParseException {
+        List<DocumentSearchDto> searchedDocuments = new LinkedList<>();
+        TopDocs topDocs = getTopDocs(value, field);
+        for(ScoreDoc scoreDoc : topDocs.scoreDocs) {
+            Document document = indexSearcher.doc(scoreDoc.doc);
+            StoredField idField = (StoredField) document.getField(LuceneConstants.ID_FIELD);
+            int docId = idField.numericValue().intValue();
+            try {
+                if(downloadPrivilegeManager.canDownload(currentUser, docId)) {
+                    DocumentSearchDto documentSearchDto = getDtoFromDocument(document);
+                    searchedDocuments.add(documentSearchDto);
+                }
+            } catch (DocumentNotExistsException e) {
+                logger.info("document has been removed: " + docId);
+            }
+        }
+        return searchedDocuments;
     }
 
     private DocumentSearchDto getDtoFromDocument(Document document) {
@@ -131,12 +135,16 @@ public class LuceneSearcher implements Searcher {
     private TopDocs getTopDocs(String value, String field) throws IOException, ParseException {
         Iterable<String> splitTitle = Splitter.on(Pattern.compile("\\s+")).omitEmptyStrings().trimResults().split(value);
         String titleQuery = Joiner.on("* *").join(splitTitle);
+        Query query = prepareQuery(field, titleQuery);
+        logger.info("parsed query for value <" + value + "> is: " + query);
+        return indexSearcher.search(query, LuceneConstants.DEFAULT_HITS_NUMBER);
+    }
+
+    private Query prepareQuery(String field, String titleQuery) throws ParseException {
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
         QueryParser queryParser = new QueryParser(Version.LUCENE_44, field, analyzer);
         queryParser.setDefaultOperator(QueryParser.Operator.OR);
         queryParser.setAllowLeadingWildcard(true);
-        Query query = queryParser.parse("*" + titleQuery + "*");
-        logger.info("parsed query for value <" + value + "> is: " + query);
-        return indexSearcher.search(query, LuceneConstants.DEFAULT_HITS_NUMBER);
+        return queryParser.parse("*" + titleQuery + "*");
     }
 }

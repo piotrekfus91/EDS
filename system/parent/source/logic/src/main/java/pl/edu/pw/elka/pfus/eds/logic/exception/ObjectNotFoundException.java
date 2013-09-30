@@ -1,5 +1,9 @@
 package pl.edu.pw.elka.pfus.eds.logic.exception;
 
+/**
+ * Wyjątek oznaczający, że nastąpiła próba dostępu do niestniejącego obiektu,
+ * np. grupy zasobów lub katalogu.
+ */
 public class ObjectNotFoundException extends LogicException {
     private static final String DEFAULT_MESSAGE = "Obiekt nie został odnaleziony";
 

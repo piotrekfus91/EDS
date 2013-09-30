@@ -32,19 +32,23 @@ public class PrivilegeServiceImpl implements PrivilegeService {
             Group group = dataBackend.getGroupByName(groupName);
             SecurityUser user = dataBackend.getUserByName(userName);
             RoleSet roles = dataBackend.getUserRoles(user, group);
-            for(Role role : roles) {
-                PermissionSet permissions = dataBackend.getPermissionsByRole(role);
-                for(Permission permission : permissions) {
-                    if(privilegeName.equals(permission.getName())) {
-                        logger.info("found in role: " + role.getName());
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return foundPermissionInRolesByName(privilegeName, roles);
         } catch (DataBackendException e) {
             throw new SecurityException(e);
         }
+    }
+
+    private boolean foundPermissionInRolesByName(String privilegeName, RoleSet roles) throws DataBackendException {
+        for(Role role : roles) {
+            PermissionSet permissions = dataBackend.getPermissionsByRole(role);
+            for(Permission permission : permissions) {
+                if(privilegeName.equals(permission.getName())) {
+                    logger.info("found in role: " + role.getName());
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

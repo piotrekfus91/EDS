@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.Transient;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -80,6 +81,7 @@ public class User extends IdentifableEntity implements Named, Versionable {
      *
      * @return sformatowana nazwa użytkownika.
      */
+    @Transient
     public String getFriendlyName() {
         if(!Strings.isNullOrEmpty(firstName))
             return (firstName + " " + Strings.nullToEmpty(lastName)).trim();

@@ -14,7 +14,7 @@ public class PluploadJsonDto {
 
     public PluploadJsonDto() {
         jsonRpc = "2.0";
-        result = "null";
+        result = null;
         error = new PluploadErrorJsonDto();
         id = "id";
     }

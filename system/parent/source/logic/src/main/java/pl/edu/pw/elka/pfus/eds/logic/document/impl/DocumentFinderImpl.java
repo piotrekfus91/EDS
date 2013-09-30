@@ -26,8 +26,8 @@ public class DocumentFinderImpl implements DocumentFinder {
 
         LogicValidator.validateOwnershipOverDocument(currentUser, document);
 
-        document.getComments(); // aby zaladowac z bazy to co jest lazy
-        document.getTags();
+        document.getComments().size(); // aby zaladowac z bazy to co jest lazy
+        document.getTags().size();
         return document;
     }
 }

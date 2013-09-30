@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -66,6 +67,7 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
      * @return ścieżka w postaci string.
      */
     @Override
+    @Transient
     public String getStringPath() {
         String parentPath = "";
         if(hasParent())
@@ -87,12 +89,13 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
     @Override
     public void removeFromAssociations() {
         for(ResourceGroup resourceGroup : resourceGroups) {
-            if(resourceGroup.getDocuments().contains(this))
+            if(resourceGroup.getDirectories().contains(this))
                 resourceGroup.removeDirectory(this);
         }
         resourceGroups.clear();
     }
 
+    @Transient
     public boolean isRootDirectory() {
         return parentDirectory == null;
     }
@@ -103,14 +106,16 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
      *
      * @return lista elementów systemu plików.
      */
+    @Transient
     public List<FileSystemEntry> getFileSystemEntries() {
         List<Directory> subdirectories = Lists.newLinkedList(this.subdirectories);
-        subdirectories.removeAll(Collections.singleton(null));
+        cleanCollectionsFromNulls(subdirectories);
         List<Document> documents = Lists.newLinkedList(this.documents);
-        documents.removeAll(Collections.singleton(null));
+        cleanCollectionsFromNulls(documents);
         return ImmutableList.<FileSystemEntry>builder().addAll(subdirectories).addAll(documents).build();
     }
 
+    @Transient
     public boolean isEmpty() {
         return subdirectories.isEmpty();
     }
@@ -263,6 +268,7 @@ public class Directory extends IdentifableEntity implements Versionable, FileSys
         return ownership && getStringPath().equals(directory.getStringPath());
     }
 
+    // specjalnie - krzak hibernate
 //    @Override
 //    public int hashCode() {
 //        return Objects.hashCode(name, subdirectories, getStringPath());

@@ -11,7 +11,7 @@ public class ValueNormalizer {
 
     static {
         nonAsciiChars = new HashMap<>();
-        initNontAsciiMap();
+        initNonAsciiMap();
     }
 
     private ValueNormalizer() {
@@ -39,7 +39,7 @@ public class ValueNormalizer {
         return builder.toString();
     }
 
-    private static void initNontAsciiMap() {
+    private static void initNonAsciiMap() {
         nonAsciiChars.put('ą', 'a');
         nonAsciiChars.put('ć', 'c');
         nonAsciiChars.put('ę', 'e');

@@ -9,6 +9,9 @@ import pl.edu.pw.elka.pfus.eds.security.ledge.SecurityAction;
 import pl.edu.pw.elka.pfus.eds.util.config.Config;
 import pl.edu.pw.elka.pfus.eds.util.message.MessageType;
 
+/**
+ * Akcja uruchamiana przy logowaniu użytkownika.
+ */
 public class Login extends SecurityAction {
     private static final Logger logger = Logger.getLogger(Login.class);
     private Config config;

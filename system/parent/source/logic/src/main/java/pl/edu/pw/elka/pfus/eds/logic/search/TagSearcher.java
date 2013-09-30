@@ -5,7 +5,7 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 import java.util.List;
 
 /**
- * Fasada wyszukiwarki.
+ * Intefejs dla wyszukiwania tagów.
  */
 public interface TagSearcher {
     /**

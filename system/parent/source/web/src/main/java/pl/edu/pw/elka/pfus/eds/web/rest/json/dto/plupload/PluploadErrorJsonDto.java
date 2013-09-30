@@ -1,6 +1,8 @@
 package pl.edu.pw.elka.pfus.eds.web.rest.json.dto.plupload;
 
 public class PluploadErrorJsonDto {
+    private static final int ERROR_CODE = 101;
+
     private int code;
     private String message;
 
@@ -9,7 +11,7 @@ public class PluploadErrorJsonDto {
     }
 
     public PluploadErrorJsonDto(String message) {
-        this(100, message);
+        this(ERROR_CODE, message);
     }
 
     public PluploadErrorJsonDto(int code, String message) {

@@ -230,7 +230,7 @@ function delete_directory(id) {
         url: rest("/directories/delete/" + id),
         success: function(result) {
             if(is_success(result)) {
-                post_message_now('information', 'Katalog usunięty: ' + currentNode.data.title);
+                post_message_now('success', 'Katalog usunięty: ' + currentNode.data.title);
                 currentNode.remove();
             } else {
                 post_error_from_result(result);

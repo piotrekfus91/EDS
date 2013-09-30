@@ -7,25 +7,18 @@ import org.picocontainer.PicoContainer;
 import java.util.Map;
 import java.util.Map.Entry;
 
-class LedgeBinder
-    extends AbstractBinder
-{
-
+class LedgeBinder extends AbstractBinder {
     private PicoContainer container;
 
-    public LedgeBinder(MutablePicoContainer container)
-    {
-        super();
+    public LedgeBinder(MutablePicoContainer container) {
         this.container = container.getParent();
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    protected void configure()
-    {
+    protected void configure() {
         final Map<Class<?>, Object> proxies = ComponentProxyFactory.proxies(container, getClass().getClassLoader());
-        for(Entry<Class<?>, Object> entry : proxies.entrySet())
-        {
+        for(Entry<Class<?>, Object> entry : proxies.entrySet()) {
             final Class key = entry.getKey();
             bind(entry.getValue()).to(key);
         }

@@ -12,22 +12,23 @@ public class JsonResourceGroupListExporterImpl extends AbstractSuccessFailureJso
         implements JsonResourceGroupListExporter {
     @Override
     public String exportSuccess(List<ResourceGroup> resourceGroups) {
-        List<ResourceGroupJsonDto> dtos = new LinkedList<>();
-        for(ResourceGroup resourceGroup : resourceGroups) {
-            ResourceGroupJsonDto dto = ResourceGroupJsonDto.from(resourceGroup);
-            dtos.add(dto);
-        }
+        List<ResourceGroupJsonDto> dtos = getDtos(resourceGroups);
         return success(dtos);
     }
 
     @Override
     public String exportFailure(String errorMessage, List<ResourceGroup> resourceGroups) {
-        List<ResourceGroupJsonDto> dtos = null;
+        List<ResourceGroupJsonDto> dtos = getDtos(resourceGroups);
+        return failure(errorMessage, dtos);
+    }
+
+    private List<ResourceGroupJsonDto> getDtos(List<ResourceGroup> resourceGroups) {
+        List<ResourceGroupJsonDto> dtos = new LinkedList<>();
         if(resourceGroups != null) {
             for(ResourceGroup resourceGroup : resourceGroups) {
                 dtos.add(ResourceGroupJsonDto.from(resourceGroup));
             }
         }
-        return failure(errorMessage, dtos);
+        return dtos;
     }
 }

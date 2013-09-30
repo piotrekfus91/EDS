@@ -1,5 +1,9 @@
 package pl.edu.pw.elka.pfus.eds.logic.exception;
 
+/**
+ * Wyjątek oznaczający, że operacja napotkała już plik lub katalog
+ * o podanej nazwie i dalsze przetwarzanie jest niemożliwe.
+ */
 public class AlreadyExistsException extends LogicException {
     private static final String DEFAULT_MESSAGE = "Istnieje już plik lub katalog o podanej nazwie";
 
@@ -19,7 +23,8 @@ public class AlreadyExistsException extends LogicException {
         super(cause);
     }
 
-    public AlreadyExistsException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public AlreadyExistsException(String message, Throwable cause, boolean enableSuppression,
+                                  boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

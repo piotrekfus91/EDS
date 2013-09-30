@@ -1,5 +1,8 @@
 package pl.edu.pw.elka.pfus.eds.logic.exception;
 
+/**
+ * Wyjątek oznaczający błąd podczas indeksowania dokumentów.
+ */
 public class IndexingException extends LogicException {
     private static final String DEFAULT_MESSAGE = "Błąd podczas indeksowania dokumentu";
 

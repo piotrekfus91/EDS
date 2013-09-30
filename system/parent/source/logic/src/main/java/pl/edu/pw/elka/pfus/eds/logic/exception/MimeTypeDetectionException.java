@@ -1,5 +1,8 @@
 package pl.edu.pw.elka.pfus.eds.logic.exception;
 
+/**
+ * Wyjątek oznaczający błąd przy sprawdzaniu typu MIME dokumentu.
+ */
 public class MimeTypeDetectionException extends LogicException {
     private static final String DEFAULT_MESSAGE = "Błąd podczas sprawdzania typu MIME";
 
