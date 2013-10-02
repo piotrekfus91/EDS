@@ -4,7 +4,7 @@
 	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.Directory" table="directory" lazy="false">
 
 		<id name="id" column="id" type="integer" unsaved-value="0">
-			<generator class="sequence">
+			<generator class="sequence-identity">
 				<param name="sequence">directory_seq</param>
 			</generator>
 		</id>
@@ -26,17 +26,17 @@
 			</many-to-many>
 		</list>
 
-		<list name="subdirectories" lazy="true" cascade="save-update,lock,delete" inverse="true" access="field">
+		<bag name="subdirectories" lazy="true" cascade="save-update,lock,delete" inverse="true" access="field">
 			<key column="parent_directory_id" not-null="false"/>
-            <list-index column="id" />
+            <!--<list-index column="id" />-->
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory"/>
-		</list>
+		</bag>
 
-		<list name="documents" lazy="true" cascade="save-update,lock,delete" inverse="true" access="field">
+		<bag name="documents" lazy="true" cascade="save-update,lock,delete" inverse="true" access="field">
 			<key column="directory_id" not-null="false"/>
-            <list-index column="id" />
+            <!--<list-index column="id" />-->
 			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Document"/>
-		</list>
+		</bag>
 
 	</class>
 </hibernate-mapping>

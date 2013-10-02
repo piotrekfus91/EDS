@@ -4,7 +4,7 @@
 	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup" table="resource_group" lazy="false">
 
 		<id name="id" column="id" type="integer" unsaved-value="0">
-			<generator class="sequence">
+			<generator class="sequence-identity">
 				<param name="sequence">resource_group_seq</param>
 			</generator>
 		</id>
@@ -17,19 +17,19 @@
         <property name="name" column="name" unique="true" type="string" length="30" not-null="true" lazy="false"/>
         <property name="description" column="description" type="text" not-null="false" lazy="false"/>
 
-		<list name="directories" table="resource_group_directory" lazy="true" cascade="save-update,lock" access="field">
+		<bag name="directories" table="resource_group_directory" lazy="true" cascade="save-update,lock" access="field">
 			<key column="resource_group_id" not-null="true"/>
-            <list-index column="id" />
+            <!--<list-index column="id" />-->
 			<many-to-many column="directory_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Directory">
 			</many-to-many>
-		</list>
+		</bag>
 
-		<list name="documents" table="resource_group_document" lazy="true" cascade="save-update,lock" access="field">
+		<bag name="documents" table="resource_group_document" lazy="true" cascade="save-update,lock" access="field">
 			<key column="resource_group_id" not-null="true"/>
-            <list-index column="id" />
+            <!--<list-index column="id" />-->
 			<many-to-many column="document_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Document">
 			</many-to-many>
-		</list>
+		</bag>
 
 	</class>
 </hibernate-mapping>

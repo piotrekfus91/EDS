@@ -4,7 +4,7 @@
 	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.Comment" table="comment" lazy="false">
 
 		<id name="id" column="id" type="integer" unsaved-value="0">
-			<generator class="sequence">
+			<generator class="sequence-identity">
 				<param name="sequence">comment_seq</param>
 			</generator>
 		</id>

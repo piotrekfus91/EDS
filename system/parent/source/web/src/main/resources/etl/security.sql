@@ -12,14 +12,13 @@ drop table if exists SECURITY_PERMISSION;
 
 CREATE TABLE SECURITY_PERMISSION
 (
-    PERMISSION_ID integer NOT NULL,
+    PERMISSION_ID integer NOT NULL DEFAULT nextval('security_permission_sequence'),
     PERMISSION_NAME varchar (99) NOT NULL,
     PERMISSION_DESC varchar (1024) NULL,
     CONSTRAINT SECURITY_PERMISSION_PK PRIMARY KEY(PERMISSION_ID),
     CONSTRAINT SECURITY_PERMISSION_UN UNIQUE (PERMISSION_NAME)
 );
 
-                                                
 -----------------------------------------------------------------------------
 -- SECURITY_ROLE
 -----------------------------------------------------------------------------
@@ -27,14 +26,13 @@ drop table if exists SECURITY_ROLE;
 
 CREATE TABLE SECURITY_ROLE
 (
-    ROLE_ID integer NOT NULL,
+    ROLE_ID integer NOT NULL DEFAULT NEXTVAL('security_role_sequence'),
     ROLE_NAME varchar (99) NOT NULL,
     ROLE_DESC varchar (1024) NULL,
     CONSTRAINT SECURITY_ROLE_PK PRIMARY KEY(ROLE_ID),
     CONSTRAINT SECURITY_ROLE_UN UNIQUE (ROLE_NAME)
 );
 
-                                                
 -----------------------------------------------------------------------------
 -- SECURITY_RESOURCE_GROUP
 -----------------------------------------------------------------------------
@@ -49,7 +47,6 @@ CREATE TABLE SECURITY_RESOURCE_GROUP
     CONSTRAINT SECURITY_RESOURCE_GROUP_UN UNIQUE (RESOURCE_GROUP_NAME)
 );
 
-                                                
 -----------------------------------------------------------------------------
 -- SECURITY_ROLE_PERMISSION       
 -----------------------------------------------------------------------------

@@ -288,8 +288,9 @@ public class DatabaseInitializer implements Startable {
         Session session = sessionFactory.getSession(null);
         logger.info("initializing security from ETL");
         session.getTransaction().begin();
+        session.doWork(new SqlScriptLoader("/etl/clean_tables.sql"));
         session.doWork(new SqlScriptLoader("/etl/security_inserts.sql"));
-        session.doWork(new SqlScriptLoader("/etl/user_create_root_directory_after_insert_trigger.sql"));
+//        session.doWork(new SqlScriptLoader("/etl/user_create_root_directory_after_insert_trigger.sql"));
         session.getTransaction().commit();
     }
 

@@ -1,12 +1,13 @@
-CREATE TRIGGER user_create_root_directory_after_insert_trigger
-  AFTER INSERT ON "user"
-  REFERENCING NEW ROW AS new_row
-  FOR EACH ROW
-  INSERT INTO directory (id, parent_directory_id, owner_id, name, version)
-    VALUES (NEXT VALUE FOR directory_seq, NULL, new_row.id, '/', 0);
+CREATE OR REPLACE FUNCTION user_create_root_directory_after_insert_trigger_function()
+  RETURNS trigger AS $$
+BEGIN
+  INSERT INTO directory("version", parent_directory_id, owner_id, "name") VALUES (0, NULL, NEW.id, '/');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
--- chytry myk, aby pozbyc sie 0 z sekwencji,
--- z ktora nie radzi sobie dynatree
-ALTER SEQUENCE directory_seq RESTART WITH 1;
-ALTER SEQUENCE document_seq RESTART WITH 1;
-ALTER SEQUENCE resource_group_seq RESTART WITH 1;
+DROP TRIGGER IF EXISTS user_create_root_directory_after_insert_trigger ON "user";
+CREATE TRIGGER user_create_root_directory_after_insert_trigger
+AFTER INSERT ON "user"
+FOR EACH ROW
+EXECUTE PROCEDURE user_create_root_directory_after_insert_trigger_function();
