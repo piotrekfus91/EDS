@@ -3,17 +3,18 @@ package pl.edu.pw.elka.pfus.eds.logic.directory.impl;
 import org.apache.log4j.Logger;
 import org.objectledge.context.Context;
 import pl.edu.pw.elka.pfus.eds.domain.dao.DirectoryDao;
+import pl.edu.pw.elka.pfus.eds.domain.dao.DocumentDao;
 import pl.edu.pw.elka.pfus.eds.domain.dao.UserDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.directory.DirectoryModifier;
-import pl.edu.pw.elka.pfus.eds.logic.document.DocumentModifier;
 import pl.edu.pw.elka.pfus.eds.logic.exception.AlreadyExistsException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
+import pl.edu.pw.elka.pfus.eds.util.file.system.FileManager;
 
 import java.util.List;
 
@@ -22,15 +23,17 @@ import static pl.edu.pw.elka.pfus.eds.logic.error.handler.ErrorHandler.handle;
 public class DirectoryModifierImpl implements DirectoryModifier {
     private static final Logger logger = Logger.getLogger(DirectoryModifierImpl.class);
     private DirectoryDao directoryDao;
-    private DocumentModifier documentModifier;
+    private DocumentDao documentDao;
+    private FileManager fileManager;
     private UserDao userDao;
     private SecurityFacade securityFacade;
     private Context context;
 
-    public DirectoryModifierImpl(DirectoryDao directoryDao, DocumentModifier documentModifier, UserDao userDao,
-                                 SecurityFacade securityFacade, Context context) {
+    public DirectoryModifierImpl(DirectoryDao directoryDao, DocumentDao documentDao, FileManager fileManager,
+                                 UserDao userDao, SecurityFacade securityFacade, Context context) {
         this.directoryDao = directoryDao;
-        this.documentModifier = documentModifier;
+        this.documentDao = documentDao;
+        this.fileManager = fileManager;
         this.userDao = userDao;
         this.securityFacade = securityFacade;
         this.context = context;
@@ -70,6 +73,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
 
     @Override
     public Directory delete(int id) {
+        documentDao.setSession(directoryDao.getSession());
         directoryDao.clear();
         Directory directory = directoryDao.findById(id);
         User currentUser = securityFacade.getCurrentUser(context);
@@ -103,7 +107,8 @@ public class DirectoryModifierImpl implements DirectoryModifier {
             recursiveRemoveDirectory(subdir);
         }
         for(Document document : directory.getDocuments()) {
-            documentModifier.delete(document.getId());
+            documentDao.delete(document);
+            fileManager.delete(document.getFileSystemName(), document.getContentMd5());
         }
         directoryDao.delete(dir);
     }

@@ -43,7 +43,7 @@ public class DirectoryModifierImplTest {
         directoryDao = mock(DirectoryDao.class);
         fileManager = mock(FileManager.class);
 
-        modifier = new DirectoryModifierImpl(directoryDao, null, userDao, securityFacade, context);
+        modifier = new DirectoryModifierImpl(directoryDao, documentDao, fileManager, userDao, securityFacade, context);
     }
 
     @Test(expectedExceptions = AlreadyExistsException.class)
