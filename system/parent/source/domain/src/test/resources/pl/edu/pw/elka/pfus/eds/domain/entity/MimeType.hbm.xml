@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.MimeType" table="mime_type" lazy="false">
+
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="sequence">
+				<param name="sequence">mime_type_seq</param>
+			</generator>
+		</id>
+
+		<property name="type" column="type" unique="true" type="string" length="30" not-null="true" lazy="false"/>
+		<property name="enabled" column="enabled" type="boolean" not-null="true" lazy="false"/>
+		<property name="defaultExtension" column="default_extension" type="string" length="6" not-null="false" lazy="false"/>
+		<property name="description" column="description" type="text" not-null="false" lazy="false"/>
+
+		<bag name="documents" lazy="true" cascade="save-update,lock,delete" inverse="true" access="field">
+			<key column="mime_type_id" not-null="true"/>
+            <!--<list-index column="id" />-->
+			<one-to-many class="pl.edu.pw.elka.pfus.eds.domain.entity.Document"/>
+		</bag>
+
+	</class>
+</hibernate-mapping>

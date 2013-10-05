@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="pl.edu.pw.elka.pfus.eds.domain.entity.Tag" table="tag" lazy="false">
+
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="sequence">
+				<param name="sequence">tag_seq</param>
+			</generator>
+		</id>
+
+		<property name="value" column="value" unique="true" index="tag_value_key" type="string" length="30" not-null="true" lazy="false"/>
+		<property name="normalizedValue" column="normalized_value" index="tag_normalized_value" type="string" length="30" not-null="true" lazy="false"/>
+
+		<bag name="documents" table="document_tag" lazy="true" cascade="save-update,lock" inverse="true"  access="field">
+			<key column="tag_id" not-null="true"/>
+            <!--<list-index column="id" />-->
+			<many-to-many column="document_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.Document">
+			</many-to-many>
+		</bag>
+
+	</class>
+</hibernate-mapping>
