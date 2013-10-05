@@ -66,6 +66,12 @@ public interface Dao<T extends GenericEntity> {
     void setSession(Session session);
 
     /**
+     * Czyści zawartość pamięci podręcznej sesji,
+     * odłącza wszystkie encje.
+     */
+    void clear();
+
+    /**
      * Rozpoczyna transakcję na bieżącej sesji.
      */
     void beginTransaction();

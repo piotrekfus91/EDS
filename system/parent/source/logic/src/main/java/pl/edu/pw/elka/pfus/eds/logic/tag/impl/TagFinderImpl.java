@@ -43,6 +43,7 @@ public class TagFinderImpl implements TagFinder {
 
     @Override
     public Tag getTagWithLoadedDocuments(String value) {
+        tagDao.clear();
         Tag tag = tagDao.findByValue(value);
         Tag detachedTag = Tag.from(tag);
         User currentUser = securityFacade.getCurrentUser(context);

@@ -50,6 +50,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
 
     @Override
     public ResourceGroup create(String name, String description) {
+        resourceGroupDao.clear();
         User currentUser = securityFacade.getCurrentUser(context);
         ResourceGroup resourceGroup = new ResourceGroup();
         resourceGroup.setName(name);
@@ -70,6 +71,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
 
     @Override
     public ResourceGroup updateNameAndDescription(String oldName, String newName, String description) {
+        resourceGroupDao.clear();
         userDao.setSession(resourceGroupDao.getSession());
         ResourceGroup resourceGroup = resourceGroupDao.findByName(oldName);
         LogicValidator.validateExistence(resourceGroup);
@@ -95,6 +97,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
 
     @Override
     public void updateRoles(String groupName, String userName, List<RolesGrantedDto> rolesGranted) {
+        resourceGroupDao.clear();
         User currentUser = securityFacade.getCurrentUser(context);
         if(!privilegeService.hasPrivilege(currentUser.getName(), Privileges.MANAGE_ROLES, groupName))
             throw new InvalidPrivilegesException();
@@ -112,6 +115,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
     public void updateDocumentPublishing(int documentId, Map<String, Boolean> sharedInGroups) {
         documentDao.setSession(resourceGroupDao.getSession());
         directoryDao.setSession(resourceGroupDao.getSession());
+        resourceGroupDao.clear();
         Document document = documentDao.findById(documentId);
         User currentUser = securityFacade.getCurrentUser(context);
         List<Integer> groupsIds = resourceGroupDao.getIdsOfNames(Lists.newLinkedList(sharedInGroups.keySet()));
@@ -147,6 +151,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
     public void updateDirectoryPublishing(int directoryId, Map<String, Boolean> sharedInGroups) {
         documentDao.setSession(resourceGroupDao.getSession());
         directoryDao.setSession(resourceGroupDao.getSession());
+        resourceGroupDao.clear();
         Directory directory = directoryDao.findById(directoryId);
         User currentUser = securityFacade.getCurrentUser(context);
         List<Integer> groupsIds = resourceGroupDao.getIdsOfNames(Lists.newLinkedList(sharedInGroups.keySet()));
@@ -184,6 +189,7 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
 
     @Override
     public void delete(String name) {
+        resourceGroupDao.clear();
         ResourceGroup resourceGroup = resourceGroupDao.findByName(name);
         LogicValidator.validateExistence(resourceGroup);
 

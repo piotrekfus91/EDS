@@ -19,12 +19,12 @@
 
         <property name="name" column="name" type="string" length="30" not-null="true" lazy="false"/>
 
-		<list name="resourceGroups" table="resource_group_directory" lazy="true" cascade="save-update,lock" inverse="true" access="field">
+		<bag name="resourceGroups" table="resource_group_directory" lazy="true" cascade="save-update,lock" inverse="true" access="field">
 			<key column="directory_id" not-null="true"/>
-            <list-index column="id" />
+            <!--<list-index column="id" />-->
 			<many-to-many column="resource_group_id" class="pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup">
 			</many-to-many>
-		</list>
+		</bag>
 
 		<bag name="subdirectories" lazy="true" cascade="save-update,lock,delete" inverse="true" access="field">
 			<key column="parent_directory_id" not-null="false"/>

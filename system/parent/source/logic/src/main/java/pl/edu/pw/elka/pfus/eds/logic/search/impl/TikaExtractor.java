@@ -39,7 +39,7 @@ public class TikaExtractor implements Extractor {
 
         try {
             parser.parse(inputStream, new WriteOutContentHandler(writer), metadata, new ParseContext());
-            logger.info("extracted: " + writer.toString());
+            logger.debug("extracted: " + writer.toString());
             return writer.toString().replaceAll("\\s+", " ");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

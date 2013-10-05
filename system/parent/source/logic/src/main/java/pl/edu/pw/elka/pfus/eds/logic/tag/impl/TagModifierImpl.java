@@ -40,6 +40,7 @@ public class TagModifierImpl implements TagModifier {
     @Override
     public void addTagsToDocument(int documentId, String commaSeparatedTagList) {
         tagDao.setSession(documentDao.getSession());
+        documentDao.clear();
         User currentUser = securityFacade.getCurrentUser(context);
         Document document = documentDao.findById(documentId);
         LogicValidator.validateOwnershipOverDocument(currentUser, document);

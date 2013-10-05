@@ -33,6 +33,7 @@ public class DownloadPrivilegeManagerImpl implements DownloadPrivilegeManager {
 
     @Override
     public boolean canDownload(User user, int documentId) {
+        documentDao.clear();
         Document document = documentDao.findById(documentId);
         if(document == null)
             throw new DocumentNotExistsException();

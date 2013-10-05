@@ -39,6 +39,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
     @Override
     public Directory add(int parentDirectoryId, String name) {
         logger.info("adding subdirectory for directory with id " + parentDirectoryId + ", name is: " + name);
+        directoryDao.clear();
         List<Directory> siblings = directoryDao.getSubdirectories(parentDirectoryId);
         if(isAnyWithSameName(name, siblings)) {
             throw new AlreadyExistsException();
@@ -69,6 +70,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
 
     @Override
     public Directory delete(int id) {
+        directoryDao.clear();
         Directory directory = directoryDao.findById(id);
         User currentUser = securityFacade.getCurrentUser(context);
 
@@ -95,6 +97,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
     }
 
     private void recursiveRemoveDirectory(Directory directory) {
+        directory.clear();
         Directory dir = directoryDao.findById(directory.getId());
         for(Directory subdir : directory.getSubdirectories()) {
             recursiveRemoveDirectory(subdir);
@@ -107,6 +110,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
 
     @Override
     public void move(int directoryId, int destinationDirectoryId) {
+        directoryDao.clear();
         User currentUser = securityFacade.getCurrentUser(context);
         Directory directory = directoryDao.findById(directoryId);
         LogicValidator.validateOwnershipOverDirectory(currentUser, directory);
@@ -132,6 +136,7 @@ public class DirectoryModifierImpl implements DirectoryModifier {
 
     @Override
     public Directory rename(int id, String newName) {
+        directoryDao.clear();
         Directory directory = directoryDao.findById(id);
         if(directory.isRootDirectory())
             throw new LogicException("Nie można zmienić nazwy katalogu głównego");

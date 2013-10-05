@@ -24,6 +24,7 @@ public class StatisticsImpl implements Statistics {
 
     @Override
     public List<DocumentsNumberInDaysDto> documentsUploadedInLastDays(int days) {
+        documentDao.clear();
         User currentUser = securityFacade.getCurrentUser(context);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, -days);

@@ -32,6 +32,7 @@ public class DocumentDownloaderImpl implements DocumentDownloader {
 
     @Override
     public DocumentNameBytesDto getDocumentNameAndBytesById(int documentId) {
+        documentDao.clear();
         Document document = documentDao.getDocumentWithGroups(documentId);
         User currentUser = securityFacade.getCurrentUser(context);
         logger.info(currentUser.getFriendlyName() + " is attempting to download file " + document.getName());

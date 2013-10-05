@@ -21,6 +21,7 @@ public class DocumentFinderImpl implements DocumentFinder {
 
     @Override
     public Document getById(int id) {
+        documentDao.clear();
         User currentUser = securityFacade.getCurrentUser(context);
         Document document = documentDao.findById(id);
 

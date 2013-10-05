@@ -67,6 +67,11 @@ public abstract class GenericDao<T extends GenericEntity> implements Dao<T> {
     }
 
     @Override
+    public void clear() {
+        session.clear();
+    }
+
+    @Override
     public void beginTransaction() {
         session.getTransaction().begin();
     }

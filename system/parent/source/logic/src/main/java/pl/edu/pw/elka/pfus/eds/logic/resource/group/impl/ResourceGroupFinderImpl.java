@@ -66,6 +66,7 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
 
     @Override
     public ResourceGroupWithAssignedUsers getByNameWithUsers(String name) {
+        resourceGroupDao.clear();
         List<Integer> groupIds = resourceGroupDao.getIdsOfNames(Lists.newArrayList(name));
         if(groupIds.size() != 1)
             throw new ObjectNotFoundException();
@@ -91,6 +92,7 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
 
     @Override
     public List<SharedResourceGroupDto> getSharableGroupsForCurrentUserAndDocument(int documentId) {
+        resourceGroupDao.clear();
         List<String> groupNames = getGroupNamesWithSharePrivilege();
         List<SharedResourceGroupDto> sharedResourceGroupDtos = new LinkedList<>();
         if(!groupNames.isEmpty()) {
@@ -106,6 +108,7 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
 
     @Override
     public List<SharedResourceGroupDto> getSharableGroupsForCurrentUserAndDirectory(int directoryId) {
+        resourceGroupDao.clear();
         List<String> groupNames = getGroupNamesWithSharePrivilege();
         List<SharedResourceGroupDto> sharedResourceGroupDtos = new LinkedList<>();
         if(!groupNames.isEmpty()) {
@@ -140,6 +143,7 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
 
     @Override
     public List<ResourceGroup> getGroupsWhereCurrentUserHasAnyPrivilege() {
+        resourceGroupDao.clear();
         User currentUser = securityFacade.getCurrentUser(context);
         List<Group> securityGroups =  securityFacade.getGroupsWhereUserHasAnyPrivilege(currentUser.getName());
         List<ResourceGroup> resourceGroups = new LinkedList<>();

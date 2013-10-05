@@ -35,8 +35,9 @@ public class CommentModifierImpl implements CommentModifier {
     @Override
     public void addComment(int documentId, String content) {
         documentDao.setSession(commentDao.getSession());
-        User currentUser = securityFacade.getCurrentUser(context);
+        commentDao.clear();
 
+        User currentUser = securityFacade.getCurrentUser(context);
         Document document = documentDao.findById(documentId);
         if(document == null)
             throw new DocumentNotExistsException();

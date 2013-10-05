@@ -25,6 +25,7 @@ public class CommentFinderImpl implements CommentFinder {
 
     @Override
     public List<Comment> getCommentsForDocument(int documentId) {
+        commentDao.clear();
         return commentDao.getCommentsForDocument(documentId);
     }
 }

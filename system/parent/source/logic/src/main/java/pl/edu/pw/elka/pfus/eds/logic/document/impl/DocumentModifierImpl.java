@@ -58,6 +58,7 @@ public class DocumentModifierImpl implements DocumentModifier {
         mimeTypeDao.setSession(documentDao.getSession());
         userDao.setSession(documentDao.getSession());
         mimeTypeDetector.setSession(documentDao.getSession());
+        documentDao.clear();
 
         MimeType mimeType = mimeTypeDetector.detect(input);
         LogicValidator.validateMimeTypeEnabled(mimeType);
@@ -90,6 +91,7 @@ public class DocumentModifierImpl implements DocumentModifier {
 
     @Override
     public void rename(int documentId, String newName) {
+        documentDao.clear();
         Document document = documentDao.findById(documentId);
         if(document.getName().equals(newName))
             return;
@@ -113,6 +115,7 @@ public class DocumentModifierImpl implements DocumentModifier {
     public void move(int documentId, int destinationDirectoryId) {
         directoryDao.setSession(documentDao.getSession());
         userDao.setSession(documentDao.getSession());
+        documentDao.clear();
 
         User currentUser = securityFacade.getCurrentUser(context);
         Document document = documentDao.findById(documentId);
@@ -153,6 +156,7 @@ public class DocumentModifierImpl implements DocumentModifier {
 
     @Override
     public void delete(int documentId) {
+        documentDao.clear();
         Document document = documentDao.findById(documentId);
         LogicValidator.validateExistence(document);
 
@@ -172,6 +176,7 @@ public class DocumentModifierImpl implements DocumentModifier {
 
     @Override
     public void cleanSessionDocuments() {
+        documentDao.clear();
         User currentUser = securityFacade.getCurrentUser(context);
 
         try {

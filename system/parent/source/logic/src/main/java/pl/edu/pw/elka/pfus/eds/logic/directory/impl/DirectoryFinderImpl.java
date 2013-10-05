@@ -33,6 +33,7 @@ public class DirectoryFinderImpl implements DirectoryFinder {
 
     @Override
     public List<FileSystemEntry> getRootDirectoryAndSessionDocuments() {
+        directoryDao.clear();
         User currentUser = getCurrentUser();
         if(currentUser == null)
             return null;
@@ -51,6 +52,7 @@ public class DirectoryFinderImpl implements DirectoryFinder {
 
     @Override
     public List<Directory> getSubdirectories(int directoryId) {
+        directoryDao.clear();
         User currentUser = getCurrentUser();
         Directory parentDirectory = directoryDao.getDirectoryWithSubdirectoriesAndOwner(directoryId);
         if(parentDirectory == null)
@@ -65,6 +67,7 @@ public class DirectoryFinderImpl implements DirectoryFinder {
 
     @Override
     public List<FileSystemEntry> getFileSystemEntries(int directoryId) {
+        directoryDao.clear();
         User currentUser = getCurrentUser();
         Directory parentDirectory = directoryDao.getDirectoryWithFileSystemEntriesAndOwner(directoryId);
         if(parentDirectory == null)
@@ -79,6 +82,7 @@ public class DirectoryFinderImpl implements DirectoryFinder {
 
     @Override
     public Directory getById(int id) {
+        directoryDao.clear();
         User currentUser = getCurrentUser();
         Directory directory = directoryDao.findById(id);
 

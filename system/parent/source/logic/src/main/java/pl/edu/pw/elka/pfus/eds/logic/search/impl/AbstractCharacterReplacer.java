@@ -4,6 +4,7 @@ import pl.edu.pw.elka.pfus.eds.logic.search.NationalCharacterReplacer;
 
 import java.util.Map;
 
+// TODO zamienic zgodnie ze wzorcem dekoratora
 public abstract class AbstractCharacterReplacer implements NationalCharacterReplacer {
     /**
      * Metoda powinna zwracać mapę par: znak do zastąpienia - znak zastępujący.
