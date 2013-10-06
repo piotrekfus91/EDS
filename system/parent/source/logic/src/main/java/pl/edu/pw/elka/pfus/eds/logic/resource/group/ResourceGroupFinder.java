@@ -65,11 +65,19 @@ public interface ResourceGroupFinder {
     List<SharedResourceGroupDto> getSharableGroupsForCurrentUserAndDirectory(int directoryId);
 
     /**
+     * Zwraca listę ról dostępnych dla danej grupy zasobów.
+     *
+     * @param groupName nazwa grupy zasobów
+     * @return lista ról.
+     */
+    List<RolesGrantedDto> getAvailableRolesForGroup(String groupName);
+
+    /**
      * Zwraca listę posiadanych rol przez danego użytkownika na danej grupie zasobów.
      *
      * @param userName nazwa użytkownika.
      * @param resourceGroupName nazwa grupy zasobów.
-     * @return
+     * @return lista ról.
      */
     List<RolesGrantedDto> getUserRolesOverResourceGroups(String userName, String resourceGroupName);
 

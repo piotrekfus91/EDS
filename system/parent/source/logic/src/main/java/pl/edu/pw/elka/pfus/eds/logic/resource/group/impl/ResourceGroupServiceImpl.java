@@ -53,6 +53,11 @@ public class ResourceGroupServiceImpl implements ResourceGroupService {
     }
 
     @Override
+    public List<RolesGrantedDto> getAvailableRolesForGroup(String groupName) {
+        return resourceGroupFinder.getAvailableRolesForGroup(groupName);
+    }
+
+    @Override
     public List<RolesGrantedDto> getUserRolesOverResourceGroups(String userName, String resourceGroupName) {
         return resourceGroupFinder.getUserRolesOverResourceGroups(userName, resourceGroupName);
     }

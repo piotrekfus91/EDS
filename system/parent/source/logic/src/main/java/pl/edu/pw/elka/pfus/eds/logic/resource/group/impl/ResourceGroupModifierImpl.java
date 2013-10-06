@@ -13,10 +13,12 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InternalException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.InvalidPrivilegesException;
+import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupModifier;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
+import pl.edu.pw.elka.pfus.eds.security.exception.SecurityException;
 import pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeService;
 import pl.edu.pw.elka.pfus.eds.security.privilege.Privileges;
 
@@ -102,12 +104,16 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
         if(!privilegeService.hasPrivilege(currentUser.getName(), Privileges.MANAGE_ROLES, groupName))
             throw new InvalidPrivilegesException();
 
-        for(RolesGrantedDto roleGranted : rolesGranted) {
-            if(roleGranted.isHas()) {
-                securityFacade.grantRoleToUserOverResourceGroup(userName, roleGranted.getRoleName(), groupName);
-            } else {
-                securityFacade.revokeRoleFromUserOverResourceGroup(userName, roleGranted.getRoleName(), groupName);
+        try {
+            for(RolesGrantedDto roleGranted : rolesGranted) {
+                if(roleGranted.isHas()) {
+                    securityFacade.grantRoleToUserOverResourceGroup(userName, roleGranted.getRoleName(), groupName);
+                } else {
+                    securityFacade.revokeRoleFromUserOverResourceGroup(userName, roleGranted.getRoleName(), groupName);
+                }
             }
+        } catch (SecurityException e) {
+            throw new LogicException(e.getMessage());
         }
     }
 

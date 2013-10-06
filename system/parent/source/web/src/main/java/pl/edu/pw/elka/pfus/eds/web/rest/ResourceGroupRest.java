@@ -74,6 +74,15 @@ public class ResourceGroupRest {
     }
 
     @GET
+    @Path("/roles/group/{groupName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getGroupRoles(@PathParam("groupName") String groupName) {
+        List<RolesGrantedDto> roles = resourceGroupService.getAvailableRolesForGroup(groupName);
+        String exported = rolesGrantedExporter.export(roles);
+        return responseWithContent(exported);
+    }
+
+    @GET
     @Path("/roles/group/{groupName}/user/{userName}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserRoles(@PathParam("groupName") String groupName, @PathParam("userName") String userName) {
@@ -150,8 +159,13 @@ public class ResourceGroupRest {
                                 List<RolesGrantedDto> rolesGranted) {
         logger.info("updating roles for user " + userName + " over group " + groupName);
         logger.info("new roles: " + rolesGranted);
-        resourceGroupService.updateRoles(groupName, userName, rolesGranted);
-        return getResourceGroupByName(groupName);
+        try {
+            resourceGroupService.updateRoles(groupName, userName, rolesGranted);
+            return getResourceGroupByName(groupName);
+        } catch (LogicException e) {
+            String exported = resourceGroupWithAssignedUsersExporter.exportFailure(e);
+            return responseWithContent(exported);
+        }
     }
 
     @PUT

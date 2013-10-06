@@ -85,7 +85,6 @@ function init_tree(root) {
             },
             onDrop: function (targetNode, sourceNode, hitMode) {
                 var success;
-                console.log("moving " + sourceNode.data.title + " to " + targetNode.data.title);
                 if(!sourceNode.data.isFolder)
                     success = move_document(sourceNode.data.key, targetNode.data.key);
                 else

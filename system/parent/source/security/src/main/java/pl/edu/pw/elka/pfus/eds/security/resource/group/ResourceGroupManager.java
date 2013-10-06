@@ -33,6 +33,14 @@ public interface ResourceGroupManager {
     void deleteResourceGroup(String name);
 
     /**
+     * Zwraca listę ról dostępnych dla danej grupy zasobów.
+     *
+     * @param groupName nazwa grupy zasobów
+     * @return lista ról.
+     */
+    List<RolesGrantedDto> getAvailableRolesForGroup(String groupName);
+
+    /**
      * Zwraca listę posiadanych rol przez danego użytkownika na danej grupie zasobów.
      *
      * @param userName nazwa użytkownika.

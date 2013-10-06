@@ -38,7 +38,6 @@ function post_resource_groups(resource_groups) {
     run_template('ResourceGroups', resource_groups_div, {
         resource_groups: resource_groups
     });
-    console.log(resource_groups_div.html());
     resource_groups_div.accordion({
         collapsible: true,
         heightStyle: "content",
@@ -126,24 +125,35 @@ function delete_resource_group(name) {
     reload_resource_groups();
 }
 
+function load_user_roles(user_roles_div, friendlyName) {
+    var url = '/resourceGroups/roles/group/' + groupName;
+    if(userName)
+        url += '/user/' + userName;
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: rest(url),
+        success: function (result) {
+            show_roles(result);
+            user_roles_div.dialog("open");
+        },
+        error: function () {
+            if(typeof friendlyName !== 'undefined' && userName != '')
+                post_message_now('error', 'Błąd przy ładowaniu listy ról dla użytkownika ' + friendlyName);
+            else
+                post_message_now('error', 'Błąd przy ładowaniu listy dostępnych ról');
+        }
+    });
+}
+
 function show_user_roles_dialog(name, friendlyName) {
     userName = name;
     userFriendlyName = friendlyName;
     var user_roles_div = $('#user_roles_div');
+    user_roles_div.find('#user_roles_user_input').css('display', 'none');
     user_roles_div.find('#user_roles_user_span').html(userFriendlyName);
     user_roles_div.find('#user_roles_group_span').html(groupName);
-    $.ajax({
-        async: false,
-        type: "GET",
-        url: rest('/resourceGroups/roles/group/' + groupName + '/user/' + userName),
-        success: function(result) {
-            show_roles(result);
-            user_roles_div.dialog("open");
-        },
-        error: function() {
-            post_message_now('error', 'Błąd przy ładowaniu listy ról dla użytkownika ' + friendlyName);
-        }
-    });
+    load_user_roles(user_roles_div, friendlyName);
 }
 
 function show_roles(roles) {
@@ -157,6 +167,16 @@ function show_roles(roles) {
     var user_roles_roles_div = $('#user_roles_roles_div');
     user_roles_roles_div.html(content);
     user_roles_roles_div.buttonset();
+}
+
+function add_new_user_to_group_click(groupName) {
+    userName = '';
+    userFriendlyName = '';
+    var user_roles_div = $('#user_roles_div');
+    user_roles_div.find('#user_roles_user_input').val('').css('display', '');
+    user_roles_div.find('#user_roles_user_span').html('').css('display', 'none');
+    user_roles_div.find('#user_roles_group_span').html(groupName);
+    load_user_roles(user_roles_div);
 }
 
 $('#resource_group_div').dialog(
@@ -207,6 +227,9 @@ $('#user_roles_div').dialog(
     $.extend({}, dialogDefaults, {
         buttons: {
             "Zapisz": function() {
+                var localUserName = $('#user_roles_user_input').val();
+                if(localUserName)
+                    userName = localUserName;
                 var data = serialize_form('user_roles_form');
                 $.ajax({
                     type: "PUT",

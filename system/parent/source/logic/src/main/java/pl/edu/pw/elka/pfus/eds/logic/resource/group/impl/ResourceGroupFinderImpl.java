@@ -14,12 +14,14 @@ import pl.edu.pw.elka.pfus.eds.domain.entity.Directory;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.ResourceGroup;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
+import pl.edu.pw.elka.pfus.eds.logic.exception.LogicException;
 import pl.edu.pw.elka.pfus.eds.logic.exception.ObjectNotFoundException;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.ResourceGroupFinder;
 import pl.edu.pw.elka.pfus.eds.logic.resource.group.dto.ResourceGroupWithAssignedUsers;
 import pl.edu.pw.elka.pfus.eds.logic.validator.LogicValidator;
 import pl.edu.pw.elka.pfus.eds.security.SecurityFacade;
 import pl.edu.pw.elka.pfus.eds.security.dto.RolesGrantedDto;
+import pl.edu.pw.elka.pfus.eds.security.exception.SecurityException;
 import pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeService;
 import pl.edu.pw.elka.pfus.eds.security.privilege.Privileges;
 
@@ -137,8 +139,21 @@ public class ResourceGroupFinderImpl implements ResourceGroupFinder {
     }
 
     @Override
+    public List<RolesGrantedDto> getAvailableRolesForGroup(String groupName) {
+        try {
+            return securityFacade.getAvailableRolesForGroup(groupName);
+        } catch (SecurityException e) {
+            throw new LogicException(e.getMessage(), e);
+        }
+    }
+
+    @Override
     public List<RolesGrantedDto> getUserRolesOverResourceGroups(String userName, String resourceGroupName) {
-        return securityFacade.getUserRolesOverResourceGroup(userName, resourceGroupName);
+        try {
+            return securityFacade.getUserRolesOverResourceGroup(userName, resourceGroupName);
+        } catch (SecurityException e) {
+            throw new LogicException(e.getMessage(), e);
+        }
     }
 
     @Override

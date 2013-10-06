@@ -77,10 +77,28 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
     }
 
     @Override
+    public List<RolesGrantedDto> getAvailableRolesForGroup(String groupName) {
+        try {
+            List<Role> allRoles = dataBackend.getAllRoles().getSortedList();
+            List<RolesGrantedDto> rolesDtos = new LinkedList<>();
+            for(Role role : allRoles) {
+                rolesDtos.add(new RolesGrantedDto(role.getName(), false));
+            }
+            return rolesDtos;
+        } catch (DataBackendException e) {
+            throw new SecurityException(e);
+        }
+    }
+
+    @Override
     public List<RolesGrantedDto> getUserRolesOverResourceGroup(String userName, String resourceGroupName) {
         try {
             SecurityUser user = dataBackend.getUserByName(userName);
+            if(user == null)
+                throw new SecurityException("Użytkownik " + userName + " nie istnieje");
             Group group = dataBackend.getGroupByName(resourceGroupName);
+            if(group == null)
+                throw new SecurityException("Grupa " + group + " nie istnieje");
             RoleSet roles = dataBackend.getUserRoles(user, group);
             List<Role> allRoles = dataBackend.getAllRoles().getSortedList();
             List<RolesGrantedDto> grantedRoles = new LinkedList<>();
@@ -100,11 +118,17 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
     public void grantRoleToUserOverResourceGroup(String userName, String roleName, String resourceGroupName) {
         try {
             SecurityUser user = dataBackend.getUserByName(userName);
+            if(user == null)
+                throw new SecurityException("Użytkownik " + userName + " nie istnieje");
             Role role = dataBackend.getRoleByName(roleName);
+            if(role == null)
+                throw new SecurityException("Rola " + roleName + " nie istnieje");
             Group group = dataBackend.getGroupByName(resourceGroupName);
+            if(group == null)
+                throw new SecurityException("Grupa " + resourceGroupName + " nie istnieje");
             dataBackend.grant(user, group, role);
         } catch (Exception e) {
-            throw new SecurityException(e);
+            throw new SecurityException(e.getMessage());
         }
     }
 
@@ -117,7 +141,7 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
 //            dobry joke, ledge nie wspiera odbierania uprawnien:)
 //            dataBackend.revoke(user, group, role);
         } catch (Exception e) {
-            throw new SecurityException(e);
+            throw new SecurityException(e.getMessage());
         }
     }
 
