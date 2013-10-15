@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Klasa reprezentująca dokument.
  */
-public class Document extends IdentifableEntity implements Versionable, FileSystemEntry {
+public class Document extends IdentifableEntity implements FileSystemEntry {
     private Integer id;
 
     @NotNull(message = "{file.system.name}")

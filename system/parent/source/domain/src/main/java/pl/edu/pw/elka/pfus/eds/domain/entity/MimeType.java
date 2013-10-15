@@ -18,6 +18,7 @@ public class MimeType extends IdentifableEntity {
     private boolean enabled = true;
     private String defaultExtension;
     private String description;
+    private Integer version;
     private List<Document> documents = new LinkedList<>();
 
     /**
@@ -69,6 +70,14 @@ public class MimeType extends IdentifableEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public List<Document> getDocuments() {

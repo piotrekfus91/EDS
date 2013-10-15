@@ -9,8 +9,9 @@
 			</generator>
 		</id>
 
-		<property name="value" column="value" unique="true" index="tag_value_key" type="string" length="30" not-null="true" lazy="false"/>
-		<property name="normalizedValue" column="normalized_value" index="tag_normalized_value" type="string" length="30" not-null="true" lazy="false"/>
+        <version name="version" column="version" type="integer" />
+        <property name="value" column="value" unique="true" index="tag_value_key" type="string" length="30" not-null="true" lazy="false"/>
+        <property name="normalizedValue" column="normalized_value" index="tag_normalized_value" type="string" length="30" not-null="true" lazy="false"/>
 
 		<bag name="documents" table="document_tag" lazy="true" cascade="save-update,lock" inverse="true"  access="field">
 			<key column="tag_id" not-null="true"/>

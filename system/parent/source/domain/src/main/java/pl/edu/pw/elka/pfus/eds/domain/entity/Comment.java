@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * Klasa reprezentująca komentarz.
  */
-public class Comment extends IdentifableEntity implements Versionable {
+public class Comment extends IdentifableEntity {
     private Integer id;
 
     @Length(min=1, message = "{comment.not.empty}")

@@ -9,10 +9,11 @@
 			</generator>
 		</id>
 
-		<property name="type" column="type" unique="true" type="string" length="30" not-null="true" lazy="false"/>
-		<property name="enabled" column="enabled" type="boolean" not-null="true" lazy="false"/>
-		<property name="defaultExtension" column="default_extension" type="string" length="6" not-null="false" lazy="false"/>
-		<property name="description" column="description" type="text" not-null="false" lazy="false"/>
+        <version name="version" column="version" type="integer" />
+        <property name="type" column="type" unique="true" type="string" length="30" not-null="true" lazy="false"/>
+        <property name="enabled" column="enabled" type="boolean" not-null="true" lazy="false"/>
+        <property name="defaultExtension" column="default_extension" type="string" length="6" not-null="false" lazy="false"/>
+        <property name="description" column="description" type="text" not-null="false" lazy="false"/>
 
 		<bag name="documents" lazy="true" cascade="save-update,lock,delete" inverse="true" access="field">
 			<key column="mime_type_id" not-null="true"/>

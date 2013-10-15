@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * Klasa reprezentuje grupę zasobów.
  */
-public class ResourceGroup extends IdentifableEntity implements Named, Versionable {
+public class ResourceGroup extends IdentifableEntity implements Named {
     private Integer id;
 
     @Length(min = 1, max = 30, message = "{resource.group.length}")

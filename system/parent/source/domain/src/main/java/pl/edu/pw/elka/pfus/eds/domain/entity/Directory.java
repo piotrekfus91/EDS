@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Klasa reprezentująca katalog użytkownika.
  */
-public class Directory extends IdentifableEntity implements Versionable, FileSystemEntry {
+public class Directory extends IdentifableEntity implements FileSystemEntry {
     private Integer id;
 
     @NotNull(message = "{file.system.name}")

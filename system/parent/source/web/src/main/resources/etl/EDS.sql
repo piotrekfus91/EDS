@@ -80,6 +80,7 @@ CREATE TABLE eds.tag (
   id               integer DEFAULT nextval('eds.tag_seq') NOT NULL, 
   value            varchar(30) NOT NULL UNIQUE, 
   normalized_value varchar(30) NOT NULL, 
+  version          int4,
   CONSTRAINT tag_pkey 
     PRIMARY KEY (id));
 CREATE TABLE eds.mime_type (
@@ -88,6 +89,7 @@ CREATE TABLE eds.mime_type (
   enabled           bool NOT NULL, 
   default_extension varchar(6), 
   description       text, 
+  version           int4,
   PRIMARY KEY (id));
 CREATE TABLE eds.document (
   id           integer DEFAULT nextval('eds.document_seq') NOT NULL, 

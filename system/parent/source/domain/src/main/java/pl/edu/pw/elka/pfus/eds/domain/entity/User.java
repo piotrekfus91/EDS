@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Klasa reprezentująca systemowego użytkownika.
  */
-public class User extends IdentifableEntity implements Named, Versionable {
+public class User extends IdentifableEntity implements Named {
     private Integer id;
     @Length(min = 1, max = 32, message = "{user.name.length}")
     private String name;

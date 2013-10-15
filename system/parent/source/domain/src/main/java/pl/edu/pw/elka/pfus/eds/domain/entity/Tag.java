@@ -24,6 +24,7 @@ public class Tag extends IdentifableEntity {
      * zapisana małymi literami i bez spacji, znaków inne niż litery.
      */
     private String normalizedValue;
+    private Integer version;
     public List<Document> documents = new LinkedList<>();
 
     public static Tag from(Tag tag) {
@@ -68,6 +69,14 @@ public class Tag extends IdentifableEntity {
 
     public void setNormalizedValue(String normalizedValue) {
         this.normalizedValue = normalizedValue;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public List<Document> getDocuments() {
