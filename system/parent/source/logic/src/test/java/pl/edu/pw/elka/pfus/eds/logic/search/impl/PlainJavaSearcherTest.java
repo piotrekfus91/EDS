@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.objectledge.context.Context;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pl.edu.pw.elka.pfus.eds.domain.dao.TagDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 import pl.edu.pw.elka.pfus.eds.logic.document.DownloadPrivilegeManager;
 import pl.edu.pw.elka.pfus.eds.logic.tag.cache.TagCache;
@@ -20,6 +21,7 @@ public class PlainJavaSearcherTest {
     private DownloadPrivilegeManager downloadPrivilegeManager;
     private Context context;
     private SecurityFacade securityFacade;
+    private TagDao tagDao;
     private TagCache tagCache;
     private Tag lfcTag;
     private Tag wallpaperTag;
@@ -32,8 +34,13 @@ public class PlainJavaSearcherTest {
         when(tagCache.getAll()).thenReturn(getSampleTags());
         downloadPrivilegeManager = mock(DownloadPrivilegeManager.class);
         context = mock(Context.class);
+        tagDao = mock(TagDao.class);
+        when(tagDao.findByValue("LFC")).thenReturn(lfcTag);
+        when(tagDao.findByValue("tapety")).thenReturn(wallpaperTag);
+        when(tagDao.findByValue("szkolne")).thenReturn(scholarTag);
+        when(tagDao.findByValue("to jest złożona nazwa zawierająca polskie litery")).thenReturn(compositeTag);
         securityFacade = mock(SecurityFacade.class);
-        searcher = new PlainJavaTagSearcher(downloadPrivilegeManager, tagCache, context, securityFacade);
+        searcher = new PlainJavaTagSearcher(downloadPrivilegeManager, tagDao, tagCache, context, securityFacade);
     }
 
     @Test

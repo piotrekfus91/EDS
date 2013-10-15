@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pfus.eds.logic.search.impl;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import org.objectledge.context.Context;
+import pl.edu.pw.elka.pfus.eds.domain.dao.TagDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Document;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 import pl.edu.pw.elka.pfus.eds.domain.entity.User;
@@ -21,13 +22,15 @@ import java.util.regex.Pattern;
  */
 public class PlainJavaTagSearcher implements TagSearcher {
     private DownloadPrivilegeManager downloadPrivilegeManager;
+    private TagDao tagDao;
     private TagCache tagCache;
     private Context context;
     private SecurityFacade securityFacade;
 
-    public PlainJavaTagSearcher(DownloadPrivilegeManager downloadPrivilegeManager, TagCache tagCache,
+    public PlainJavaTagSearcher(DownloadPrivilegeManager downloadPrivilegeManager, TagDao tagDao, TagCache tagCache,
                                 Context context, SecurityFacade securityFacade) {
         this.downloadPrivilegeManager = downloadPrivilegeManager;
+        this.tagDao = tagDao;
         this.tagCache = tagCache;
         this.context = context;
         this.securityFacade = securityFacade;
@@ -51,6 +54,7 @@ public class PlainJavaTagSearcher implements TagSearcher {
                 }
             }
             if(match) {
+                tag = tagDao.findByValue(tag.getValue());
                 Tag detachedTag = Tag.from(tag);
                 List<Document> filteredOutDocuments = downloadPrivilegeManager
                         .filterOutInaccessibleDocuments(currentUser, tag.getDocuments());
