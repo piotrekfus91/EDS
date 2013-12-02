@@ -50,22 +50,14 @@ public interface ResourceGroupManager {
     List<RolesGrantedDto> getUserRolesOverResourceGroup(String userName, String resourceGroupName);
 
     /**
-     * Dodaje podanego użytkownika do danej roli na danej grupie zasobów.
+     * Ustawia użytkownikowi podane role na danej grupie zasobów.
+     * Pozostałe role są odbierane.
      *
      * @param userName nazwa użytkownika.
-     * @param roleName nazwa roli.
      * @param resourceGroupName nazwa grupy zasobów.
+     * @param roleNames lista nazw ról, które ma posiadać użytkownik.
      */
-    void grantRoleToUserOverResourceGroup(String userName, String roleName, String resourceGroupName);
-
-    /**
-     * Odbiera rolę podanemu użytkownikowi na podanej grupie zasobów.
-     *
-     * @param userName nazwa użytkownika.
-     * @param roleName nazwa roli.
-     * @param resourceGroupName nazwa grupy zasobów.
-     */
-    void revokeRoleFromUserOverResourceGroup(String userName, String roleName, String resourceGroupName);
+    void setUserRolesOnResourceGroup(String userName, String resourceGroupName, List<String> roleNames);
 
     /**
      * Zwraca listę użytkowników, którzy mają jakiekolwiek uprawnienia

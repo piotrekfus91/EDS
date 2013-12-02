@@ -71,13 +71,8 @@ public class SecurityFacadeImpl implements SecurityFacade {
     }
 
     @Override
-    public void grantRoleToUserOverResourceGroup(String userName, String roleName, String resourceGroupName) {
-        resourceGroupManager.grantRoleToUserOverResourceGroup(userName, roleName, resourceGroupName);
-    }
-
-    @Override
-    public void revokeRoleFromUserOverResourceGroup(String userName, String roleName, String resourceGroupName) {
-        resourceGroupManager.revokeRoleFromUserOverResourceGroup(userName, roleName, resourceGroupName);
+    public void setUserRolesOnResourceGroup(String userName, String resourceGroupName, List<String> roleNames) {
+        resourceGroupManager.setUserRolesOnResourceGroup(userName, resourceGroupName, roleNames);
     }
 
     @Override

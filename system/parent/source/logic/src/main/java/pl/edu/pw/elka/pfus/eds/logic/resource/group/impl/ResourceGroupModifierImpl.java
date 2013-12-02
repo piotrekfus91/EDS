@@ -22,6 +22,7 @@ import pl.edu.pw.elka.pfus.eds.security.exception.SecurityException;
 import pl.edu.pw.elka.pfus.eds.security.privilege.PrivilegeService;
 import pl.edu.pw.elka.pfus.eds.security.privilege.Privileges;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -105,13 +106,13 @@ public class ResourceGroupModifierImpl implements ResourceGroupModifier {
             throw new InvalidPrivilegesException();
 
         try {
+            List<String> roleNames = new LinkedList<>();
             for(RolesGrantedDto roleGranted : rolesGranted) {
                 if(roleGranted.isHas()) {
-                    securityFacade.grantRoleToUserOverResourceGroup(userName, roleGranted.getRoleName(), groupName);
-                } else {
-                    securityFacade.revokeRoleFromUserOverResourceGroup(userName, roleGranted.getRoleName(), groupName);
+                    roleNames.add(roleGranted.getRoleName());
                 }
             }
+            securityFacade.setUserRolesOnResourceGroup(userName, groupName, roleNames);
         } catch (SecurityException e) {
             throw new LogicException(e.getMessage());
         }

@@ -23,6 +23,8 @@ import java.util.Map;
 public class ResourceGroupManagerImpl implements ResourceGroupManager {
     private static final Logger logger = Logger.getLogger(ResourceGroupManagerImpl.class);
 
+    private static final boolean REMOVE_OLD_ROLES = true;
+
     private Context context;
     private DataBackend dataBackend;
     private UserManager userManager;
@@ -115,33 +117,24 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
     }
 
     @Override
-    public void grantRoleToUserOverResourceGroup(String userName, String roleName, String resourceGroupName) {
+    public void setUserRolesOnResourceGroup(String userName, String resourceGroupName, List<String> roleNames) {
         try {
             SecurityUser user = dataBackend.getUserByName(userName);
             if(user == null)
                 throw new SecurityException("Użytkownik " + userName + " nie istnieje");
-            Role role = dataBackend.getRoleByName(roleName);
-            if(role == null)
-                throw new SecurityException("Rola " + roleName + " nie istnieje");
             Group group = dataBackend.getGroupByName(resourceGroupName);
             if(group == null)
                 throw new SecurityException("Grupa " + resourceGroupName + " nie istnieje");
-            dataBackend.grant(user, group, role);
+            RoleSet newRoles = new RoleSet();
+            for(String roleName : roleNames) {
+                Role role = dataBackend.getRoleByName(roleName);
+                if(role == null)
+                    throw new SecurityException("Rola " + roleName + " nie istnieje");
+                newRoles.add(role);
+            }
+            dataBackend.grant(user, group, newRoles, REMOVE_OLD_ROLES);
         } catch (Exception e) {
-            throw new SecurityException(e.getMessage());
-        }
-    }
-
-    @Override
-    public void revokeRoleFromUserOverResourceGroup(String userName, String roleName, String resourceGroupName) {
-        try {
-            SecurityUser user = dataBackend.getUserByName(userName);
-            Role role = dataBackend.getRoleByName(roleName);
-            Group group = dataBackend.getGroupByName(resourceGroupName);
-//            dobry joke, ledge nie wspiera odbierania uprawnien:)
-//            dataBackend.revoke(user, group, role);
-        } catch (Exception e) {
-            throw new SecurityException(e.getMessage());
+            throw new SecurityException(e);
         }
     }
 
