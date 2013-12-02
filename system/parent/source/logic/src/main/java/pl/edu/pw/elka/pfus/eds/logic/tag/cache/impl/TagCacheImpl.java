@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 
 public class TagCacheImpl implements TagCache {
     private static final Logger logger = Logger.getLogger(TagCacheImpl.class);
-    private LoadingCache<Integer, Tag> cache;
+    private LoadingCache<String, Tag> cache;
     private TagCacheLoader loader;
     private TagDao tagDao;
 
@@ -28,12 +28,12 @@ public class TagCacheImpl implements TagCache {
     }
 
     @Override
-    public Tag get(Integer key) {
+    public Tag get(String value) {
         try {
-            return cache.get(key);
+            return cache.get(value);
         } catch (ExecutionException e) {
             logger.warn("error in tag cache: " + e.getMessage(), e);
-            return tagDao.findById(key);
+            return tagDao.findByValue(value);
         }
     }
 
@@ -46,9 +46,9 @@ public class TagCacheImpl implements TagCache {
     @Override
     public void rebuild() {
         List<Tag> tags = tagDao.getAll();
-        Map<Integer, Tag> tagMap = new HashMap<>();
+        Map<String, Tag> tagMap = new HashMap<>();
         for(Tag tag : tags) {
-            tagMap.put(tag.getId(), tag);
+            tagMap.put(tag.getValue(), tag);
         }
         cache.putAll(tagMap);
     }

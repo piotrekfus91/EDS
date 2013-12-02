@@ -12,10 +12,10 @@ public interface TagCache {
     /**
      * Zwraca tag na podstawie id.
      *
-     * @param key id tagu.
+     * @param value wartość tagu.
      * @return tag.
      */
-    Tag get(Integer key);
+    Tag get(String value);
 
     /**
      * Zwraca wszystkie tagi.

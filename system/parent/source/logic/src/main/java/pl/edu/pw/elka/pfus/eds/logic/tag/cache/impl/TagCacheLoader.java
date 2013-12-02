@@ -4,7 +4,7 @@ import com.google.common.cache.CacheLoader;
 import pl.edu.pw.elka.pfus.eds.domain.dao.TagDao;
 import pl.edu.pw.elka.pfus.eds.domain.entity.Tag;
 
-public class TagCacheLoader extends CacheLoader<Integer, Tag> {
+public class TagCacheLoader extends CacheLoader<String, Tag> {
     private TagDao tagDao;
 
     public TagCacheLoader(TagDao tagDao) {
@@ -12,7 +12,7 @@ public class TagCacheLoader extends CacheLoader<Integer, Tag> {
     }
 
     @Override
-    public Tag load(Integer key) throws Exception {
-        return tagDao.findById(key);
+    public Tag load(String value) throws Exception {
+        return tagDao.findByValue(value);
     }
 }
