@@ -46,7 +46,7 @@ public class HibernateDocumentDao extends IdentifableGenericDao<Document> implem
             "DELETE " +
             "FROM Document d " +
             "WHERE d.owner.id = :ownerId " +
-                    "AND d.sessionDocument = TRUE";
+                    "AND d.directory IS NULL";
 
     public HibernateDocumentDao(Context context, SessionFactory sessionFactory, EntityValidator validator) {
         super(context, sessionFactory, validator);

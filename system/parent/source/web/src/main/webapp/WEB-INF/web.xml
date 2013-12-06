@@ -37,6 +37,10 @@
         <listener-class>pl.edu.pw.elka.pfus.eds.web.servlet.ServletContextListener</listener-class>
     </listener>
 
+    <listener>
+        <listener-class>pl.edu.pw.elka.pfus.eds.web.servlet.SessionDocumentsSessionListener</listener-class>
+    </listener>
+
     <filter>
         <filter-name>Authentication filter</filter-name>
         <filter-class>pl.edu.pw.elka.pfus.eds.web.servlet.AuthFilter</filter-class>

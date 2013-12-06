@@ -138,6 +138,9 @@
     <component class-key="pl.edu.pw.elka.pfus.eds.web.rest.json.JsonDocumentsNumberInDaysListExporter"
                class="pl.edu.pw.elka.pfus.eds.web.rest.json.impl.JsonDocumentsNumberInDaysListExporterImpl" />
 
+    <component class="pl.edu.pw.elka.pfus.eds.web.container.ContainerFactory">
+        <parameter key="forwardMeToParent" />
+    </component>
 
     <!-- jersey -->
     <container key="forwardMeToParent"/>
