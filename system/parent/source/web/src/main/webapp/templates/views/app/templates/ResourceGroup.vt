@@ -1,6 +1,6 @@
 $viewEnclosureTool.top()
 <div>
-    Założyciel: {{resouce_group.founder}}
+    Założyciel: {{resource_group.founder}}
 </div>
 <div id="resource_group_description">
     {{resource_group.description}}
