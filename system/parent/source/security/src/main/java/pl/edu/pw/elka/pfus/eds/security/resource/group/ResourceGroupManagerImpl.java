@@ -111,6 +111,8 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
                     grantedRoles.add(new RolesGrantedDto(role.getName(), false));
             }
             return grantedRoles;
+        } catch (SecurityException e) {
+            throw e;
         } catch (Exception e) {
             throw new SecurityException(e);
         }
@@ -133,6 +135,8 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
                 newRoles.add(role);
             }
             dataBackend.grant(user, group, newRoles, REMOVE_OLD_ROLES);
+        } catch (SecurityException e) {
+            throw e;
         } catch (Exception e) {
             throw new SecurityException(e);
         }
