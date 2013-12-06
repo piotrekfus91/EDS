@@ -8,8 +8,10 @@
 -- SECURITY_PERMISSION
 -----------------------------------------------------------------------------
 SET search_path TO eds;
-drop table if exists SECURITY_PERMISSION;
 
+drop table if exists SECURITY_PERMISSION;
+drop sequence if exists security_permission_sequence;
+create sequence security_permission_sequence;
 CREATE TABLE SECURITY_PERMISSION
 (
     PERMISSION_ID integer NOT NULL DEFAULT nextval('security_permission_sequence'),
@@ -23,7 +25,8 @@ CREATE TABLE SECURITY_PERMISSION
 -- SECURITY_ROLE
 -----------------------------------------------------------------------------
 drop table if exists SECURITY_ROLE;
-
+drop sequence if exists security_role_sequence;
+create sequence security_role_sequence;
 CREATE TABLE SECURITY_ROLE
 (
     ROLE_ID integer NOT NULL DEFAULT NEXTVAL('security_role_sequence'),
@@ -37,7 +40,8 @@ CREATE TABLE SECURITY_ROLE
 -- SECURITY_RESOURCE_GROUP
 -----------------------------------------------------------------------------
 drop table if exists SECURITY_RESOURCE_GROUP;
-
+drop sequence if exists security_resource_group_sequence;
+create sequence security_resource_group_sequence;
 CREATE TABLE SECURITY_RESOURCE_GROUP
 (
     RESOURCE_GROUP_ID integer NOT NULL,
@@ -65,7 +69,8 @@ CREATE TABLE SECURITY_ROLE_PERMISSION
 -- SECURITY_USER
 -----------------------------------------------------------------------------
 drop table if exists SECURITY_USER;
-
+drop sequence if exists security_user_sequence;
+create sequence security_user_sequence;
 CREATE TABLE SECURITY_USER
 (
     USER_ID integer NOT NULL,
@@ -106,22 +111,3 @@ CREATE TABLE SECURITY_USER_RESOURCE_GROUP_ROLE
     CONSTRAINT SECURITY_USER_GROUP_ROLE_GROU_FK FOREIGN KEY (RESOURCE_GROUP_ID) REFERENCES SECURITY_RESOURCE_GROUP (RESOURCE_GROUP_ID),
     CONSTRAINT SECURITY_USER_GROUP_ROLE_ROLE_FK FOREIGN KEY (ROLE_ID) REFERENCES SECURITY_ROLE (ROLE_ID)
 );
-
-drop sequence if exists security_user_sequence;
-create sequence security_user_sequence;
-
-drop sequence if exists security_permission_sequence;
-create sequence security_permission_sequence;
-
-drop sequence if exists security_role_sequence;
-create sequence security_role_sequence;
-
-drop sequence if exists security_resource_group_sequence;
-create sequence security_resource_group_sequence;
-
---drop sequence ;
---createResourceGroup sequence ;
-
---drop sequence ;
---createResourceGroup sequence ;
-                        
