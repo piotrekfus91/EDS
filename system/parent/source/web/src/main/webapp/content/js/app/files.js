@@ -435,7 +435,7 @@ function update_tags(tags) {
 function update_tags_of_document(id, tagList) {
     $.ajax({
         type: "PUT",
-        url: rest('/tags/tagsToDocument/' + id + '/' + tagList),
+        url: rest('/tags/tagsToDocument/' + id + '/%20' + tagList),
         success: function(result) {
             if(is_success(result)) {
                 post_message_now('success', 'Lista tagów zaktualizowana');
