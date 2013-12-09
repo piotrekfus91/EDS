@@ -100,7 +100,7 @@ public class ResourceGroupManagerImpl implements ResourceGroupManager {
                 throw new SecurityException("Użytkownik " + userName + " nie istnieje");
             Group group = dataBackend.getGroupByName(resourceGroupName);
             if(group == null)
-                throw new SecurityException("Grupa " + group + " nie istnieje");
+                throw new SecurityException("Grupa " + resourceGroupName + " nie istnieje");
             RoleSet roles = dataBackend.getUserRoles(user, group);
             List<Role> allRoles = dataBackend.getAllRoles().getSortedList();
             List<RolesGrantedDto> grantedRoles = new LinkedList<>();
