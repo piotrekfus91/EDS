@@ -68,10 +68,7 @@ public class User extends IdentifableEntity implements Named {
 
     @Override
     public void removeFromAssociations() {
-        directories.remove(this);
-        comments.remove(this);
-        documents.remove(this);
-        resourceGroups.remove(this);
+        // cascade
     }
 
     /**

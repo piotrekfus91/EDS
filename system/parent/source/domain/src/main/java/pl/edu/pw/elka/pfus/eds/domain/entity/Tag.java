@@ -47,7 +47,9 @@ public class Tag extends IdentifableEntity {
 
     @Override
     public void removeFromAssociations() {
-        documents.remove(this);
+        for(Document document : documents) {
+            document.removeTag(this);
+        }
     }
 
     public void setId(Integer id) {

@@ -33,7 +33,7 @@ public class MimeType extends IdentifableEntity {
 
     @Override
     public void removeFromAssociations() {
-        documents.remove(this);
+        // zagwarantowane przez cascade
     }
 
     public void setId(Integer id) {
