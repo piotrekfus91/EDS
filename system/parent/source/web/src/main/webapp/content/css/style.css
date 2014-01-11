@@ -7,7 +7,7 @@ html, body {
 }
 
 #ajax_loading {
-    background-image: url('/content/images/loading.gif');
+    background-image: url('../images/loading.gif');
     height: 66px;
     width: 66px;
     padding: 0;
@@ -21,7 +21,7 @@ html, body {
 
 .tabs {
     height: 100%;
-    background: #eff5f9 url('/content/images/background.png') no-repeat fixed center;
+    background: #eff5f9 url('../images/background.png') no-repeat fixed center;
 }
 
 .files_main_table {

@@ -64,7 +64,7 @@ function current_time() {
 }
 
 function rest(suffix) {
-    return '/rest' + suffix;
+    return '/eds/rest' + suffix;
 }
 
 function is_success(result) {
